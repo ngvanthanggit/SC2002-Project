@@ -1,7 +1,0 @@
-{
-    "java.project.sourcePaths": ["src"],         // Points to your source files
-    "java.project.outputPath": "bin",            // Compiled output goes to the "bin" folder
-    "java.project.referencedLibraries": [        // Includes all JAR files in the "lib" folder
-        "lib/**/*.jar"
-    ]
-}
