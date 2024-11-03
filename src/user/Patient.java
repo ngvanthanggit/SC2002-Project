@@ -13,10 +13,10 @@ public class Patient extends User{
         this.contactInfo = null;
     }
     
-    public Patient(String hospitalID, String gender, String role,
-                    String name, int age, String dateOB, 
+    public Patient(String hospitalID, String name, String role,
+                    String gender, int age, String password, String dateOB, 
                     String bloodType, String contactInfo){
-        super(hospitalID, gender, role, name, age);
+        super(hospitalID, name, role, gender, age, password);
         this.dateOB = dateOB;
         this.bloodType = bloodType;
         this.contactInfo = contactInfo;
@@ -42,7 +42,7 @@ public class Patient extends User{
 
     //other Methods()
     public String userInfo() {
-        return String.format("Patient[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, DateOB=%s, BloodType=%s, ContactInfo=%s]",
-        getHospitalId(), getName(), getRole(), getGender(), getAge(), dateOB, bloodType, contactInfo);
+        return String.format("Patient[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, Password=%s, DateOB=%s, BloodType=%s, ContactInfo=%s]",
+        getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType, contactInfo);
     }
 }
