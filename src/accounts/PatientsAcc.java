@@ -71,7 +71,7 @@ public class PatientsAcc {
     }
 
     //find patient by hospitalID
-    private static User findPatientById(String hospitalID) {
+    public static User findPatientById(String hospitalID) {
         for (User patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
                 return patient;
@@ -80,6 +80,16 @@ public class PatientsAcc {
         return null;
     }
 
+    // get patient name using hospital ID
+    public String getPatientName(String hospitalID) {
+        for (User patient : patients) {
+            if (patient.getHospitalID().equals(hospitalID)) {
+                return (patient != null) ? patient.getName() : "Patient not found";
+            }
+        }
+        return null;
+    }
+    
     //updating methods
     public static void addPatient(Patient patient) {
         //add patient to patient List

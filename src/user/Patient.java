@@ -22,6 +22,10 @@ public class Patient extends User{
         this.contactInfo = contactInfo;
     }
 
+    public Patient(String hospitalID, String name) {
+        super(hospitalID, name); 
+    }
+
     //get Methods()
     public String getDateOB() {
         return dateOB;
@@ -33,6 +37,10 @@ public class Patient extends User{
 
     public String getContactInfo() {
         return contactInfo;
+    }
+
+    public String getHospitalID() {
+        return super.getHospitalID();
     }
 
     //set Methods()

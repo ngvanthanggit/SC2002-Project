@@ -1,5 +1,5 @@
 package user;
-//parent clase of all User classes
+//parent class of all User classes
 
 public class User {
     private String hospitalId;
@@ -23,6 +23,11 @@ public class User {
         this.gender = gender;
         this.age = age;
         this.password = password;
+    }
+
+    public User(String hospitalID, String name) {
+        this.hospitalId = hospitalID;
+        this.name = name;
     }
 
     //get Methods()
