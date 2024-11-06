@@ -10,7 +10,7 @@ import io.CSVread;
 import io.CSVwrite;
 import user.*;
 
-public class DoctorAcc {
+public class DoctorsAcc {
     // List of all doctors
     private static List<Doctor> doctors = new ArrayList<>();
 
@@ -63,10 +63,20 @@ public class DoctorAcc {
         CSVwrite.writeCSVList("Data//Updated/Doctor_List(Updated).csv", doctors);
     }
 
-    private static User findDoctorById(String hospitalID) {
+    public static User findDoctorById(String hospitalID) {
         for (User doctor : doctors) {
             if (doctor.getHospitalID() == hospitalID) {
                 return doctor;
+            }
+        }
+        return null;
+    }
+
+    // get doctor name using hospital ID
+    public String getDoctorName(String hospitalID) {
+        for (User doctor : doctors) {
+            if (doctor.getHospitalID().equals(hospitalID)) {
+                return (doctor != null) ? doctor.getName() : "Doctor not found";
             }
         }
         return null;
