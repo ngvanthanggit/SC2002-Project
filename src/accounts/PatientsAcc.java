@@ -70,8 +70,8 @@ public class PatientsAcc {
         CSVwrite.writeCSVList("Data//Updated/Patient_List(Updated).csv", patients);
     }
 
-    // find patient by hospitalID
-    private static User findPatientById(String hospitalID) {
+    //find patient by hospitalID
+    public static User findPatientById(String hospitalID) {
         for (User patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
                 return patient;
@@ -80,13 +80,22 @@ public class PatientsAcc {
         return null;
     }
 
-    // updating methods
+    // get patient name using hospital ID
+    public String getPatientName(String hospitalID) {
+        for (User patient : patients) {
+            if (patient.getHospitalID().equals(hospitalID)) {
+                return (patient != null) ? patient.getName() : "Patient not found";
+            }
+        }
+        return null;
+    }
+
+    //updating methods
     public static void addPatient(Patient patient) {
         // add patient to patient List
         patients.add(patient);
         CSVwrite.writeCSV("Data//Updated/Patient_List(Updated).csv", patient);
     }
-
     // this method might or might not need, delete if neccessary
     public static void removePatient(Patient patient) {
         patients.remove(patient);
@@ -102,7 +111,6 @@ public class PatientsAcc {
             System.out.println("Your password has been changed");
             return;
         }
-
     }
 
 }
