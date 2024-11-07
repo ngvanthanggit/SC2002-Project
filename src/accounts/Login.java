@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import user.Administrator;
 import user.User;
+import user.Doctor;
 
 public class Login {
 
@@ -27,41 +28,44 @@ public class Login {
             if (user.getHospitalID().equals(enteredId) && user.getPassword().equals(enteredPassword)) {
                 System.out.println("Login successful! Welcome, " + user.getRole() + " " + user.getName());
 
-                //prompt user to change password if it is default password
+                // prompt user to change password if it is default password
                 checkDefPw(user, scanner);
 
-                switch(user.getRole()){
+                switch (user.getRole()) {
                     case "Patient":
-                        //create new patient class
+                        // create new patient class
                         break;
 
                     case "Pharmacist":
-                        //create new pharmacist class
+                        // create new pharmacist class
                         break;
 
                     case "Doctor":
-                        //create new Doctor Class
-                        break;
-                    
+                        // create new Doctor Class
+                        return new Doctor(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
+                                user.getAge(), user.getPassword());
+
                     case "Administrator":
-                        return new Administrator(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(), user.getAge(), user.getPassword());
-                    default: return null;
+                        return new Administrator(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
+                                user.getAge(), user.getPassword());
+                    default:
+                        return null;
                 }
             }
         }
         return null; // Return null if login fails
     }
 
-    //check if user is using default pw "password1234"
-    public static void checkDefPw(User user, Scanner scanner){
-        if(user.getPassword().equals("password1234")){
+    // check if user is using default pw "password1234"
+    public static void checkDefPw(User user, Scanner scanner) {
+        if (user.getPassword().equals("password1234")) {
             System.out.println("You are logging in with a default password, please change your password. ");
             System.out.print("Enter your password: ");
-            String newPassword = scanner.nextLine(); //set new Password
+            String newPassword = scanner.nextLine(); // set new Password
 
-            if(user.getRole().equals("Patient")){
-                PatientsAcc.updatePassword(user.getHospitalID(),newPassword);
-            } else {
+            if (user.getRole().equals("Patient")) {
+                PatientsAcc.updatePassword(user.getHospitalID(), newPassword);
+            } else if (user.getRole().equals("Administrator")) {
                 AdminsAcc.updatePassword(user.getHospitalID(), newPassword);
             }
         }
