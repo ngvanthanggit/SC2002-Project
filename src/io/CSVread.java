@@ -11,23 +11,22 @@ import user.*;
 
 public class CSVread {
 
-    //Extract common fields for both User and Patient
+    // Extract common fields for both User and Patient
     private static User extractCommonFields(String[] row, Map<String, Integer> columnMapping) {
-        //.trim() used to remove extra spaces after the strings/int
+        // .trim() used to remove extra spaces after the strings/int
         return new User(
-            row[columnMapping.get("hospitalID")].trim(),
-            row[columnMapping.get("name")].trim(),
-            row[columnMapping.get("role")].trim(),
-            row[columnMapping.get("gender")].trim(),
-            Integer.parseInt(row[columnMapping.get("age")].trim()),
-            row[columnMapping.get("password")].trim()
-        );
+                row[columnMapping.get("hospitalID")].trim(),
+                row[columnMapping.get("name")].trim(),
+                row[columnMapping.get("role")].trim(),
+                row[columnMapping.get("gender")].trim(),
+                Integer.parseInt(row[columnMapping.get("age")].trim()),
+                row[columnMapping.get("password")].trim());
     }
 
-    //General method to read CSV and map columns to fields dynamically
+    // General method to read CSV and map columns to fields dynamically
     public static List<Object> readCSV(String fileString, Map<String, Integer> columnMapping, String objectType) {
         BufferedReader reader = null;
-        String line = ""; 
+        String line = "";
         List<Object> records = new ArrayList<>();
 
         try {
@@ -44,49 +43,60 @@ public class CSVread {
                 // Extract common fields using the helper method
                 User baseUser = extractCommonFields(row, columnMapping);
 
-                // Handling User objects, change the row.length for the amount of parameters in your class
+                // Handling User objects, change the row.length for the amount of parameters in
+                // your class
                 if (objectType.equals("User") && row.length >= 6) {
                     records.add(baseUser); // Add the user
                 }
                 // Handling Patient objects
                 else if (objectType.equals("Patient") && row.length >= 9) {
                     Patient patient = new Patient(
-                        baseUser.getHospitalID(),
-                        baseUser.getName(),
-                        baseUser.getRole(),
-                        baseUser.getGender(),
-                        baseUser.getAge(),
-                        baseUser.getPassword(),
-                        row[columnMapping.get("dateOB")].trim(),
-                        row[columnMapping.get("bloodType")].trim(),
-                        row[columnMapping.get("contactInfo")].trim());
+                            baseUser.getHospitalID(),
+                            baseUser.getName(),
+                            baseUser.getRole(),
+                            baseUser.getGender(),
+                            baseUser.getAge(),
+                            baseUser.getPassword(),
+                            row[columnMapping.get("dateOB")].trim(),
+                            row[columnMapping.get("bloodType")].trim(),
+                            row[columnMapping.get("contactInfo")].trim());
                     records.add(patient); // Add the patient
                 }
 
-                // Handle Doctor objects, change the row.length for the amount of parameters in your class
-                else if (objectType.equals("Doctor") && row.length >= 9){
+                // Handle Doctor objects, change the row.length for the amount of parameters in
+                // your class
+                else if (objectType.equals("Doctor") && row.length >= 6) {
+                    Doctor doctor = new Doctor(
+                            baseUser.getHospitalID(),
+                            baseUser.getName(),
+                            baseUser.getRole(),
+                            baseUser.getGender(),
+                            baseUser.getAge(),
+                            baseUser.getPassword());
+                    records.add(doctor); // Add the doctor
 
                 }
-                // Handle Pharmacist objects, change the row.length for the amount of parameters in your class
-                else if (objectType.equals("Pharmacist") && row.length >= 9){
+                // Handle Pharmacist objects, change the row.length for the amount of parameters
+                // in your class
+                else if (objectType.equals("Pharmacist") && row.length >= 9) {
 
                 }
                 // Handle Administrator objects
-                else if (objectType.equals("Administrator") && row.length >= 6){
+                else if (objectType.equals("Administrator") && row.length >= 6) {
                     Administrator administrator = new Administrator(
-                        baseUser.getHospitalID(),
-                        baseUser.getName(),
-                        baseUser.getRole(),
-                        baseUser.getGender(),
-                        baseUser.getAge(),
-                        baseUser.getPassword());
-                        records.add(administrator); // Add the administrator
+                            baseUser.getHospitalID(),
+                            baseUser.getName(),
+                            baseUser.getRole(),
+                            baseUser.getGender(),
+                            baseUser.getAge(),
+                            baseUser.getPassword());
+                    records.add(administrator); // Add the administrator
                 }
 
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         } finally {
             try {
                 if (reader != null) {
