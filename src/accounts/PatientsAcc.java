@@ -12,16 +12,18 @@ public class PatientsAcc {
 
     // store the list of patients
     private static List<Patient> patients = new ArrayList<>();
+    private static String originalPath = "../Data//Original/Patient_List.csv";
+    private static String updatedPath = "../Data//Updated/Patient_List(Updated).csv";
 
     // static method to load patients from CSV file and return as a list
     public static void loadPatients(boolean isFirstRun) {
 
         String filePath;
         if (isFirstRun) {
-            filePath = "Data//Original/Patient_List.csv";
-            CSVclear.clearFile("Data//Updated/Patient_List(Updated).csv");
+            filePath = originalPath;
+            CSVclear.clearFile(updatedPath);
         } else {
-            filePath = "Data//Updated/Patient_List(Updated).csv";
+            filePath = updatedPath;
         }
 
         // clear the list to avoid having duplicate data
@@ -67,10 +69,10 @@ public class PatientsAcc {
     }
 
     public static void duplicatePatient() {
-        CSVwrite.writeCSVList("Data//Updated/Patient_List(Updated).csv", patients);
+        CSVwrite.writeCSVList(updatedPath, patients);
     }
 
-    //find patient by hospitalID
+    // find patient by hospitalID
     public static User findPatientById(String hospitalID) {
         for (User patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
@@ -90,12 +92,13 @@ public class PatientsAcc {
         return null;
     }
 
-    //updating methods
+    // updating methods
     public static void addPatient(Patient patient) {
         // add patient to patient List
         patients.add(patient);
-        CSVwrite.writeCSV("Data//Updated/Patient_List(Updated).csv", patient);
+        CSVwrite.writeCSV(updatedPath, patient);
     }
+
     // this method might or might not need, delete if neccessary
     public static void removePatient(Patient patient) {
         patients.remove(patient);

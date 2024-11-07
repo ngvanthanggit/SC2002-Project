@@ -4,6 +4,8 @@ import java.util.List;
 import accounts.*;
 import user.*;
 
+import menus.*;
+
 public class HMSApp {
     private static String format = "|%-25s|\n";
 
@@ -29,6 +31,7 @@ public class HMSApp {
             List<User> admins = AdminsAcc.getAdmins();
             List<User> patients = PatientsAcc.getPatients();
             List<User> doctors = DoctorsAcc.getDoctors();
+
             System.out.println("\nWelcome to the HMS App");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.printf(format, "1. Login");
@@ -91,6 +94,8 @@ public class HMSApp {
                 Patient patient = (Patient) loggedIn;
             } else if (loggedIn instanceof Doctor) {
                 Doctor doctor = (Doctor) loggedIn;
+                DoctorMenu doctorMenu = new DoctorMenu(doctor);
+                doctorMenu.displayMenu();
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
                 admin.AdminMenu();

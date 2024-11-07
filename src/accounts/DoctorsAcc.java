@@ -13,14 +13,16 @@ import user.*;
 public class DoctorsAcc {
     // List of all doctors
     private static List<Doctor> doctors = new ArrayList<>();
+    private static String originalPath = "../Data//Original/Doctor_List.csv";
+    private static String updatedPath = "../Data//Updated/Doctor_List(Updated).csv";
 
     public static void loadDoctors(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
-            filePath = "Data//Original/Doctor_List.csv";
-            CSVclear.clearFile("Data//Updated/Doctor_List(Updated).csv");
+            filePath = originalPath;
+            CSVclear.clearFile(updatedPath);
         } else {
-            filePath = "Data//Updated/Doctor_List(Updated).csv";
+            filePath = updatedPath;
         }
 
         doctors.clear();
@@ -60,7 +62,7 @@ public class DoctorsAcc {
     }
 
     public static void duplicateDoctor() {
-        CSVwrite.writeCSVList("Data//Updated/Doctor_List(Updated).csv", doctors);
+        CSVwrite.writeCSVList(updatedPath, doctors);
     }
 
     public static User findDoctorById(String hospitalID) {
@@ -84,7 +86,7 @@ public class DoctorsAcc {
 
     private static void addDoctor(Doctor doctor) {
         doctors.add(doctor);
-        CSVwrite.writeCSV("Data//Updated/Doctor_List(Updated).csv", null);
+        CSVwrite.writeCSV(updatedPath, null);
     }
 
     public static void removeDoctor(Doctor doctor) {
