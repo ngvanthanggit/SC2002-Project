@@ -1,13 +1,15 @@
+package main;
+
 import java.util.Scanner;
 import java.util.List;
 
 import accounts.*;
 import user.*;
-
 import menus.*;
 
 public class HMSApp {
     private static String format = "|%-25s|\n";
+    private static User loggedInUser; // To store the logged-in user
 
     public static void main(String[] args) {
 
@@ -74,7 +76,8 @@ public class HMSApp {
                 login = new Login(DoctorsAcc.getDoctors());
                 break;
             case 3: // Pharmacist
-
+                System.out.println("Pharmacist Selected!");
+                login = new Login(PharmacistsAcc.getPharmacists());
                 break;
             case 4: // Administrator
                 System.out.println("Administrator Selected!");
@@ -87,6 +90,7 @@ public class HMSApp {
         // authenticate user
         User loggedIn = login.authenticate(); // returns the user that has logged in
         if (loggedIn != null) {
+            loggedInUser = loggedIn; // Store the logged-in user
 
             // check return type of user,
             // add pharmacist and doctor here
@@ -99,11 +103,12 @@ public class HMSApp {
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
                 admin.AdminMenu();
-            }
-            // add doctor and pharmacist in this manner
-        } else {
+            } else if (loggedIn instanceof Pharmacist) {
+                Pharmacist pharmacist = (Pharmacist) loggedIn;
+                //pharmacist.PharmacistMenu(); //need to check again
+            } else {
             System.out.println("Login failed! Incorrect ID or password.");
-        }
+            }
     }
 
     public static void mainCreateAcc(List<User> admins, List<User> patients) {
@@ -131,5 +136,9 @@ public class HMSApp {
         System.out.printf(format, "4. Administrator");
         System.out.print("Role: ");
         return sc.nextInt();
+    }
+
+    public static User getLoggedInUser() {
+    return loggedInUser;
     }
 }
