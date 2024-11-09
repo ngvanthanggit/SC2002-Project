@@ -1,5 +1,6 @@
 //this class will be called when our program starts
 //main purpose is to handle the imported data
+package main;
 
 import accounts.PatientsAcc;
 import accounts.AdminsAcc;
