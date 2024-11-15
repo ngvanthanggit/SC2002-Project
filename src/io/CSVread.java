@@ -186,12 +186,16 @@ public class CSVread {
                 LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate") && !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
                 ? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter) : null;
 
+                
+
                 // Create a new ReplenishRequest with parsed data
-                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
-                request.setRequestedBy(requestedBy);
-                request.setRequestDate(requestDate);
-                request.setRequestStatus(status);
-                request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+                //ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
+                //request.setRequestedBy(requestedBy);
+                //request.setRequestDate(requestDate);
+                //request.setRequestStatus(status);
+                //request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+
+                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity, requestedBy, requestDate, status, approvalDate);
 
                 replenishList.add(request); // Add item to the list
             }

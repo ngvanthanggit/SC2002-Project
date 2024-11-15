@@ -5,11 +5,11 @@ package main;
 import accounts.PatientsAcc;
 import accounts.PharmacistsAcc;
 import inventory.InventoryManager;
+import inventory.ReplenishManager;
 import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
 
 public class SystemInitialisation {
-
     private static boolean isFirstRun = true;
 
     // simiplifies all methods needed when 1st boot up of system under 1 method
@@ -21,6 +21,7 @@ public class SystemInitialisation {
         PharmacistsAcc.loadPharmacists(isFirstRun);
         DoctorsAcc.loadDoctors(isFirstRun);
         InventoryManager.loadInventory(isFirstRun);
+        ReplenishManager.loadReplenish(isFirstRun);
 
         // save the original data into a new file to be updated
         AdminsAcc.duplicateAdmin();
@@ -28,6 +29,7 @@ public class SystemInitialisation {
         PharmacistsAcc.duplicatePharmacist();
         DoctorsAcc.duplicateDoctor();
         InventoryManager.duplicateInventory();
+        ReplenishManager.duplicateReplenish();
 
         // Displaying the List of Patients and Staffs from CSV
         AdminsAcc.displayAdmins();
@@ -35,7 +37,8 @@ public class SystemInitialisation {
         PharmacistsAcc.displayPharmacists();
         DoctorsAcc.displayDoctors();
         InventoryManager.displayInventory();
-        
+        ReplenishManager.displayReplenishList();
+
         // set to false after first load
         isFirstRun = false;
     }
