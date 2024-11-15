@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import io.CSVclear;
-import io.CSVread;
-import io.CSVwrite;
+import io.*;
 
 public class InventoryManager {
     //List of inventory items
@@ -106,7 +104,7 @@ public class InventoryManager {
         InventoryItem item = getItem(itemName);
         if(item != null) {
             item.setQuantity(quantity);
-            //need to write data in csv file
+            CSVwrite.writeCSV(updatedPath, item);
             System.out.println("There are now " + quantity +" "+ itemName + " in the inventory.");
         }
         else {
