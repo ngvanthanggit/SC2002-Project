@@ -1,9 +1,9 @@
 package inventory;
 import java.util.*;
+//import java.time.LocalDate;
 
-import io.CSVclear;
-import io.CSVread;
-import io.CSVwrite;
+
+import io.*;
 
 public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
@@ -70,6 +70,7 @@ public class ReplenishManager {
     
     public void approveReplenish(ReplenishRequest request) {
         request.setRequestStatus(RequestStatus.APPROVED);
+        request.setApprovalDate(LocalDate.now());
         CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval
         System.out.println("Replenish request for " + request.getItemName() + " approved.");
     }
