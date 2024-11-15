@@ -12,8 +12,8 @@ import user.Pharmacist;
 public class PharmacistsAcc {
     // store all Administrator objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Pharm_List.csv";
-    private static String updatedPath = "../Data//Updated/Pharm_List(Updated).csv";
+    private static String originalPath = "Data//Original/Pharm_List.csv";
+    private static String updatedPath = "Data//Updated/Pharm_List(Updated).csv";
 
     // read in csv file of staffs
     public static void loadPharmacists(boolean isFirstRun) {

@@ -7,6 +7,16 @@ public class Doctor extends User {
         this(null, null, null, null, 0, null);
     }
 
+    public void displayMenu(){
+        //display Doctor menus
+    }
+
+    @Override
+    public void logout(){
+        System.out.println("Doctor Logging Out.");
+        return;
+    }
+
     public Doctor(String hospitalID, String name, String role,
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);

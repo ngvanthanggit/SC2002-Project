@@ -1,7 +1,9 @@
 package user;
 //parent class of all User classes
 
-public class User {
+import menus.CommonMenus;
+
+public class User implements CommonMenus {
     private String hospitalId;
     private String name;
     private String role;
@@ -70,4 +72,12 @@ public class User {
                 hospitalId, name, role, gender, age, password);
     }
 
+    public void displayMenu(){
+        System.out.println("User Menu.");
+    }
+
+    public void logout(){
+        System.out.println("User Logging Out.");
+        return;
+    }
 }

@@ -32,6 +32,7 @@ public class HMSApp {
             // refresh the List every run
             List<User> admins = AdminsAcc.getAdmins();
             List<User> patients = PatientsAcc.getPatients();
+            List<User> pharmacists = PharmacistsAcc.getPharmacists();
             List<User> doctors = DoctorsAcc.getDoctors();
 
             System.out.println("\nWelcome to the HMS App");
@@ -47,6 +48,7 @@ public class HMSApp {
                     mainLogin(sc);// login
                     break;
                 case 2:
+                    //ignore
                     mainCreateAcc(admins, patients); // create newAcc
                     break;
                 case 3:
@@ -102,13 +104,15 @@ public class HMSApp {
                 doctorMenu.displayMenu();
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
-                admin.AdminMenu();
+                admin.displayMenu();
             } else if (loggedIn instanceof Pharmacist) {
                 Pharmacist pharmacist = (Pharmacist) loggedIn;
+                pharmacist.displayMenu();
                 //pharmacist.PharmacistMenu(); //need to check again
             } else {
             System.out.println("Login failed! Incorrect ID or password.");
             }
+        }
     }
 
     public static void mainCreateAcc(List<User> admins, List<User> patients) {

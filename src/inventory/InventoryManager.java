@@ -8,12 +8,13 @@ import java.util.HashMap;
 import io.CSVclear;
 import io.CSVread;
 import io.CSVwrite;
+import user.Patient;
 
 public class InventoryManager {
     //List of inventory items
     private static List<InventoryItem> inventory = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Medicine_List.csv";
-    private static String updatedPath = "../Data//Updated/Medicine_List(Updated).csv";
+    private static String originalPath = "Data//Original/Medicine_List.csv";
+    private static String updatedPath = "Data//Updated/Medicine_List(Updated).csv";
 
     public static void loadInventory(boolean isFirstRun) {
         String filePath;
@@ -30,8 +31,15 @@ public class InventoryManager {
         inventoryColumnMapping.put("Initial Stock", 1);
         inventoryColumnMapping.put("Low Stock Level Alert", 2);
 
-        inventory = CSVread.readitemCSV(filePath, inventoryColumnMapping);
+        List<InventoryItem> inventoryMapList = CSVread.readItemCSV(filePath, inventoryColumnMapping);
 
+        // add the data from CSV into patientsList
+        for (InventoryItem item : inventoryMapList) {
+            if (item instanceof InventoryItem) {
+                inventory.add(item);
+            }
+        }
+        
         if (inventory.isEmpty()) {
             System.out.println("No items were loaded.");
         } else {
@@ -49,9 +57,21 @@ public class InventoryManager {
         return null;
     }
     //return all items in a list
-    public List<InventoryItem> getInventory() {
+    public static List<InventoryItem> getInventory() {
         return inventory;
     }
+
+    public static void displayInventory(){
+        System.out.println("The Medication in the CSV file are: ");
+        for(InventoryItem inventoryItem: inventory){
+            System.out.println(inventoryItem.getItemInfo());
+        }
+    }
+
+    public static void duplicateInventory(){
+        CSVwrite.writeCSVList(updatedPath, inventory);
+    }
+
     //Add new item to inventory
     public void addItem(String itemName, int quantity, int minimumQuantity) {
         //Check for valid parameters

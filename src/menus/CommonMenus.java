@@ -1,6 +1,6 @@
 package menus;
 
 public interface CommonMenus {
-    public void Logout(); //Everyone
-    public void Menu();
+    public void logout(); //Everyone
+    public void displayMenu();
 }
