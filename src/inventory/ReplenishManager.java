@@ -69,8 +69,7 @@ public class ReplenishManager {
     }
     
     public void approveReplenish(ReplenishRequest request) {
-        request.setRequestStatus(RequestStatus.APPROVED);
-        request.setApprovalDate(LocalDate.now());
+        request.setRequestStatus(RequestStatus.APPROVED); //approvalDate is set also
         CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval
         System.out.println("Replenish request for " + request.getItemName() + " approved.");
     }
