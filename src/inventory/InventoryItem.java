@@ -42,5 +42,14 @@ public class InventoryItem {
         return minimumQuantity;
     }
 
+    //convert into a CSV readable and writeable format
+    public String toCSVRow() {
+        return String.format("%s,%d,%d", itemName, quantity, minimumQuantity);
+    }
+
+    public String getItemInfo() {
+        return String.format("Inventory[Medicine Name=%s, Initial Stock=%d, Low Stock Alert=%d]",
+        itemName, quantity, minimumQuantity);
+    }
 }
 

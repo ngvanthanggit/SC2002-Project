@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import inventory.InventoryItem;
+
 public class CSVwrite {
 
     private static boolean headersWritten = false;
@@ -23,37 +25,51 @@ public class CSVwrite {
             return;
         }
 
+        FileWriter output = null;
         try {
             // set to true to append not replace exisiting data, set to false to write over
             // all data
-            FileWriter output = new FileWriter(filePath, true);
-            List<String> data = new ArrayList<>();
-
-            // get all class&inherited fields
-            for (Field field : getAllFields(object.getClass())) {
-                field.setAccessible(true); // Allows access to private fields
-                Object value = field.get(object);
-
-                // Convert data to readable format and check for null values
-                if (value != null && value.getClass().isArray()) {
-                    data.add(Arrays.toString((Object[]) value)); // Convert array to string
-                } else if (value != null) {
-                    data.add(value.toString()); // Convert other fields to string
-                } else {
-                    data.add(""); // Empty string if null
-                }
+            output = new FileWriter(filePath, true);
+            
+            //handles InventoryItem
+            if(object instanceof InventoryItem){
+                output.write(((InventoryItem) object).toCSVRow() + '\n');
             }
+            //handles all User based classes
+            else {
+                List<String> data = new ArrayList<>();
 
-            // write only the data values (not field names) as a CSV row
-            output.write(String.join(",", data));
-            output.write("\n");
-            // System.out.println("Data written successfully!");
+                // get all class&inherited fields
+                for (Field field : getAllFields(object.getClass())) {
+                    field.setAccessible(true); // Allows access to private fields
+                    Object value = field.get(object);
 
-            output.close();
+                    // Convert data to readable format and check for null values
+                    if (value != null && value.getClass().isArray()) {
+                        data.add(Arrays.toString((Object[]) value)); // Convert array to string
+                    } else if (value != null) {
+                        data.add(value.toString()); // Convert other fields to string
+                    } else {
+                        data.add(""); // Empty string if null
+                    }
+                }
 
+                //write only the data values (not field names) as a CSV row
+                output.write(String.join(",", data) + "\n");
+                //output.write("\n");
+                //System.out.println("Data written successfully!");
+            }
         } catch (IOException | IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
@@ -80,7 +96,9 @@ public class CSVwrite {
             return;
         }
 
-        try (FileWriter output = new FileWriter(filePath, false)) { // Overwrite mode
+        FileWriter output = null;
+        try {
+            output = new FileWriter(filePath, false);  // Overwrite mode
 
             // Write the header first
             if (header != null) {
@@ -89,26 +107,41 @@ public class CSVwrite {
 
             // Write each object data as a new row
             for (T object : objects) {
-                List<String> data = new ArrayList<>();
+                //handles InventoryItem
+                if(object instanceof InventoryItem){
+                    output.write(((InventoryItem) object).toCSVRow() + "\n");
+                } 
+                //handles user based classes
+                else {
+                    List<String> data = new ArrayList<>();
 
-                // Get all class & inherited fields
-                for (Field field : getAllFields(object.getClass())) {
-                    field.setAccessible(true);
-                    Object value = field.get(object);
+                    // Get all class & inherited fields
+                    for (Field field : getAllFields(object.getClass())) {
+                        field.setAccessible(true);
+                        Object value = field.get(object);
 
-                    if (value != null && value.getClass().isArray()) {
-                        data.add(Arrays.toString((Object[]) value));
-                    } else if (value != null) {
-                        data.add(value.toString());
-                    } else {
-                        data.add("");
+                        if (value != null && value.getClass().isArray()) {
+                            data.add(Arrays.toString((Object[]) value));
+                        } else if (value != null) {
+                            data.add(value.toString());
+                        } else {
+                            data.add("");
+                        }
                     }
+                    output.write(String.join(",", data) + "\n");
                 }
-                output.write(String.join(",", data) + "\n");
             }
 
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

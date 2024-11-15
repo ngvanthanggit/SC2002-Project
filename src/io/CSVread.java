@@ -81,7 +81,7 @@ public class CSVread {
                 }
                 // Handle Pharmacist objects, change the row.length for the amount of parameters
                 // in your class
-                else if (objectType.equals("Pharmacist") && row.length >= 9){
+                else if (objectType.equals("Pharmacist") && row.length >= 6){
                     Pharmacist pharmacist = new Pharmacist(
                             baseUser.getHospitalID(),
                             baseUser.getName(),
@@ -90,7 +90,6 @@ public class CSVread {
                             baseUser.getAge(),
                             baseUser.getPassword());
                     records.add(pharmacist);
-
                 }
                 // Handle Administrator objects
                 else if (objectType.equals("Administrator") && row.length >= 6) {
@@ -103,7 +102,6 @@ public class CSVread {
                             baseUser.getPassword());
                     records.add(administrator); // Add the administrator
                 }
-
             }
 
         } catch (Exception e) {
