@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import accounts.AdminsAcc;
 
-public class Administrator extends User {
+public class Administrator extends User  {
     
     //constructors
     public Administrator(){
@@ -20,13 +20,14 @@ public class Administrator extends User {
         super(hospitalID, name, role, gender, age, password);
     }
 
+    @Override
     public String userInfo() {
         return String.format("Admin[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, Password=%s]",
         getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
-    //method to view all Admin Methods
-    public void AdminMenu(){
+    //View all Admin Methods, implemented from User Class Interface
+    public void displayMenu(){
         int choice;
         Scanner sc = new Scanner(System.in);
 
@@ -56,7 +57,7 @@ public class Administrator extends User {
                     
                     break;
                 case 5:
-                    Logout(); 
+                    logout(); 
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -208,8 +209,10 @@ public class Administrator extends User {
     public void ApproveReplenishment(){
 
     }
-    public void Logout(){
-        System.out.println("Logging Out.");
+
+    @Override
+    public void logout(){
+        System.out.println("Administrator Logging Out.");
         return;
     }
 }

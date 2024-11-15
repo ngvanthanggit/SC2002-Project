@@ -81,7 +81,7 @@ public class CSVread {
                 }
                 // Handle Pharmacist objects, change the row.length for the amount of parameters
                 // in your class
-                else if (objectType.equals("Pharmacist") && row.length >= 9){
+                else if (objectType.equals("Pharmacist") && row.length >= 6){
                     Pharmacist pharmacist = new Pharmacist(
                             baseUser.getHospitalID(),
                             baseUser.getName(),
@@ -90,7 +90,6 @@ public class CSVread {
                             baseUser.getAge(),
                             baseUser.getPassword());
                     records.add(pharmacist);
-
                 }
                 // Handle Administrator objects
                 else if (objectType.equals("Administrator") && row.length >= 6) {
@@ -103,7 +102,6 @@ public class CSVread {
                             baseUser.getPassword());
                     records.add(administrator); // Add the administrator
                 }
-
             }
 
         } catch (Exception e) {
@@ -188,12 +186,16 @@ public class CSVread {
                 LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate") && !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
                 ? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter) : null;
 
+                
+
                 // Create a new ReplenishRequest with parsed data
-                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
-                request.setRequestedBy(requestedBy);
-                request.setRequestDate(requestDate);
-                request.setRequestStatus(status);
-                request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+                //ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
+                //request.setRequestedBy(requestedBy);
+                //request.setRequestDate(requestDate);
+                //request.setRequestStatus(status);
+                //request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+
+                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity, requestedBy, requestDate, status, approvalDate);
 
                 replenishList.add(request); // Add item to the list
             }

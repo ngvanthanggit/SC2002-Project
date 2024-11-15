@@ -3,9 +3,8 @@ package accounts;
 import java.util.List;
 import java.util.Scanner;
 
-import user.Administrator;
-import user.User;
-import user.Doctor;
+import user.*;
+import accounts.*;
 
 public class Login {
 
@@ -38,7 +37,8 @@ public class Login {
 
                     case "Pharmacist":
                         // create new pharmacist class
-                        break;
+                        return new Pharmacist(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
+                        user.getAge(), user.getPassword());
 
                     case "Doctor":
                         // create new Doctor Class
@@ -67,7 +67,10 @@ public class Login {
                 PatientsAcc.updatePassword(user.getHospitalID(), newPassword);
             } else if (user.getRole().equals("Administrator")) {
                 AdminsAcc.updatePassword(user.getHospitalID(), newPassword);
+            } else if (user.getRole().equals("Pharmacist")) {
+                PharmacistsAcc.updatePassword(user.getHospitalID(), newPassword);
             }
+
         }
     }
 }
