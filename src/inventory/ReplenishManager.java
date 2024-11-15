@@ -6,6 +6,7 @@ import io.*;
 public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
     private InventoryManager inventoryManager;
+    private Inventoryitem item;
     private static int idCounter = 0;
     private static String originalPath = "../Data//Original/Replenish_List.csv";
     private static String updatedPath = "../Data//Updated/Replenish_List(Updated).csv";
@@ -70,7 +71,8 @@ public class ReplenishManager {
     public void approveReplenish(ReplenishRequest request) {
         request.setRequestStatus(RequestStatus.APPROVED);
         CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval
-        inventoryManager.updateItem(request.getItemName(), request.getReplenishQuantity());
+        item = inventoryManager.getItem(request.getItemName());
+        inventoryManager.updateItem(request.getItemName(), item.getQuantity() + request.getReplenishQuantity());
         System.out.println("Replenish request for " + request.getItemName() + " approved.");
     }
 
