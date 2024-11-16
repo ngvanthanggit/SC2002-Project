@@ -9,4 +9,8 @@ public class Doctor extends User {
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);
     }
+
+    public String getHospitalID() {
+        return super.getHospitalID();
+    }
 }
