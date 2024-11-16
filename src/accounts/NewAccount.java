@@ -9,10 +9,58 @@ import user.*;
 
 public class NewAccount {
 
-    private static String format = "|%-25s|\n";
-
-    public static User createNewAccount(List<User> patients, List<User> pharmacists, List<User> doctors, List<User> admins){
+    @SuppressWarnings("unchecked")
+    public static <T extends User> T createNewAccount(List<T> usersList, Role role){
         Scanner sc = new Scanner(System.in);
+        String prefix, name, gender, password; //common variables
+        int age, numDigits = 3;
+
+        //common details
+        System.out.print("Enter your Name: ");
+        name = sc.nextLine();
+        System.out.print("Enter your Gender: ");
+        gender = sc.nextLine();
+        System.out.print("Enter your Age: ");
+        age = sc.nextInt();
+        sc.nextLine(); //consume
+        System.out.print("Enter your Password: ");
+        password = sc.nextLine();
+
+        //determine prefix based on role passed
+        switch (role){
+            case Patient:
+                prefix = "P1";
+                String id = IDGenerator.generateID(prefix, usersList, User::getHospitalID, numDigits);
+                
+                System.out.print("Enter your Date of Birth (DD/MM/YYYY): ");
+                String DOB = sc.nextLine();
+                System.out.print("Enter your Blood Type (Ex. O+): ");
+                String bloodType = sc.nextLine();
+                System.out.print("Enter your Email: ");
+                String email = sc.nextLine();
+                return (T) new Patient(id, name, role, gender, age, password, DOB, bloodType, email);
+
+            case Doctor:
+                prefix = "D";
+                id = IDGenerator.generateID(prefix, usersList, User::getHospitalID, numDigits);
+                return (T) new Doctor(id, name, role, gender, age, password);
+                
+            case Pharmacist:
+                prefix = "P";
+                id = IDGenerator.generateID(prefix, usersList, User::getHospitalID, numDigits);
+                return (T) new Pharmacist(id, name, role, gender, age, password);
+                
+            case Administrator:
+                prefix = "A";
+                id = IDGenerator.generateID(prefix, usersList, User::getHospitalID, numDigits);
+                return (T) new Administrator(id, name, role, gender, age, password);
+            default:
+                throw new IllegalArgumentException("Un-Identified Role.");
+        }
+
+        
+
+        /*Scanner sc = new Scanner(System.in);
         String name, gender, password, DOB, bloodType, email, prefix;
         Role role;
         int age, numDeigits = 3;
@@ -82,6 +130,6 @@ public class NewAccount {
                 break;
             default: System.out.println("Invalid Choice!");
         }
-        return user;
+        return user;*/
     }
 }
