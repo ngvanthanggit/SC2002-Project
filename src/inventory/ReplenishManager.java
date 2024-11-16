@@ -73,7 +73,7 @@ public class ReplenishManager {
 
     public static void generateReplenish(String itemName, int replenishQuantity) {
         // Generate a unique ID for the request
-        String requestID = "REQ" + String.format("%04d", idCounter++);
+        String requestID = "REQ" + String.format("%03d", ++idCounter);
         
         // Create a new replenish request
         ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
