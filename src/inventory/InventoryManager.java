@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import io.CSVclear;
-import io.CSVread;
-import io.CSVwrite;
+import io.*;
 import user.Patient;
 
 public class InventoryManager {
@@ -48,7 +46,7 @@ public class InventoryManager {
 
     }
 
-    public InventoryItem getItem(String itemName) {
+    public static InventoryItem getItem(String itemName) {
         for (InventoryItem item : inventory) {
             if(item.getItemName().equalsIgnoreCase(itemName)) {
                 return item;
@@ -61,10 +59,23 @@ public class InventoryManager {
         return inventory;
     }
 
-    public static void displayInventory(){
-        System.out.println("The Medication in the CSV file are: ");
-        for(InventoryItem inventoryItem: inventory){
-            System.out.println(inventoryItem.getItemInfo());
+    public static void displayInventory() {
+        if(inventory.isEmpty()) {
+            System.out.println("The inventory is currently empty.");
+        }
+        else {
+            System.out.println("The Medication in the CSV file are: ");
+            for(InventoryItem inventoryItem: inventory){
+                System.out.println(inventoryItem.getItemInfo());
+            }
+        }
+    }
+
+    public static void displayLowItem() {
+        for(InventoryItem inventoryItem : inventory) {
+            if(inventoryItem.getQuantity() <= inventoryItem.getMinimumQualtity()) {
+                System.out.println("Warning: " + inventoryItem.getItemName() + " is low in stock.");
+            }
         }
     }
 
@@ -133,12 +144,4 @@ public class InventoryManager {
             System.out.println("The item does not exist in the inventory.");
         }
     }
-
-
-
-
-
-
-
-    
 }
