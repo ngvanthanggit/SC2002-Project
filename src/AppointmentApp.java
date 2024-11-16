@@ -6,16 +6,17 @@ import java.util.Scanner;
 
 import appointmentManager.*;
 
+//test case for Patient Appointment Class
 public class AppointmentApp {
 
     private ApptScheduler scheduler = new ApptScheduler();
-    private ApptRepository repository = new ApptRepository();
+    private ApptManager repository = new ApptManager();
     private ApptService service = new ApptService(scheduler, repository);
 
     private Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        SystemInitialisation.start();
+        //SystemInitialisation.start();
         AppointmentApp app = new AppointmentApp();
         app.run();
     }

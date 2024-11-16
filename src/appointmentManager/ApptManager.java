@@ -4,13 +4,177 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import inventory.InventoryItem;
 import io.CSVclear;
+import io.CSVread;
+import io.CSVwrite;
 import user.User;
 
+//holds the List of All Appointments from CSV
+public class ApptManager {
+    
+    //UPDATED CODE
+    private static final String originalPath = "Data//Original/Appt_List.csv";
+    private static final String updatedPath = "Data//Updated/Appt_List(Updated).csv";
+    private static List<Appointment> apptList = new ArrayList<>();
 
-public class ApptRepository {
-    private static final String CSV_FILE = "appointments.csv";
+    public static void loadAppointments(boolean isFirstRun){
+        String filePath;
+        if (isFirstRun) {
+            filePath = originalPath;
+            CSVclear.clearFile(updatedPath);
+        } else {
+            filePath = updatedPath;
+        }
+        apptList.clear();
+
+        Map<String, Integer> apptColumnMapping = new HashMap<>();
+        apptColumnMapping.put("AppointmentID", 0);
+        apptColumnMapping.put("PatientID", 1);
+        apptColumnMapping.put("DoctorID", 2);
+        apptColumnMapping.put("Date", 3);
+        apptColumnMapping.put("Time", 4);
+        apptColumnMapping.put("Status", 5);
+        apptColumnMapping.put("ConsultationNotes", 6);
+        apptColumnMapping.put("PrescribedMedications", 7);
+        apptColumnMapping.put("ServiceType", 8);
+
+        List<Appointment> apptMapList = CSVread.readApptCSV(filePath, apptColumnMapping);
+
+        // add the data from CSV into patientsList
+        for (Appointment appt : apptMapList) {
+            if (appt instanceof Appointment) {
+                apptList.add(appt);
+            }
+        }
+        
+        if (apptList.isEmpty()) {
+            System.out.println("No items were loaded.");
+        } else {
+            System.out.println("Inventory successfully loaded: " + apptList.size());
+        }
+    }
+
+    //return all appointments in the list
+    public static List<Appointment> getAppointments(){
+        return apptList;
+    }
+
+    //rewrite all data in the CSV file
+    public static void duplicateAppointments(){
+        CSVwrite.writeCSVList(updatedPath, apptList);
+    }
+
+    //find appointment by the entered ID
+    public static Appointment findAppointmentByID(int appointmentID) {
+        for (Appointment appointment : apptList) {
+            if (appointment.getAppointmentID() == appointmentID) {
+                return appointment;
+            }
+        }
+        return null;  // Return null if not found
+    }
+
+    //only used by the Administrator
+    public static void displayAppointments(){
+        if(apptList.isEmpty()) {
+            System.out.println("The Appointments is currently empty.");
+        }
+        else {
+            System.out.println("\nThe Appointments in the CSV file are: ");
+            for(Appointment appointment: apptList){
+                System.out.println(appointment.getApptInfo());
+            }
+        }
+    }
+
+    //used by Doctor OR Patient to Display ALL appointments
+    public static List<Appointment> displayAppointments(User user){
+        //create a new list to store appts with the same Doctor/Patient
+        List<Appointment> allAppts = new ArrayList<>();
+        //find matching Patient/Doctor in all Appointments
+        for (Appointment appointment: apptList){
+            //if found either Patient/Doctor return all appts
+            if(appointment.getDoctor().equals(user) || appointment.getPatient().equals(user)){
+                allAppts.add(appointment);
+            }
+        }
+        return allAppts;
+    }
+
+    //used by Doctor or Patient to Display Appts STATUS_CONFIRMED
+    public static List<Appointment> displayConfirmedAppts(User user){
+        List<Appointment> confirmedAppt = new ArrayList<>();
+        for(Appointment appointment: apptList){
+            //add all confirmed appointmnets
+            if((appointment.getDoctor().equals(user) || appointment.getPatient().equals(user))
+            && appointment.getStatus() == ApptStatus.CONFIRMED){
+                confirmedAppt.add(appointment);
+            }
+        }
+        return confirmedAppt;
+    }
+
+    public static List<Appointment> displayPastAppts(User user){
+        List<Appointment> pastAppt = new ArrayList<>();
+        for(Appointment appointment: apptList){
+            //add all past appointmnets => COMPLETED
+            if((appointment.getDoctor().equals(user) || appointment.getPatient().equals(user))
+            && appointment.getStatus() == ApptStatus.COMPLETED){
+                pastAppt.add(appointment);
+            }
+        }
+        return pastAppt;
+    }
+
+    //used by patient & admin
+    public Appointment getOutcomeRecord(int appointmentID) {
+        try {
+            Appointment appointment = findAppointmentByID(appointmentID);
+            if (appointment == null) {
+                throw new Exception("AppointmentID is null.");
+            }
+            return appointment;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /*
+    get all Patient Appointments
+    - get confirmed only
+    - get unconfirmed
+    */
+
+    /*
+    get all Doctor Appointments
+    - get confirmed only
+    - get unconfirmed
+    */
+
+    //get appointment outcome
+
+
+
+    //ORIGINAL CODE
+    /*private static final String CSV_FILE = "appointments.csv"; //remove later
     public List<Appointment> appointments;
+
+    public List<Appointment> loadAllAppointments() {
+        List<Appointment> appointments = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE))) {
+            String line;
+            // br.readLine(); // read and discard header line
+            while ((line = br.readLine()) != null) {
+                Appointment appt = Appointment.fromCSV(line);  // Assuming you have this method
+                appointments.add(appt);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return appointments;
+    }
     
     private void writeHeaderToCSV() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE, false))) {  // 'false' to overwrite
@@ -115,22 +279,19 @@ public class ApptRepository {
         // Rewrite the CSV with the updated appointments list
         rewriteCSV(appointments);
     }
-
-    public List<Appointment> loadAllAppointments() {
-        List<Appointment> appointments = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE))) {
-            String line;
-            // br.readLine(); // read and discard header line
-            while ((line = br.readLine()) != null) {
-                Appointment appt = Appointment.fromCSV(line);  // Assuming you have this method
-                appointments.add(appt);
+    
+    public Appointment findAppointmentByID(int appointmentID) {
+        appointments = loadAllAppointments();
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentID() == appointmentID) {
+                return appointment;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return appointments;
+        return null;  // Return null if not found
     }
+    //remove till here
 
+    //used by patient & doctor
     public List<Appointment> loadConfirmedAppointments() {
         List<Appointment> appointments = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE))) {
@@ -147,18 +308,8 @@ public class ApptRepository {
         }
         return appointments;
     }
-   
-    public Appointment findAppointmentByID(int appointmentID) {
-        appointments = loadAllAppointments();
-        for (Appointment appointment : appointments) {
-            if (appointment.getAppointmentID() == appointmentID) {
-                return appointment;
-            }
-        }
-        return null;  // Return null if not found
-    }
 
-    // get past appointments for a specific patient
+    // get past appointments for a specific patient & admin
     public List<Appointment> getPastAppointments(User patient) {
         List<Appointment> pastAppointments = new ArrayList<>();
         appointments = loadAllAppointments();
@@ -173,6 +324,7 @@ public class ApptRepository {
         return pastAppointments;
     }
 
+    //used by patient & admin
     public Appointment getOutcomeRecord(int appointmentID) {
         try {
             Appointment appointment = findAppointmentByID(appointmentID);
@@ -186,6 +338,7 @@ public class ApptRepository {
         }
     }
 
+    //both patient admin usage
     public List<Appointment> getAllAppointments(String hospitalID) {
         List<Appointment> AllAppointments = new ArrayList<>();
         appointments = loadAllAppointments();
@@ -195,5 +348,5 @@ public class ApptRepository {
             }
         }
         return AllAppointments;
-    }
+    }*/
 }

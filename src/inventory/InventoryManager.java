@@ -31,7 +31,7 @@ public class InventoryManager {
 
         List<InventoryItem> inventoryMapList = CSVread.readItemCSV(filePath, inventoryColumnMapping);
 
-        // add the data from CSV into patientsList
+        // add the data from CSV into inventoryList
         for (InventoryItem item : inventoryMapList) {
             if (item instanceof InventoryItem) {
                 inventory.add(item);
@@ -43,7 +43,6 @@ public class InventoryManager {
         } else {
             System.out.println("Inventory successfully loaded: " + inventory.size());
         }
-
     }
 
     public static InventoryItem getItem(String itemName) {
@@ -65,7 +64,7 @@ public class InventoryManager {
         }
         return null;*/
     }
-    //return all items in a list
+    //return all items in the list
     public static List<InventoryItem> getInventory() {
         return inventory;
     }

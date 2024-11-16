@@ -9,10 +9,8 @@ import user.*;
 
 
 public class Appointment {
-    public enum Status {
-        SCHEDULED, CANCELLED, COMPLETED, NOT_SCHEDULED, PENDING, CONFIRMED
-    }
-    private Status status;
+    //will use enum ApptStatus class ltr
+    private ApptStatus status;
     private Doctor doctor;
     private Patient patient;
     private int appointmentID;
@@ -21,13 +19,13 @@ public class Appointment {
 
     private String consultationNotes;
     private String prescribedMedications;
-    private String serviceType;
+    private String serviceType; //x-ray etc.
 
     private static int idCounter = 1000;
 
     // constructor
     public Appointment(){
-        this.status = Status.NOT_SCHEDULED; 
+        this.status = ApptStatus.NOT_SCHEDULED; 
         this.doctor = null; 
         this.patient = null;
         this.appointmentDate = null; 
@@ -36,7 +34,7 @@ public class Appointment {
     }
 
     public Appointment(Doctor doctor, Patient patient){
-        this.status = Status.NOT_SCHEDULED; // default values
+        this.status = ApptStatus.NOT_SCHEDULED; // default values
         this.doctor = doctor; 
         this.patient = patient;
         // this.appointmentDate = LocalDate.now(); // set default date as today
@@ -46,7 +44,7 @@ public class Appointment {
 
     // with appointmentID
     public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime, int appointmentID){
-        this.status = Status.PENDING; 
+        this.status = ApptStatus.PENDING; 
         this.doctor = doctor; 
         this.patient = patient;
         this.appointmentDate = appointmentDate; 
@@ -56,7 +54,7 @@ public class Appointment {
 
     // without appointmentID
     public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime){
-        this.status = Status.PENDING; 
+        this.status = ApptStatus.PENDING; 
         this.doctor = doctor; 
         this.patient = patient;
         this.appointmentDate = appointmentDate; 
@@ -64,59 +62,52 @@ public class Appointment {
         this.appointmentID = createAppointmentID();
     }
 
-    public void updateStatus(Status status){
-        this.status = status;
-    }
-
-    public void confirmAppointment() {
-        this.status = Status.CONFIRMED;
-    }
-
-    public void cancelAppointment() {
-        this.status = Status.CANCELLED;
-    }
-
-    public void completeAppointment() {
-        this.status = Status.COMPLETED;
-    }
-
-    public void createAppointment() {
-        this.status = Status.PENDING;
-    }
-
-    public void assignDoctor(Doctor doctor){
+    //setter methods
+    public void setDoctor(Doctor doctor){
         this.doctor = doctor;
     }
 
-    public void assignPatient(Patient patient){
+    public void setPatient(Patient patient){
         this.patient = patient;
     }
 
-    public void assignDate(LocalDate appointmentDate){
+    public void setDate(LocalDate appointmentDate){
         if (appointmentDate.isAfter(LocalDate.now()))
             this.appointmentDate = appointmentDate;
         else 
             throw new IllegalArgumentException("Appointment date must be in the future");
     }
 
-    public void assignTime(LocalTime appointmentTime){
+    public void setTime(LocalTime appointmentTime){
         this.appointmentTime = appointmentTime;
     }
-
-    public int createAppointmentID(){
-        this.appointmentID = idCounter--; 
-        return idCounter; // decrement and return
+    
+    public void setStatus(ApptStatus status){
+        this.status = status;
     }
 
     public void setAppointmentID(int appointmentID){
         this.appointmentID = appointmentID;
     }
 
+    public void setConsultationNotes(String consultationNotes) {
+        this.consultationNotes = consultationNotes;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public void setPrescribedMedications(String prescribedMedications) {
+        this.prescribedMedications = prescribedMedications;
+    }
+
+    //getter methods
     public int getAppointmentID(){
         return appointmentID;
     }
 
-    public Status getStatus() {
+    public ApptStatus getStatus() {
         return status;
     }
 
@@ -140,24 +131,42 @@ public class Appointment {
         return consultationNotes;
     }
 
-    public void setConsultationNotes(String consultationNotes) {
-        this.consultationNotes = consultationNotes;
-    }
-
     public String getPrescribedMedications() {
         return prescribedMedications;
-    }
-
-    public void setPrescribedMedications(String prescribedMedications) {
-        this.prescribedMedications = prescribedMedications;
     }
 
     public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
+    //other methods
+    public String getApptInfo(){
+        return String.format("[AppointmentID = %s, PatientID = %s, DoctorID = %s, Date = %s, Time = %s, Status = %s, Consultation Notes = %s, Prescribed Medications = %s, Service Type = %s]",
+        appointmentID, patient.getHospitalID(), doctor.getHospitalID(), 
+        appointmentDate.toString(), appointmentTime.toString(), status,
+        consultationNotes, prescribedMedications, serviceType);
+    }
+
+    //Appointment
+    public void confirmAppointment() {
+        this.status = ApptStatus.CONFIRMED;
+    }
+
+    public void cancelAppointment() {
+        this.status = ApptStatus.CANCELLED;
+    }
+
+    public void completeAppointment() {
+        this.status = ApptStatus.COMPLETED;
+    }
+
+    public void createAppointment() {
+        this.status = ApptStatus.PENDING;
+    }
+
+    public int createAppointmentID(){
+        this.appointmentID = idCounter--; 
+        return idCounter; // decrement and return
     }
 
     // convert appointment to CSV format
@@ -167,7 +176,7 @@ public class Appointment {
     }
 
     // convert CSV to appointment
-    public static Appointment fromCSV(String csvLine) {
+    /*public static Appointment fromCSV(String csvLine) {
         if (csvLine == null || csvLine.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid CSV line: " + csvLine);
         }
@@ -178,14 +187,14 @@ public class Appointment {
             String doctorID = values[2];
             LocalDate date = LocalDate.parse(values[3]);
             LocalTime time = LocalTime.parse(values[4]);
-            Appointment.Status status = Appointment.Status.valueOf(values[5].toUpperCase());
+            ApptStatus status = ApptStatus.valueOf(values[5].toUpperCase());
             // Recreate Appointment object
             //check whether returns patient
             Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
             //check whether returns doctor
             Doctor doctor = (Doctor) DoctorsAcc.findDoctorById(doctorID);
             Appointment appointment = new Appointment(doctor, patient, date, time);
-            appointment.updateStatus(status);
+            appointment.setStatus(status);
             appointment.setAppointmentID(appointmentID);
 
             appointment.setConsultationNotes(values.length > 6 ? values[6] : "");
@@ -200,5 +209,5 @@ public class Appointment {
         } catch (Exception e) {
             throw new RuntimeException("Error parsing CSV line: " + csvLine, e);
         }
-    }
+    }*/
 }

@@ -8,11 +8,12 @@ import user.*;
 
 import accounts.PatientsAcc;
 
+//might delete
 public class ApptService {
     private ApptScheduler scheduler;
-    private ApptRepository repository;
+    private ApptManager repository;
 
-    public ApptService(ApptScheduler scheduler, ApptRepository repository){
+    public ApptService(ApptScheduler scheduler, ApptManager repository){
         this.scheduler = scheduler;
         this.repository = repository;
     }
@@ -24,7 +25,7 @@ public class ApptService {
 
     public void rescheduleAppointment(int appointmentID, LocalDate newDate, LocalTime newTime){
         Appointment appointment = scheduler.rescheduleAppointment(appointmentID, newDate, newTime);
-        appointment.updateStatus(Appointment.Status.PENDING);
+        appointment.setStatus(Appointment.Status.PENDING);
         repository.removeFromCSV(appointment);
         repository.saveToCSV(appointment);
     }

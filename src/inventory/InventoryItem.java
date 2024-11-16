@@ -48,7 +48,7 @@ public class InventoryItem {
     }
 
     public String getItemInfo() {
-        return String.format("Inventory[Medicine = %s, Initial Stock = %d, Low Stock Alert = %d]",
+        return String.format("[Medicine = %s, Initial Stock = %d, Low Stock Alert = %d]",
         itemName, quantity, minimumQuantity);
     }
 }

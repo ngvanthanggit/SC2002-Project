@@ -7,10 +7,10 @@ import java.util.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
+//might delete
 public class ApptScheduler {
     public List<Appointment> appointments;
-    ApptRepository repository = new ApptRepository();
+    ApptManager repository = new ApptManager();
 
     public ApptScheduler() {
         this.appointments = new ArrayList<>();
@@ -39,11 +39,11 @@ public class ApptScheduler {
         // Check if the time slot is available
         if (!isTimeSlotBooked(doctor, date, time)) {
             Appointment appointment = new Appointment(doctor, patient);
-            appointment.assignDate(date);
-            appointment.assignTime(time);
+            appointment.setDate(date);
+            appointment.setTime(time);
             appointment.createAppointmentID();
             appointment.createAppointment();
-            appointment.assignDoctor(doctor);
+            appointment.setDoctor(doctor);
             addAppointment(appointment);
             System.out.println("Appointment scheduled successfully.");
             System.out.println("Your appointment ID is: " + appointment.getAppointmentID());
@@ -65,8 +65,8 @@ public class ApptScheduler {
             throw new IllegalArgumentException("New time slot is not available.");
         }
         
-        appointment.assignDate(newDate);
-        appointment.assignTime(newTime);
+        appointment.setDate(newDate);
+        appointment.setTime(newTime);
         System.out.println("Appointment rescheduled successfully");
         return appointment;
     }
