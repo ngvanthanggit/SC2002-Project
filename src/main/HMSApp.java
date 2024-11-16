@@ -48,7 +48,7 @@ public class HMSApp {
                     mainLogin(sc);// login
                     break;
                 case 2:
-                    //ignore
+                    // ignore
                     mainCreateAcc(admins, patients); // create newAcc
                     break;
                 case 3:
@@ -100,17 +100,16 @@ public class HMSApp {
                 Patient patient = (Patient) loggedIn;
             } else if (loggedIn instanceof Doctor) {
                 Doctor doctor = (Doctor) loggedIn;
-                DoctorMenu doctorMenu = new DoctorMenu(doctor);
-                doctorMenu.displayMenu();
+                doctor.displayMenu();
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
                 admin.displayMenu();
             } else if (loggedIn instanceof Pharmacist) {
                 Pharmacist pharmacist = (Pharmacist) loggedIn;
                 pharmacist.displayMenu();
-                //pharmacist.PharmacistMenu(); //need to check again
+                // pharmacist.PharmacistMenu(); //need to check again
             } else {
-            System.out.println("Login failed! Incorrect ID or password.");
+                System.out.println("Login failed! Incorrect ID or password.");
             }
         }
     }
@@ -143,6 +142,6 @@ public class HMSApp {
     }
 
     public static User getLoggedInUser() {
-    return loggedInUser;
+        return loggedInUser;
     }
 }

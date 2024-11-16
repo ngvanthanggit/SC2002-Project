@@ -38,7 +38,7 @@ public class Login {
                     case "Pharmacist":
                         // create new pharmacist class
                         return new Pharmacist(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
-                        user.getAge(), user.getPassword());
+                                user.getAge(), user.getPassword());
 
                     case "Doctor":
                         // create new Doctor Class
@@ -69,6 +69,8 @@ public class Login {
                 AdminsAcc.updatePassword(user.getHospitalID(), newPassword);
             } else if (user.getRole().equals("Pharmacist")) {
                 PharmacistsAcc.updatePassword(user.getHospitalID(), newPassword);
+            } else if (user.getRole().equals("Doctor")) {
+                DoctorsAcc.updatePassword(user.getHospitalID(), newPassword);
             }
 
         }

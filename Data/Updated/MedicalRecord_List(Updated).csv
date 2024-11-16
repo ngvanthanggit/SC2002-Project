@@ -1,0 +1,3 @@
+Doctor ID,Patient ID,Diagnoses,Prescriptions,Treatment Plan
+D001,P1001,"Diabetes;Hypertension","Metformin;Amlodipine","Plan1"
+D002,P1001,"Asthma","Salbutamol","Plan4;Plan5"

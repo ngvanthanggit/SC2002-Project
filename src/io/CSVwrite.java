@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import inventory.InventoryItem;
+import medicalrecord.MedicalRecord;
 
 public class CSVwrite {
 
@@ -30,12 +31,12 @@ public class CSVwrite {
             // set to true to append not replace exisiting data, set to false to write over
             // all data
             output = new FileWriter(filePath, true);
-            
-            //handles InventoryItem
-            if(object instanceof InventoryItem){
+
+            // handles InventoryItem
+            if (object instanceof InventoryItem) {
                 output.write(((InventoryItem) object).toCSVRow() + '\n');
             }
-            //handles all User based classes
+            // handles all User based classes
             else {
                 List<String> data = new ArrayList<>();
 
@@ -54,10 +55,10 @@ public class CSVwrite {
                     }
                 }
 
-                //write only the data values (not field names) as a CSV row
+                // write only the data values (not field names) as a CSV row
                 output.write(String.join(",", data) + "\n");
-                //output.write("\n");
-                //System.out.println("Data written successfully!");
+                // output.write("\n");
+                // System.out.println("Data written successfully!");
             }
         } catch (IOException | IllegalAccessException e) {
             // TODO Auto-generated catch block
@@ -98,20 +99,27 @@ public class CSVwrite {
 
         FileWriter output = null;
         try {
-            output = new FileWriter(filePath, false);  // Overwrite mode
+            output = new FileWriter(filePath, false); // Overwrite mode
 
             // Write the header first
             if (header != null) {
                 output.write(header + "\n");
+            } else {
+                if (objects.get(0) instanceof MedicalRecord) {
+                    header = "Doctor ID,Patient ID,Diagnoses,Prescriptions,Treatment Plan";
+                    output.write(header + "\n");
+                }
             }
 
             // Write each object data as a new row
             for (T object : objects) {
-                //handles InventoryItem
-                if(object instanceof InventoryItem){
+                // handles InventoryItem
+                if (object instanceof InventoryItem) {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
-                } 
-                //handles user based classes
+                } else if (object instanceof MedicalRecord) {
+                    output.write(((MedicalRecord) object).toCSVRow() + "\n");
+                }
+                // handles user based classes
                 else {
                     List<String> data = new ArrayList<>();
 
