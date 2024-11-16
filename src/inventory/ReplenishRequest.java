@@ -29,6 +29,16 @@ public class ReplenishRequest {
         this.approvalDate = null;                // Approval date is null until approved
     }
 
+    public ReplenishRequest(String requestID, String itemName, int replenishQuantity, String requestedBy, LocalDate requestDate, RequestStatus status, LocalDate approvalDate) {
+        this.requestID = requestID;
+        this.itemName = itemName;
+        this.replenishQuantity = replenishQuantity;
+        this.requestedBy = requestedBy;
+        this.requestDate = requestDate;
+        this.status = status;
+        this.approvalDate = approvalDate;
+    }
+
     // Getters
     public String getRequestID() {
         return requestID;
@@ -77,5 +87,16 @@ public class ReplenishRequest {
     public void setRequestedBy(String requestedBy) {
         this.requestedBy = requestedBy;
     }
+
+    public String getRequestInfo() {
+        return String.format(
+            "Requests[RequestID = %s, Medicine Name = %s, Replenish Quantity = %d, Requested By = %s, Request Date = %s, Status = %s, Approval Date = %s]",
+            requestID, itemName, replenishQuantity, requestedBy, 
+            requestDate != null ? requestDate.toString() : "N/A", // Convert LocalDate to string
+            status != null ? status.toString() : "N/A",           // Convert Enum to string
+            approvalDate != null ? approvalDate.toString() : "N/A" // Convert LocalDate to string
+        );
+    }
+    
 }
 

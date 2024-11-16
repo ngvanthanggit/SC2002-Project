@@ -58,7 +58,7 @@ public class AdminsAcc {
     }
 
     public static void displayAdmins() {
-        System.out.println("The Admins in the CSV file are: ");
+        System.out.println("\nThe Admins in the CSV file are: ");
         for (User admin : admins) {
             System.out.println(admin.userInfo());
         }

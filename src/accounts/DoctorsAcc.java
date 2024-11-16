@@ -55,7 +55,7 @@ public class DoctorsAcc {
     }
 
     public static void displayDoctors() {
-        System.out.println("The Doctor in the CSV file are: ");
+        System.out.println("\nThe Doctor in the CSV file are: ");
         for (User doctor : doctors) {
             System.out.println(doctor.userInfo());
         }

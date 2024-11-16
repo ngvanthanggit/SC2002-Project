@@ -7,7 +7,7 @@ public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
     private InventoryManager inventoryManager;
 
-    private Inventoryitem item;
+    private InventoryItem item;
     private static int idCounter = 0;
     private static String originalPath = "Data//Original/Replenish_List.csv";
     private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
@@ -38,7 +38,7 @@ public class ReplenishManager {
         if (replenishList.isEmpty()) {
             System.out.println("No items were loaded.");
         } else {
-            System.out.println("Inventory successfully loaded: " + replenishList.size());
+            System.out.println("Replenish List successfully loaded: " + replenishList.size());
 
             String lastRequestID = replenishList.get(replenishList.size() - 1).getRequestID();
             idCounter = extractIdNumber(lastRequestID);
@@ -55,7 +55,23 @@ public class ReplenishManager {
         return replenishList;
     }
 
-    public void submitReplenish(String itemName, int replenishQuantity) {
+    public static void displayReplenishList() {
+        if(replenishList.isEmpty()) {
+            System.out.println("There are no replenish request at the moment.");
+        }
+        else {
+            System.out.println("\nThe request in the CSV file are: ");
+            for(ReplenishRequest request: replenishList){
+                System.out.println(request.getRequestInfo());
+            }
+        }
+    }
+
+    public static void duplicateReplenish(){
+        CSVwrite.writeCSVList(updatedPath, replenishList);
+    }
+
+    public static void generateReplenish(String itemName, int replenishQuantity) {
         // Generate a unique ID for the request
         String requestID = "REQ" + String.format("%04d", idCounter++);
         

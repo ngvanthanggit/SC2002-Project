@@ -1,7 +1,7 @@
 package inventory;
 
 public class InventoryItem {
-    private String itemName;
+    private Medicine itemName;
     private int quantity;
     private int minimumQuantity;
 
@@ -12,13 +12,13 @@ public class InventoryItem {
         this.minimumQuantity = 0;
     }
 
-    public InventoryItem(String itemName, int quantity, int minimumQuantity) {
+    public InventoryItem(Medicine itemName, int quantity, int minimumQuantity) {
         this.itemName = itemName;
         this.quantity = quantity;
         this.minimumQuantity = minimumQuantity;
     }
 
-    public void setItemName(String itemName) {
+    public void setItemName(Medicine itemName) {
         this.itemName = itemName;
     }
 
@@ -30,7 +30,7 @@ public class InventoryItem {
         this.minimumQuantity = minimumQuantity;
     }
 
-    public String getItemName() {
+    public Medicine getItemName() {
         return itemName;
     }
 
@@ -48,7 +48,7 @@ public class InventoryItem {
     }
 
     public String getItemInfo() {
-        return String.format("Inventory[Medicine Name=%s, Initial Stock=%d, Low Stock Alert=%d]",
+        return String.format("Inventory[Medicine = %s, Initial Stock = %d, Low Stock Alert = %d]",
         itemName, quantity, minimumQuantity);
     }
 }

@@ -8,13 +8,19 @@ import menus.PharmacistMenu;
 
 public class Pharmacist extends User implements PharmacistMenu{
 
-    public Pharmacist(String hospitalID, String name, String role,
+    public Pharmacist(String hospitalID, String name, Role role,
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);
     }
 
     public String getName() {
         return super.getName();
+    }
+
+    @Override
+    public String userInfo() {
+        return String.format("[PharmacistID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
+        getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
     @Override
@@ -29,14 +35,19 @@ public class Pharmacist extends User implements PharmacistMenu{
         Scanner sc = new Scanner(System.in);
 
         do{
+            System.out.println("\nPharmacist Menus are listed Below");
+            System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View Appointment Outcome");
             System.out.println("2. View Inventory");
-            System.out.println("3. Submit Replenish Request");
-            System.out.println("4. Logout");
+            System.out.println("3. View Replenish Request List");
+            System.out.println("4. Submit Replenish Request");
+            System.out.println("5. Logout");
+            System.out.printf("%s\n", "-".repeat(27));
             System.out.print("Choice: ");
             choice = sc.nextInt();
+            sc.nextLine(); //consume line
             handleSelection(choice, sc);
-        } while(choice!=4);
+        } while(choice!=5);
     }
 
     public void handleSelection(int option, Scanner scanner) {
@@ -48,9 +59,12 @@ public class Pharmacist extends User implements PharmacistMenu{
                 viewInventory();
                 break;
             case 3:
-                System.out.println("3. Submit Replenish Request");
+                ReplenishManager.displayReplenishList();
                 break;
             case 4:
+                submitReplenish(scanner);
+                break;
+            case 5:
                 logout(); //logout
                 break;
             default:
@@ -60,22 +74,46 @@ public class Pharmacist extends User implements PharmacistMenu{
 
     //show all items & low level warning
     public void viewInventory() {
-        List<InventoryItem> inventory = InventoryManager.getInventory();
-        //Inventory is empty
-        if(inventory.isEmpty()) {
-            System.out.println("The inventory is currently empty.");
+        //List<InventoryItem> inventory = InventoryManager.getInventory();
+        InventoryManager.displayInventory();
+        InventoryManager.displayLowItem();
+    }
+
+    public void submitReplenish(Scanner scanner) {
+        String itemName = null;
+        int quantity = 0;
+        boolean valid = false;
+        InventoryManager.displayLowItem();
+
+        while(!valid) {
+            System.out.println("Please enter the item you want to replenish");
+            System.out.print("Choice: ");
+            itemName = scanner.nextLine().trim();       //only can read a word
+            if(InventoryManager.getItem(itemName) == null) {
+                System.out.println("Invalid item, please enter the correct item name.");
+            }
+            else {
+                valid = true;
+            }
         }
-        else {
-            for(InventoryItem item : inventory) {
-                if(item.getQuantity() < 5) { //need to change low level
-                    System.out.print("Item: " + item.getItemName() + ", Quantity: " + item.getQuantity());
-                    System.out.println("Warning: " + item.getItemName() + " is low in stock.");
-                }
-                else {
-                    System.out.println("Item: " + item.getItemName() + ", Quantity: " + item.getQuantity() + ", Low Level Alert: " + item.getMinimumQualtity());
+        valid = false;
+        while(!valid) {
+            System.out.println("Please enter the amount you want to replenish");
+            System.out.print("Choice: ");
+            if (scanner.hasNextInt()) {             //check for int input
+                quantity = scanner.nextInt();
+                if (quantity > 0) {             
+                    valid = true;
+                } else {
+                    System.out.println("Invalid input, please enter a number.");
                 }
             }
-            
+            else {
+                System.out.println("Invalid input, please enter a number.");
+                scanner.next();
+            }
+
         }
+        ReplenishManager.generateReplenish(itemName, quantity);
     }
 }

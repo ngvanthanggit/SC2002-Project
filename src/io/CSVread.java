@@ -20,7 +20,7 @@ public class CSVread {
         return new User(
                 row[columnMapping.get("hospitalID")].trim(),
                 row[columnMapping.get("name")].trim(),
-                row[columnMapping.get("role")].trim(),
+                Role.valueOf(row[columnMapping.get("role")].trim()),
                 row[columnMapping.get("gender")].trim(),
                 Integer.parseInt(row[columnMapping.get("age")].trim()),
                 row[columnMapping.get("password")].trim());
@@ -136,7 +136,7 @@ public class CSVread {
                 String[] row = line.split(",");
 
                 InventoryItem item = new InventoryItem(
-                row[columnMapping.get("Medicine Name")].trim(),
+                Medicine.valueOf(row[columnMapping.get("Medicine Name")].trim()),
                 Integer.parseInt(row[columnMapping.get("Initial Stock")].trim()),
                 Integer.parseInt(row[columnMapping.get("Low Stock Level Alert")].trim())
                 );
@@ -163,7 +163,7 @@ public class CSVread {
         BufferedReader reader = null;
         String line = ""; 
         List<ReplenishRequest> replenishList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Corrected date format
 
         try {
             reader = new BufferedReader(new FileReader(fileString));
@@ -176,6 +176,15 @@ public class CSVread {
                 // Array of Strings, split at commas
                 String[] row = line.split(",");
 
+                //System.out.println("Processing row: " + line);
+                //System.out.println("Row length: " + row.length);
+
+                // Check if the row has enough columns for "Medicine"
+                if (columnMapping.get("Medicine") >= row.length) {
+                    //System.out.println("Skipping malformed row (missing Medicine column): " + line);
+                    continue;
+                }
+
                 // Parse fields from the CSV row based on column mapping
                 String requestID = row[columnMapping.get("RequestID")].trim();
                 String itemName = row[columnMapping.get("Medicine")].trim();
@@ -183,15 +192,27 @@ public class CSVread {
                 String requestedBy = row[columnMapping.get("RequestedBy")].trim();
                 LocalDate requestDate = LocalDate.parse(row[columnMapping.get("RequestDate")].trim(), formatter);
                 RequestStatus status = RequestStatus.valueOf(row[columnMapping.get("Status")].trim());
-                LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate") && !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
-                ? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter) : null;
+                //LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate") && !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
+                //? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter) : null;
+
+                // Handle ApprovalDate: allow it to remain null if the column is empty
+                LocalDate approvalDate = null;
+                if (columnMapping.containsKey("ApprovalDate") && columnMapping.get("ApprovalDate") < row.length) {
+                    String approvalDateString = row[columnMapping.get("ApprovalDate")].trim();
+                    if (!approvalDateString.isEmpty()) {
+                        approvalDate = LocalDate.parse(approvalDateString, formatter);
+                    }
+                }
+                
 
                 // Create a new ReplenishRequest with parsed data
-                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
-                request.setRequestedBy(requestedBy);
-                request.setRequestDate(requestDate);
-                request.setRequestStatus(status);
-                request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+                //ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
+                //request.setRequestedBy(requestedBy);
+                //request.setRequestDate(requestDate);
+                //request.setRequestStatus(status);
+                //request.setApprovalDate(approvalDate); // Manually set approval date if it exists
+
+                ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity, requestedBy, requestDate, status, approvalDate);
 
                 replenishList.add(request); // Add item to the list
             }
