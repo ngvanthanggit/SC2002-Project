@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 import appointmentManager.Appointment;
 import inventory.InventoryItem;
+import medicalrecord.MedicalRecord;
+import schedule.Schedule;
 
 public class CSVwrite {
 
@@ -31,12 +33,12 @@ public class CSVwrite {
             // set to true to append not replace exisiting data, set to false to write over
             // all data
             output = new FileWriter(filePath, true);
-            
-            //handles InventoryItem
-            if(object instanceof InventoryItem){
+
+            // handles InventoryItem
+            if (object instanceof InventoryItem) {
                 output.write(((InventoryItem) object).toCSVRow() + '\n');
             }
-            //handles all User based classes
+            // handles all User based classes
             else {
                 List<String> data = new ArrayList<>();
 
@@ -55,10 +57,10 @@ public class CSVwrite {
                     }
                 }
 
-                //write only the data values (not field names) as a CSV row
+                // write only the data values (not field names) as a CSV row
                 output.write(String.join(",", data) + "\n");
-                //output.write("\n");
-                //System.out.println("Data written successfully!");
+                // output.write("\n");
+                // System.out.println("Data written successfully!");
             }
         } catch (IOException | IllegalAccessException e) {
             // TODO Auto-generated catch block
@@ -99,24 +101,37 @@ public class CSVwrite {
 
         FileWriter output = null;
         try {
-            output = new FileWriter(filePath, false);  // Overwrite mode
+            output = new FileWriter(filePath, false); // Overwrite mode
 
             // Write the header first
             if (header != null) {
                 output.write(header + "\n");
+            } else {
+                if (objects.get(0) instanceof MedicalRecord) {
+                    header = "Doctor ID,Patient ID,Diagnoses,Prescriptions,Treatment Plan";
+                    output.write(header + "\n");
+                }
             }
 
             // Write each object data as a new row
             for (T object : objects) {
-                //handles InventoryItems
-                if(object instanceof InventoryItem){
+                // handles InventoryItem
+                if (object instanceof InventoryItem) {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
-                } 
-                //handles Appointments
-                else if(object instanceof Appointment){
+                }
+                // handles MedicalRecord
+                else if (object instanceof MedicalRecord) {
+                    output.write(((MedicalRecord) object).toCSVRow() + "\n");
+                }
+                // handles Schedule
+                else if (object instanceof Schedule) {
+                    output.write(((Schedule) object).toCSVRow() + "\n");
+                }
+                // handles Appointments
+                else if (object instanceof Appointment) {
                     output.write(((Appointment) object).toCSVFormat() + "\n");
                 }
-                //handles user based classes
+                // handles user based classes
                 else {
                     List<String> data = new ArrayList<>();
 
@@ -167,71 +182,75 @@ public class CSVwrite {
         return fields;
     }
 
-    /*public static String selectCSVFile() {
-
-        File[] files = listCSVFiles();
-        System.out.println("Choose a CSV file to save to or Create a new one:");
-
-        if (files != null && files.length > 0) {
-            // display all CSV files
-            System.out.println("\nThe available CSV files are:");
-            System.out.println("0: Create a new CSV file");
-            for (int i = 0; i < files.length; i++) {
-                System.out.println((i + 1) + ": " + files[i].getName());
-            }
-        } else {
-            // create new file if there are no files in "Data"
-            System.out.println("No files to write to. Please create a new file");
-            return createCSVFile();
-        }
-
-        // ask user to select a file
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the number of the file you would like to write into: ");
-        int choice = sc.nextInt();
-        sc.nextLine();
-
-        if (choice == 0) {
-            return createCSVFile(); // create new file
-        } else if (choice > 0 && choice <= files.length) {
-            headersWritten = true; // indicate that headers already exist in this file
-            return files[choice - 1].getAbsolutePath(); // return path file name
-        } else {
-            System.out.println("Invalid choice.");
-            return null;
-        }
-    }
-
-    public static String createCSVFile() {
-        Scanner sc = new Scanner(System.in);
-
-        // ask user for new CSV file name
-        System.out.println("Enter the name of the CSV file (without .csv)");
-        String fileName = sc.nextLine().trim(); // incase of any blank spaces
-        String filePath = "Data/" + fileName + ".csv";
-
-        // ask user for headers
-        System.out.println("Enter the headers, comma-seperated (Example: ID,Name)");
-        String headersInp = sc.nextLine();
-        String[] headers = headersInp.split(",");
-
-        try (FileWriter newFileWriter = new FileWriter(filePath)) {
-            // write headers to the file
-            newFileWriter.write(String.join(",", headers));
-            newFileWriter.write("\n");
-            System.out.println("New CSV file created!");
-
-            headersWritten = true; // indicate headers are written
-            return filePath; // return to writeCSV
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static File[] listCSVFiles() {
-        File folder = new File("Data"); // folder name
-        return folder.listFiles((dir, name) -> name.endsWith(".csv")); // filter all CSV files
-    }*/
+    /*
+     * public static String selectCSVFile() {
+     * 
+     * File[] files = listCSVFiles();
+     * System.out.println("Choose a CSV file to save to or Create a new one:");
+     * 
+     * if (files != null && files.length > 0) {
+     * // display all CSV files
+     * System.out.println("\nThe available CSV files are:");
+     * System.out.println("0: Create a new CSV file");
+     * for (int i = 0; i < files.length; i++) {
+     * System.out.println((i + 1) + ": " + files[i].getName());
+     * }
+     * } else {
+     * // create new file if there are no files in "Data"
+     * System.out.println("No files to write to. Please create a new file");
+     * return createCSVFile();
+     * }
+     * 
+     * // ask user to select a file
+     * Scanner sc = new Scanner(System.in);
+     * System.out.
+     * print("Enter the number of the file you would like to write into: ");
+     * int choice = sc.nextInt();
+     * sc.nextLine();
+     * 
+     * if (choice == 0) {
+     * return createCSVFile(); // create new file
+     * } else if (choice > 0 && choice <= files.length) {
+     * headersWritten = true; // indicate that headers already exist in this file
+     * return files[choice - 1].getAbsolutePath(); // return path file name
+     * } else {
+     * System.out.println("Invalid choice.");
+     * return null;
+     * }
+     * }
+     * 
+     * public static String createCSVFile() {
+     * Scanner sc = new Scanner(System.in);
+     * 
+     * // ask user for new CSV file name
+     * System.out.println("Enter the name of the CSV file (without .csv)");
+     * String fileName = sc.nextLine().trim(); // incase of any blank spaces
+     * String filePath = "Data/" + fileName + ".csv";
+     * 
+     * // ask user for headers
+     * System.out.println("Enter the headers, comma-seperated (Example: ID,Name)");
+     * String headersInp = sc.nextLine();
+     * String[] headers = headersInp.split(",");
+     * 
+     * try (FileWriter newFileWriter = new FileWriter(filePath)) {
+     * // write headers to the file
+     * newFileWriter.write(String.join(",", headers));
+     * newFileWriter.write("\n");
+     * System.out.println("New CSV file created!");
+     * 
+     * headersWritten = true; // indicate headers are written
+     * return filePath; // return to writeCSV
+     * } catch (IOException e) {
+     * e.printStackTrace();
+     * return null;
+     * }
+     * }
+     * 
+     * public static File[] listCSVFiles() {
+     * File folder = new File("Data"); // folder name
+     * return folder.listFiles((dir, name) -> name.endsWith(".csv")); // filter all
+     * CSV files
+     * }
+     */
 
 }

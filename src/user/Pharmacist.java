@@ -6,7 +6,7 @@ import java.util.Scanner;
 import inventory.*;
 import menus.PharmacistMenu;
 
-public class Pharmacist extends User implements PharmacistMenu{
+public class Pharmacist extends User implements PharmacistMenu {
 
     public Pharmacist(String hospitalID, String name, Role role,
             String gender, int age, String password) {
@@ -20,21 +20,21 @@ public class Pharmacist extends User implements PharmacistMenu{
     @Override
     public String userInfo() {
         return String.format("[PharmacistID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
-        getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
+                getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
     @Override
-    public void logout(){
+    public void logout() {
         System.out.println("Pharmacist Logging Out.");
         return;
     }
 
-    //Pharmist Menus, implemented from User class interface
+    // Pharmist Menus, implemented from User class interface
     public void displayMenu() {
         int choice;
         Scanner sc = new Scanner(System.in);
 
-        do{
+        do {
             System.out.println("\nPharmacist Menus are listed Below");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View Appointment Outcome");
@@ -45,13 +45,13 @@ public class Pharmacist extends User implements PharmacistMenu{
             System.out.printf("%s\n", "-".repeat(27));
             System.out.print("Choice: ");
             choice = sc.nextInt();
-            sc.nextLine(); //consume line
+            sc.nextLine(); // consume line
             handleSelection(choice, sc);
-        } while(choice!=5);
+        } while (choice != 5);
     }
 
     public void handleSelection(int option, Scanner scanner) {
-        switch(option) {
+        switch (option) {
             case 1:
                 System.out.println("1. View Appointment Outcome");
                 break;
@@ -65,16 +65,16 @@ public class Pharmacist extends User implements PharmacistMenu{
                 submitReplenish(scanner);
                 break;
             case 5:
-                logout(); //logout
+                logout(); // logout
                 break;
             default:
                 System.out.println("Invalid choice, please try again.");
         }
     }
 
-    //show all items & low level warning
+    // show all items & low level warning
     public void viewInventory() {
-        //List<InventoryItem> inventory = InventoryManager.getInventory();
+        // List<InventoryItem> inventory = InventoryManager.getInventory();
         InventoryManager.displayInventory();
         InventoryManager.displayLowItem();
     }
@@ -85,30 +85,28 @@ public class Pharmacist extends User implements PharmacistMenu{
         boolean valid = false;
         InventoryManager.displayLowItem();
 
-        while(!valid) {
+        while (!valid) {
             System.out.println("Please enter the item you want to replenish");
             System.out.print("Choice: ");
-            itemName = scanner.nextLine().trim();       //only can read a word
-            if(InventoryManager.getItem(itemName) == null) {
+            itemName = scanner.nextLine().trim(); // only can read a word
+            if (InventoryManager.getItem(itemName) == null) {
                 System.out.println("Invalid item, please enter the correct item name.");
-            }
-            else {
+            } else {
                 valid = true;
             }
         }
         valid = false;
-        while(!valid) {
+        while (!valid) {
             System.out.println("Please enter the amount you want to replenish");
             System.out.print("Choice: ");
-            if (scanner.hasNextInt()) {             //check for int input
+            if (scanner.hasNextInt()) { // check for int input
                 quantity = scanner.nextInt();
-                if (quantity > 0) {             
+                if (quantity > 0) {
                     valid = true;
                 } else {
                     System.out.println("Invalid input, please enter a number.");
                 }
-            }
-            else {
+            } else {
                 System.out.println("Invalid input, please enter a number.");
                 scanner.next();
             }

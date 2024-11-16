@@ -1,4 +1,5 @@
 package inventory;
+
 import java.util.*;
 
 import io.*;
@@ -7,8 +8,8 @@ public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
     private InventoryManager inventoryManager;
 
-    //private InventoryItem item;
-    //private static int idCounter = 0;
+    // private InventoryItem item;
+    // private static int idCounter = 0;
     private static String originalPath = "Data//Original/Replenish_List.csv";
     private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
 
@@ -40,34 +41,38 @@ public class ReplenishManager {
         } else {
             System.out.println("Replenish List successfully loaded: " + replenishList.size());
 
-            //String lastRequestID = replenishList.get(replenishList.size() - 1).getRequestID();
-            //idCounter = extractIdNumber(lastRequestID);
-            
+            // String lastRequestID = replenishList.get(replenishList.size() -
+            // 1).getRequestID();
+            // idCounter = extractIdNumber(lastRequestID);
+
         }
+        displayReplenishList();
     }
 
-    /*private static int extractIdNumber(String requestId) {
-        String numericPart = requestId.replaceAll("[^\\d]", ""); // Removes non-digit characters
-        return Integer.parseInt(numericPart); // Convert to integer
-    }*/
+    /*
+     * private static int extractIdNumber(String requestId) {
+     * String numericPart = requestId.replaceAll("[^\\d]", ""); // Removes non-digit
+     * characters
+     * return Integer.parseInt(numericPart); // Convert to integer
+     * }
+     */
 
     public static List<ReplenishRequest> getReplenishList() {
         return replenishList;
     }
 
     public static void displayReplenishList() {
-        if(replenishList.isEmpty()) {
+        if (replenishList.isEmpty()) {
             System.out.println("There are no replenish request at the moment.");
-        }
-        else {
+        } else {
             System.out.println("\nThe Requests in the CSV file are: ");
-            for(ReplenishRequest request: replenishList){
+            for (ReplenishRequest request : replenishList) {
                 System.out.println(request.getRequestInfo());
             }
         }
     }
 
-    public static void duplicateReplenish(){
+    public static void duplicateReplenish() {
         CSVwrite.writeCSVList(updatedPath, replenishList);
     }
 
@@ -75,22 +80,21 @@ public class ReplenishManager {
         // Generate a unique ID for the request
         // String requestID = "REQ" + String.format("%03d", ++idCounter);
         String requestID = IDGenerator.generateID(
-                "REQ", 
-                replenishList, 
+                "REQ",
+                replenishList,
                 ReplenishRequest::getRequestID, // Use method reference for ID extraction
-                3
-        );
-        
+                3);
+
         // Create a new replenish request
         ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
-        
+
         // Add to the list and write to CSV
         replenishList.add(request);
         CSVwrite.writeCSV(updatedPath, request);
-        
+
         System.out.println("Replenish request submitted for " + itemName + " (" + replenishQuantity + " units).");
     }
-    
+
     public void approveReplenish(ReplenishRequest request) {
         request.setRequestStatus(RequestStatus.APPROVED);
         CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval

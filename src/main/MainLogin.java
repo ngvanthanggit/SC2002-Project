@@ -2,15 +2,15 @@ package main;
 
 import java.util.Scanner;
 
-import accounts*;
+import accounts.*;
 import menus.DoctorMenu;
 import user.*;
 
 public class MainLogin {
-    private static User loggedInUser; //store logged-in user. static becuz only 1 at a time
+    private static User loggedInUser; // store logged-in user. static becuz only 1 at a time
     private static final String format = "|%-25s|\n";
 
-    public static void login(Scanner sc){
+    public static void login(Scanner sc) {
         int userRole = checkRole(sc); // return class of user
         Login login = null;
 
@@ -48,12 +48,11 @@ public class MainLogin {
                 pharmacist.displayMenu();
             } else if (loggedIn instanceof Doctor) {
                 Doctor doctor = (Doctor) loggedIn;
-                DoctorMenu doctorMenu = new DoctorMenu(doctor);
-                doctorMenu.displayMenu();
+                doctor.displayMenu();
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
                 admin.displayMenu();
-            }  
+            }
         } else {
             System.out.println("Login failed! Incorrect ID or password.");
         }

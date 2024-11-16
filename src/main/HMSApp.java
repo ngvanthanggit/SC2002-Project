@@ -47,7 +47,7 @@ public class HMSApp {
                     MainLogin.login(sc);// login
                     break;
                 case 2:
-                    //ignore
+                    // ignore
                     mainCreateAcc(patients, pharmacists, doctors, admins); // create newAcc
                     break;
                 case 3:
@@ -62,8 +62,9 @@ public class HMSApp {
         } while (choice != 3);
     }
 
-    //will remove in the future
-    public static void mainCreateAcc(List<User> patients, List<User> pharmacists, List<User> doctors, List<User> admins) {
+    // will remove in the future
+    public static void mainCreateAcc(List<User> patients, List<User> pharmacists, List<User> doctors,
+            List<User> admins) {
         User newCreatedUser = NewAccount.createNewAccount(patients, pharmacists, doctors, admins);
         // add new user into database
         if (newCreatedUser != null && newCreatedUser instanceof Patient) {
