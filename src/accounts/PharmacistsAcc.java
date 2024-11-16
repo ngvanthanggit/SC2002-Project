@@ -58,7 +58,7 @@ public class PharmacistsAcc {
     }
 
     public static void displayPharmacists() {
-        System.out.println("The Pharmacists in the CSV file are: ");
+        System.out.println("\nThe Pharmacists in the CSV file are: ");
         for (User pharmacist : pharmacists) {
             System.out.println(pharmacist.userInfo());
         }

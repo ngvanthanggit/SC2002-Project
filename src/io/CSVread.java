@@ -11,6 +11,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.print.Doc;
+
+import accounts.DoctorsAcc;
+import accounts.PatientsAcc;
+import appointmentManager.Appointment;
+import appointmentManager.ApptStatus;
 import user.*;
 import inventory.*;
 import medicalrecord.*;
@@ -24,7 +30,7 @@ public class CSVread {
         return new User(
                 row[columnMapping.get("hospitalID")].trim(),
                 row[columnMapping.get("name")].trim(),
-                row[columnMapping.get("role")].trim(),
+                Role.valueOf(row[columnMapping.get("role")].trim()),
                 row[columnMapping.get("gender")].trim(),
                 Integer.parseInt(row[columnMapping.get("age")].trim()),
                 row[columnMapping.get("password")].trim());
@@ -81,7 +87,6 @@ public class CSVread {
                             baseUser.getAge(),
                             baseUser.getPassword());
                     records.add(doctor); // Add the doctor
-
                 }
                 // Handle Pharmacist objects, change the row.length for the amount of parameters
                 // in your class
@@ -122,7 +127,7 @@ public class CSVread {
         return records; // Return the list of records (depends on the class of objects)
     }
 
-    // General method to read CSV and map columns to fields dynamically for
+    // general method to read CSV and map columns to fields dynamically for
     // inventory
     public static List<InventoryItem> readItemCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
@@ -141,7 +146,7 @@ public class CSVread {
                 String[] row = line.split(",");
 
                 InventoryItem item = new InventoryItem(
-                        row[columnMapping.get("Medicine Name")].trim(),
+                        Medicine.valueOf(row[columnMapping.get("Medicine Name")].trim()),
                         Integer.parseInt(row[columnMapping.get("Initial Stock")].trim()),
                         Integer.parseInt(row[columnMapping.get("Low Stock Level Alert")].trim()));
 
@@ -162,13 +167,13 @@ public class CSVread {
         return inventory; // Return the list of InventoryItem object
     }
 
-    // General method to read CSV and map columns to fields dynamically for
+    // general method to read CSV and map columns to fields dynamically for
     // replenishrequest
     public static List<ReplenishRequest> readReplenishCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
         List<ReplenishRequest> replenishList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Corrected date format
 
         try {
             reader = new BufferedReader(new FileReader(fileString));
@@ -181,6 +186,16 @@ public class CSVread {
                 // Array of Strings, split at commas
                 String[] row = line.split(",");
 
+                // System.out.println("Processing row: " + line);
+                // System.out.println("Row length: " + row.length);
+
+                // Check if the row has enough columns for "Medicine"
+                if (columnMapping.get("Medicine") >= row.length) {
+                    // System.out.println("Skipping malformed row (missing Medicine column): " +
+                    // line);
+                    continue;
+                }
+
                 // Parse fields from the CSV row based on column mapping
                 String requestID = row[columnMapping.get("RequestID")].trim();
                 String itemName = row[columnMapping.get("Medicine")].trim();
@@ -188,10 +203,19 @@ public class CSVread {
                 String requestedBy = row[columnMapping.get("RequestedBy")].trim();
                 LocalDate requestDate = LocalDate.parse(row[columnMapping.get("RequestDate")].trim(), formatter);
                 RequestStatus status = RequestStatus.valueOf(row[columnMapping.get("Status")].trim());
-                LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate")
-                        && !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
-                                ? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter)
-                                : null;
+                // LocalDate approvalDate = (row.length > columnMapping.get("ApprovalDate") &&
+                // !row[columnMapping.get("ApprovalDate")].trim().isEmpty())
+                // ? LocalDate.parse(row[columnMapping.get("ApprovalDate")].trim(), formatter) :
+                // null;
+
+                // Handle ApprovalDate: allow it to remain null if the column is empty
+                LocalDate approvalDate = null;
+                if (columnMapping.containsKey("ApprovalDate") && columnMapping.get("ApprovalDate") < row.length) {
+                    String approvalDateString = row[columnMapping.get("ApprovalDate")].trim();
+                    if (!approvalDateString.isEmpty()) {
+                        approvalDate = LocalDate.parse(approvalDateString, formatter);
+                    }
+                }
 
                 // Create a new ReplenishRequest with parsed data
                 // ReplenishRequest request = new ReplenishRequest(requestID, itemName,
@@ -327,5 +351,66 @@ public class CSVread {
             }
         }
         return schedules;
+    }
+
+    public static List<Appointment> readApptCSV(String fileString, Map<String, Integer> columnMapping) {
+        BufferedReader reader = null;
+        String line = "";
+        List<Appointment> appointments = new ArrayList<>();
+
+        try {
+            reader = new BufferedReader(new FileReader(fileString));
+
+            // Read the first line to skip the header
+            String headerLine = reader.readLine();
+
+            // Continuously read the next line
+            while ((line = reader.readLine()) != null) {
+                // Array of Strings, split at commas
+                String[] row = line.split(",");
+
+                // Extract appointment fields based on column mapping
+                int appointmentID = Integer.parseInt(row[columnMapping.get("AppointmentID")].trim());
+                String patientID = row[columnMapping.get("PatientID")].trim();
+                String doctorID = row[columnMapping.get("DoctorID")].trim();
+                LocalDate date = LocalDate.parse(row[columnMapping.get("Date")].trim());
+                LocalTime time = LocalTime.parse(row[columnMapping.get("Time")].trim());
+                ApptStatus status = ApptStatus.valueOf(row[columnMapping.get("Status")].trim().toUpperCase());
+                String consultationNotes = row.length > columnMapping.get("ConsultationNotes")
+                        ? row[columnMapping.get("ConsultationNotes")].trim()
+                        : "";
+                String prescribedMedications = row.length > columnMapping.get("PrescribedMedications")
+                        ? row[columnMapping.get("PrescribedMedications")].trim()
+                        : "";
+                String serviceType = row.length > columnMapping.get("ServiceType")
+                        ? row[columnMapping.get("ServiceType")].trim()
+                        : "";
+
+                // Recreate Doctor and Patient objects using their IDs
+                Doctor doctor = (Doctor) DoctorsAcc.findDoctorById(doctorID);
+                Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
+
+                // Create a new Appointment object
+                Appointment appointment = new Appointment(doctor, patient, date, time, appointmentID);
+                appointment.setStatus(status);
+                appointment.setConsultationNotes(consultationNotes);
+                appointment.setPrescribedMedications(prescribedMedications);
+                appointment.setServiceType(serviceType);
+
+                appointments.add(appointment); // Add the appointment to the list
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return appointments; // Return the list of Appointment objects
     }
 }

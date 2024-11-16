@@ -62,7 +62,7 @@ public class PatientsAcc {
     }
 
     public static void displayPatients() {
-        System.out.println("The Patient in the CSV file are: ");
+        System.out.println("\nThe Patient in the CSV file are: ");
         for (User patient : patients) {
             System.out.println(patient.userInfo());
         }
@@ -74,7 +74,7 @@ public class PatientsAcc {
 
     // find patient by hospitalID
     public static User findPatientById(String hospitalID) {
-        for (User patient : patients) {
+        for (Patient patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
                 return patient;
             }

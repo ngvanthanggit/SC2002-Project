@@ -9,6 +9,7 @@ import inventory.ReplenishRequest;
 
 import java.util.List;
 
+//test case for Inventory & Pharmacist Portion
 public class testcase {
     private static String format = "|%-25s|\n";
 
@@ -34,3 +35,4 @@ public class testcase {
     }
     
 }
+

@@ -16,12 +16,18 @@ public class Doctor extends User implements DoctorMenu {
     }
 
     @Override
+    public String userInfo() {
+        return String.format("[DoctorID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
+                getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
+    }
+
+    @Override
     public void logout() {
         System.out.println("Doctor Logging Out.");
         return;
     }
 
-    public Doctor(String hospitalID, String name, String role,
+    public Doctor(String hospitalID, String name, Role role,
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);
     }
@@ -346,5 +352,15 @@ public class Doctor extends User implements DoctorMenu {
 
     public void declineAppointmentRequest() {
         System.out.println("Decline Appointment Request");
+    }
+
+    public String getHospitalID() {
+        return super.getHospitalID();
+    }
+
+    @Override
+    public void updateAppointmentRequest() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateAppointmentRequest'");
     }
 }

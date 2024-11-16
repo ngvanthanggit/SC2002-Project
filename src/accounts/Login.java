@@ -25,27 +25,28 @@ public class Login {
 
         for (User user : users) {
             if (user.getHospitalID().equals(enteredId) && user.getPassword().equals(enteredPassword)) {
+                System.out.printf("%s\n", "-".repeat(27));
                 System.out.println("Login successful! Welcome, " + user.getRole() + " " + user.getName());
 
                 // prompt user to change password if it is default password
                 checkDefPw(user, scanner);
 
                 switch (user.getRole()) {
-                    case "Patient":
+                    case Patient:
                         // create new patient class
                         break;
 
-                    case "Pharmacist":
+                    case Pharmacist:
                         // create new pharmacist class
                         return new Pharmacist(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
                                 user.getAge(), user.getPassword());
 
-                    case "Doctor":
+                    case Doctor:
                         // create new Doctor Class
                         return new Doctor(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
                                 user.getAge(), user.getPassword());
 
-                    case "Administrator":
+                    case Administrator:
                         return new Administrator(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
                                 user.getAge(), user.getPassword());
                     default:
@@ -63,14 +64,23 @@ public class Login {
             System.out.print("Enter your password: ");
             String newPassword = scanner.nextLine(); // set new Password
 
-            if (user.getRole().equals("Patient")) {
-                PatientsAcc.updatePassword(user.getHospitalID(), newPassword);
-            } else if (user.getRole().equals("Administrator")) {
-                AdminsAcc.updatePassword(user.getHospitalID(), newPassword);
-            } else if (user.getRole().equals("Pharmacist")) {
-                PharmacistsAcc.updatePassword(user.getHospitalID(), newPassword);
-            } else if (user.getRole().equals("Doctor")) {
-                DoctorsAcc.updatePassword(user.getHospitalID(), newPassword);
+            // update password based on the role
+            switch (user.getRole()) {
+                case Patient:
+                    PatientsAcc.updatePassword(user.getHospitalID(), newPassword);
+                    break;
+                case Administrator:
+                    AdminsAcc.updatePassword(user.getHospitalID(), newPassword);
+                    break;
+                case Pharmacist:
+                    PharmacistsAcc.updatePassword(user.getHospitalID(), newPassword);
+                    break;
+                case Doctor:
+                    DoctorsAcc.updatePassword(user.getHospitalID(), newPassword);
+                    break;
+                default:
+                    System.out.println("Invalid role. Password update failed.");
+                    break;
             }
 
         }

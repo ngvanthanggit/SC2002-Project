@@ -55,7 +55,7 @@ public class DoctorsAcc {
     }
 
     public static void displayDoctors() {
-        System.out.println("The Doctor in the CSV file are: ");
+        System.out.println("\nThe Doctor in the CSV file are: ");
         for (User doctor : doctors) {
             System.out.println(doctor.userInfo());
         }
@@ -67,7 +67,7 @@ public class DoctorsAcc {
 
     public static User findDoctorById(String hospitalID) {
         for (User doctor : doctors) {
-            if (doctor.getHospitalID() == hospitalID) {
+            if (doctor.getHospitalID().equals(hospitalID)) {
                 return doctor;
             }
         }

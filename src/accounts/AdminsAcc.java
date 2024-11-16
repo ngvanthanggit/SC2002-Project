@@ -58,7 +58,7 @@ public class AdminsAcc {
     }
 
     public static void displayAdmins() {
-        System.out.println("The Admins in the CSV file are: ");
+        System.out.println("\nThe Admins in the CSV file are: ");
         for (User admin : admins) {
             System.out.println(admin.userInfo());
         }
@@ -90,10 +90,20 @@ public class AdminsAcc {
 
         if (adminToRemove != null) {
             admins.remove(adminToRemove); // remove Data from admin List
-            System.out.println("Staff member with Hospital ID " + hospitalID + " has been removed.");
+            System.out.println("Administrator with Hospital ID " + hospitalID + " has been removed.");
             duplicateAdmin(); // rewrite the CSV file without the row removed
         } else {
-            System.out.println("Staff member with Hospital ID " + hospitalID + " not found.");
+            System.out.println("Administrator with Hospital ID " + hospitalID + " not found.");
+        }
+    }
+
+    public static void updateStaff(String hospitalID) {
+        User adminToUpdate = findStaffById(hospitalID);
+
+        if(adminToUpdate != null){
+
+        } else {
+            System.out.println("Administrator with Hospital ID " + hospitalID + " not found.");
         }
     }
 
@@ -109,9 +119,4 @@ public class AdminsAcc {
         }
 
     }
-
-    public static void updateStaff() {
-
-    }
-
 }

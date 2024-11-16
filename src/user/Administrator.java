@@ -15,14 +15,20 @@ public class Administrator extends User  {
         super(null, null, null, null, 0, null);
     }
 
-    public Administrator(String hospitalID, String name, String role,
+    public Administrator(String hospitalID, String name, Role role,
                 String gender, int age, String password){
         super(hospitalID, name, role, gender, age, password);
     }
 
     @Override
+    public void logout(){
+        System.out.println("Administrator Logging Out.");
+        return;
+    }
+
+    @Override
     public String userInfo() {
-        return String.format("Admin[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, Password=%s]",
+        return String.format("[AdminID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
         getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
@@ -32,7 +38,7 @@ public class Administrator extends User  {
         Scanner sc = new Scanner(System.in);
 
         do {
-            System.out.println("\nAdmin Menus are listed Below");
+            System.out.println("\nAdmin Menu");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View and Manage Hospital Staff");
             System.out.println("2. View appointment details");
@@ -45,7 +51,7 @@ public class Administrator extends User  {
 
             switch(choice) {
                 case 1:
-                    viewManageMenu(sc);
+                    manageHospitalStaff(sc);
                     break;
                 case 2:
                     
@@ -66,41 +72,50 @@ public class Administrator extends User  {
         } while(choice!=5);
     }
 
-    //1st subMenu + methods
-    public void viewManageMenu(Scanner sc){
+    /*
+     * Staff Management
+     */
+    public void manageHospitalStaff(Scanner sc){
         int choice;
         do {
             System.out.println("\nView & Manage Menu");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View Hospital Staff");
-            System.out.println("2. Update Hospital Staff");
-            System.out.println("3. Remove Hospital Staff Member");
-            System.out.println("4. Go Back");
+            System.out.println("2. Add New Hospital Staff");
+            System.out.println("3. Update Hospital Staff");
+            System.out.println("4. Remove Hospital Staff Member");
+            System.out.println("5. Go Back");
             System.out.print("Choice: ");
             choice = sc.nextInt();
 
             switch(choice) {
                 case 1:
-                    displayStaffs(sc);
+                    viewStaff(sc);
                     break;
 
                 case 2:
+                    addStaff(sc);
                     break;
 
                 case 3:
-                    removeStaff(sc);
+                    updateStaff(sc);
                     break;
 
                 case 4:
+                    removeStaff(sc);
+                    break;
+
+                case 5:
                     return; //go back to main menu
                 default: 
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
         }
-        while(choice!=4);
+        while(choice!=5);
     }
-    public void displayStaffs(Scanner sc){
+
+    public void viewStaff(Scanner sc){
         int choice;
         do{
             System.out.println("\nSelect the staffs you want to display");
@@ -185,10 +200,15 @@ public class Administrator extends User  {
         } while(filter!=6);
     }
 
+    public void addStaff(Scanner sc){
+
+    }
+
     //update staff info findbyID
     public void updateStaff(Scanner sc){
 
     }
+
     public void removeStaff(Scanner sc){
         //need to use a check such that i cant remove myself
         sc.nextLine(); //consume
@@ -199,7 +219,9 @@ public class Administrator extends User  {
         AdminsAcc.removeAdmin(staffID); 
     }
 
-    //2nd subMenu + methods
+    /*
+     * Inventory Management
+     */
     public void ViewMedicationInven(){
 
     }
@@ -210,9 +232,7 @@ public class Administrator extends User  {
 
     }
 
-    @Override
-    public void logout(){
-        System.out.println("Administrator Logging Out.");
-        return;
-    }
+    /*
+     * Appointment Management
+     */
 }
