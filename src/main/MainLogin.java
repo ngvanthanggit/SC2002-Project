@@ -2,17 +2,9 @@ package main;
 
 import java.util.Scanner;
 
-import accounts.AdminsAcc;
-import accounts.DoctorsAcc;
-import accounts.Login;
-import accounts.PatientsAcc;
-import accounts.PharmacistsAcc;
+import accounts*;
 import menus.DoctorMenu;
-import user.Administrator;
-import user.Doctor;
-import user.Patient;
-import user.Pharmacist;
-import user.User;
+import user.*;
 
 public class MainLogin {
     private static User loggedInUser; //store logged-in user. static becuz only 1 at a time
