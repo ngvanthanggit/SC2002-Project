@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 import inventory.InventoryItem;
 import medicalrecord.MedicalRecord;
+import schedule.Schedule;
 
 public class CSVwrite {
 
@@ -116,8 +117,14 @@ public class CSVwrite {
                 // handles InventoryItem
                 if (object instanceof InventoryItem) {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
-                } else if (object instanceof MedicalRecord) {
+                }
+                // handles MedicalRecord
+                else if (object instanceof MedicalRecord) {
                     output.write(((MedicalRecord) object).toCSVRow() + "\n");
+                }
+                // handles Schedule
+                else if (object instanceof Schedule) {
+                    output.write(((Schedule) object).toCSVRow() + "\n");
                 }
                 // handles user based classes
                 else {

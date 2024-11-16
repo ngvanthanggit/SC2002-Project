@@ -8,8 +8,8 @@ import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
 import inventory.InventoryManager;
 import inventory.ReplenishManager;
-import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
+import schedule.ScheduleManager;
 
 public class SystemInitialisation {
     private static boolean isFirstRun = true;
@@ -25,6 +25,7 @@ public class SystemInitialisation {
         InventoryManager.loadInventory(isFirstRun);
         ReplenishManager.loadReplenish(isFirstRun);
         MedicalRecordManager.loadMedicalRecords(isFirstRun);
+        ScheduleManager.loadSchedules(isFirstRun);
 
         // save the original data into a new file to be updated
         AdminsAcc.duplicateAdmin();
@@ -34,6 +35,7 @@ public class SystemInitialisation {
         InventoryManager.duplicateInventory();
         ReplenishManager.duplicateReplenish();
         MedicalRecordManager.duplicateMedicalRecord();
+        ScheduleManager.duplicateSchedule();
 
         // Displaying the List of Patients and Staffs from CSV
         AdminsAcc.displayAdmins();
@@ -43,6 +45,7 @@ public class SystemInitialisation {
         InventoryManager.displayInventory();
         ReplenishManager.displayReplenishList();
         MedicalRecordManager.displayMedicalRecords();
+        ScheduleManager.displaySchedules();
 
         // set to false after first load
         isFirstRun = false;

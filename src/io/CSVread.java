@@ -4,14 +4,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import user.*;
 import inventory.*;
 import medicalrecord.*;
+import schedule.*;
 
 public class CSVread {
 
@@ -277,4 +280,52 @@ public class CSVread {
         return medicalRecords; // Return the list of MedicalRecord objects
     }
 
+    public static List<Schedule> readScheduleCSV(String fileString, Map<String, Integer> columnMapping) {
+        BufferedReader reader = null;
+        String line = "";
+        List<Schedule> schedules = new ArrayList<>();
+        try {
+            reader = new BufferedReader(new FileReader(fileString));
+
+            // Read the first line
+            String headerLine = reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String[] row = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+
+                if (row.length < columnMapping.size()) {
+                    System.err.println("Skipping malformed row: " + line);
+                    continue;
+                }
+
+                // Parse fields from the CSV row based on column mapping
+                String doctorID = row[columnMapping.get("Doctor ID")].trim();
+                LocalDate date = LocalDate.parse(row[columnMapping.get("Date")].trim());
+                String timeSlotsString = row[columnMapping.get("Time Slots")].replace("\"", "").trim();
+
+                List<LocalTime> timeSlots = new ArrayList<>();
+                for (String timeSlot : timeSlotsString.split(";")) {
+                    LocalTime time = LocalTime.parse(timeSlot);
+                    timeSlots.add(time);
+                }
+
+                // Create a new Schedule object
+                Schedule schedule = new Schedule(doctorID, date, timeSlots);
+
+                // Add the schedule to the list
+                schedules.add(schedule);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return schedules;
+    }
 }

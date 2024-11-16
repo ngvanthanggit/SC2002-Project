@@ -71,13 +71,13 @@ public class MedicalRecord {
 
     // Additional Methods
     public String getRecordDetails() {
-        return "MedicalRecord{\n" +
+        return "MedicalRecord{" +
                 "doctorID='" + doctorID + '\'' +
                 ", patientID='" + patientID + '\'' +
                 ", diagnoses=" + diagnoses +
                 ", prescriptions=" + prescriptions +
                 ", treatmentPlans='" + treatmentPlans + '\'' +
-                "\n}";
+                "}";
     }
 
     public String toCSVRow() {
