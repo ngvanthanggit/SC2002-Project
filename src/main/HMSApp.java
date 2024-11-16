@@ -40,6 +40,7 @@ public class HMSApp {
             System.out.printf(format, "1. Login");
             System.out.printf(format, "2. Create new account");
             System.out.printf(format, "3. Exit");
+            System.out.printf("%s\n", "-".repeat(27));
             System.out.print("Choice: ");
             choice = sc.nextInt();
 
@@ -133,11 +134,12 @@ public class HMSApp {
 
     public static int checkRole(Scanner sc) {
         System.out.println("\nAre you a Staff or a Patient?");
-        System.out.printf("%s\n", "-".repeat(25));
+        System.out.printf("%s\n", "-".repeat(27));
         System.out.printf(format, "1. Patient");
         System.out.printf(format, "2. Doctor");
         System.out.printf(format, "3. Pharmacist");
         System.out.printf(format, "4. Administrator");
+        System.out.printf("%s\n", "-".repeat(27));
         System.out.print("Role: ");
         return sc.nextInt();
     }

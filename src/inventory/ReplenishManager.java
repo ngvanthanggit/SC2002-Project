@@ -60,7 +60,7 @@ public class ReplenishManager {
             System.out.println("There are no replenish request at the moment.");
         }
         else {
-            System.out.println("The request in the CSV file are: ");
+            System.out.println("\nThe request in the CSV file are: ");
             for(ReplenishRequest request: replenishList){
                 System.out.println(request.getRequestInfo());
             }

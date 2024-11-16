@@ -10,7 +10,8 @@ public class NewAccount {
 
     public static User createNewAccount(List<User> admins, List<User> patients){
         Scanner sc = new Scanner(System.in);
-        String name, role, gender, password, DOB, bloodType, email;
+        String name, gender, password, DOB, bloodType, email;
+        Role role;
         int age;
 
         User user = null;
@@ -41,7 +42,7 @@ public class NewAccount {
         switch (choice){
             case 1:
                 //patient, role specific additional information
-                role = "Patient";
+                role = Role.Patient;
                 System.out.print("Enter you Date of Birth (DD/MM/YYYY): ");
                 DOB = sc.nextLine();
                 System.out.print("Enter your Blood Type (Ex. O+): ");
@@ -53,19 +54,19 @@ public class NewAccount {
                 
             case 2:
                 //pharmacist
-                role = "Pharmacist";
+                role = Role.Pharmacist;
                 //user = new User(hospitalID, name, role, gender, age, password);
                 break;
 
             case 3:
                 //doctor
-                role = "Doctor";
+                role = Role.Doctor;
                 //user = new User(hospitalID, name, role, gender, age, password);
                 break;
 
             case 4:
                 //administrator 
-                role = "Administrator";
+                role = Role.Administrator;
                 user = new Administrator(hospitalID, name, role, gender, age, password);
                 break;
             default: System.out.println("Invalid Choice!");

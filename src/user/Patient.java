@@ -1,6 +1,6 @@
 package user;
 
-public class Patient extends User{
+public class Patient extends User {
     private String dateOB; //date of birth
     private String bloodType;
     private String contactInfo; //changeable
@@ -13,7 +13,7 @@ public class Patient extends User{
         this.contactInfo = null;
     }
     
-    public Patient(String hospitalID, String name, String role,
+    public Patient(String hospitalID, String name, Role role,
                     String gender, int age, String password, String dateOB, 
                     String bloodType, String contactInfo){
         super(hospitalID, name, role, gender, age, password);
@@ -49,8 +49,15 @@ public class Patient extends User{
     }
 
     //other Methods()
+    @Override
+    public void logout(){
+        System.out.println("Patient Logging Out.");
+        return;
+    }
+
+    @Override
     public String userInfo() {
-        return String.format("Patient[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, Password=%s, DateOB=%s, BloodType=%s, ContactInfo=%s]",
+        return String.format("[PatientID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s, DateOB = %s, BloodType = %s, ContactInfo = %s]",
         getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType, contactInfo);
     }
 }

@@ -8,13 +8,19 @@ import menus.PharmacistMenu;
 
 public class Pharmacist extends User implements PharmacistMenu{
 
-    public Pharmacist(String hospitalID, String name, String role,
+    public Pharmacist(String hospitalID, String name, Role role,
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);
     }
 
     public String getName() {
         return super.getName();
+    }
+
+    @Override
+    public String userInfo() {
+        return String.format("[PharmacistID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
+        getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
     @Override
@@ -29,13 +35,17 @@ public class Pharmacist extends User implements PharmacistMenu{
         Scanner sc = new Scanner(System.in);
 
         do{
+            System.out.println("\nPharmacist Menus are listed Below");
+            System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View Appointment Outcome");
             System.out.println("2. View Inventory");
             System.out.println("3. View Replenish Request List");
             System.out.println("4. Submit Replenish Request");
             System.out.println("5. Logout");
+            System.out.printf("%s\n", "-".repeat(27));
             System.out.print("Choice: ");
             choice = sc.nextInt();
+            sc.nextLine(); //consume line
             handleSelection(choice, sc);
         } while(choice!=5);
     }
@@ -78,7 +88,7 @@ public class Pharmacist extends User implements PharmacistMenu{
         while(!valid) {
             System.out.println("Please enter the item you want to replenish");
             System.out.print("Choice: ");
-            itemName = scanner.next().trim();       //only can read a word
+            itemName = scanner.nextLine().trim();       //only can read a word
             if(InventoryManager.getItem(itemName) == null) {
                 System.out.println("Invalid item, please enter the correct item name.");
             }

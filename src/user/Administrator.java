@@ -15,14 +15,20 @@ public class Administrator extends User  {
         super(null, null, null, null, 0, null);
     }
 
-    public Administrator(String hospitalID, String name, String role,
+    public Administrator(String hospitalID, String name, Role role,
                 String gender, int age, String password){
         super(hospitalID, name, role, gender, age, password);
     }
 
     @Override
+    public void logout(){
+        System.out.println("Administrator Logging Out.");
+        return;
+    }
+
+    @Override
     public String userInfo() {
-        return String.format("Admin[PatientID=%s, Name=%s, Role=%s, Gender=%s, Age=%d, Password=%s]",
+        return String.format("[AdminID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s]",
         getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword());
     }
 
@@ -208,11 +214,5 @@ public class Administrator extends User  {
     }
     public void ApproveReplenishment(){
 
-    }
-
-    @Override
-    public void logout(){
-        System.out.println("Administrator Logging Out.");
-        return;
     }
 }

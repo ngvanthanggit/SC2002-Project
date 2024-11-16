@@ -47,12 +47,23 @@ public class InventoryManager {
     }
 
     public static InventoryItem getItem(String itemName) {
-        for (InventoryItem item : inventory) {
+        try {
+            Medicine medicine = Medicine.valueOf(itemName);
+            for (InventoryItem item : inventory) {
+                if (item.getItemName() == medicine) {
+                    return item;
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid medicine name: " + itemName);
+        }
+        return null;
+        /*for (InventoryItem item : inventory) {
             if(item.getItemName().equalsIgnoreCase(itemName)) {
                 return item;
             }
         }
-        return null;
+        return null;*/
     }
     //return all items in a list
     public static List<InventoryItem> getInventory() {
@@ -64,7 +75,7 @@ public class InventoryManager {
             System.out.println("The inventory is currently empty.");
         }
         else {
-            System.out.println("The Medication in the CSV file are: ");
+            System.out.println("\nThe Medication in the CSV file are: ");
             for(InventoryItem inventoryItem: inventory){
                 System.out.println(inventoryItem.getItemInfo());
             }
@@ -86,7 +97,7 @@ public class InventoryManager {
     //Add new item to inventory
     public void addItem(String itemName, int quantity, int minimumQuantity) {
         //Check for valid parameters
-        if (itemName == null || itemName.isEmpty()) {
+        /*if (itemName == null || itemName.isEmpty()) {
             System.out.println("Item name cannot be null or empty.");
             return;
         }
@@ -102,13 +113,31 @@ public class InventoryManager {
             System.out.println(quantity + " units of " + itemName + " have been added to the inventory.");
         } else {
             System.out.println("That item already exists in the inventory.");
-        }
+        }*/
+        try {
+            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
+            if (quantity < 0) {
+                System.out.println("Invalid quantity value.");
+                return;
+            }
 
+            if (getItem(itemName) == null) {
+                InventoryItem newItem = new InventoryItem(medicine, quantity, minimumQuantity);
+                inventory.add(newItem);
+                CSVwrite.writeCSV(updatedPath, newItem);
+                System.out.println(quantity + " units of " + medicine + " have been added to the inventory.");
+            } else {
+                System.out.println("That item already exists in the inventory.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid medicine name: " + itemName);
+        }
     }
+
     //Delete item from inventory
     public void removeItem(String itemName) {
         //Check for valid parameters
-        if (itemName == null || itemName.isEmpty()) {
+        /*if (itemName == null || itemName.isEmpty()) {
             System.out.println("Item name cannot be null or empty.");
             return;
         }
@@ -120,13 +149,26 @@ public class InventoryManager {
             System.out.println(item + " has been removed from the inventory");
         } else {
             System.out.println("The item does not exist in the inventory.");
+        }*/
+        try {
+            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
+            InventoryItem item = getItem(itemName);
+            if (item != null) {
+                inventory.remove(item);
+                System.out.println(medicine + " has been removed from the inventory.");
+                duplicateInventory(); // Update CSV file
+            } else {
+                System.out.println("The item does not exist in the inventory.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid medicine name: " + itemName);
         }
-
     }
+
     //Update item quantity
     public void updateItem(String itemName, int quantity) {
         //Check for valid parameters
-        if (itemName == null || itemName.isEmpty()) {
+        /*if (itemName == null || itemName.isEmpty()) {
             System.out.println("Item name cannot be null or empty.");
             return;
         }
@@ -142,6 +184,24 @@ public class InventoryManager {
         }
         else {
             System.out.println("The item does not exist in the inventory.");
+        }*/
+        try {
+            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
+            if (quantity < 0) {
+                System.out.println("Invalid quantity value.");
+                return;
+            }
+            InventoryItem item = getItem(itemName);
+            if (item != null) {
+                item.setQuantity(quantity);
+                System.out.println("There are now " + quantity + " units of " + medicine + " in the inventory.");
+                duplicateInventory(); // Update CSV file
+            } else {
+                System.out.println("The item does not exist in the inventory.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid medicine name: " + itemName);
         }
+
     }
 }

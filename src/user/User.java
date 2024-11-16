@@ -6,7 +6,7 @@ import menus.CommonMenus;
 public class User implements CommonMenus {
     private String hospitalId;
     private String name;
-    private String role;
+    private Role role;
     private String gender;
     private int age; // changeable
     private String password; // changeable
@@ -16,7 +16,7 @@ public class User implements CommonMenus {
         this(null, null, null, null, 0, null);
     }
 
-    public User(String hospitalID, String name, String role,
+    public User(String hospitalID, String name, Role role,
             String gender, int age, String password) {
         // implement those found in excel sheet first
         this.hospitalId = hospitalID;
@@ -41,7 +41,7 @@ public class User implements CommonMenus {
         return name;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
