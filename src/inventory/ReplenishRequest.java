@@ -2,7 +2,7 @@ package inventory;
 
 import java.time.LocalDate;
 
-import main.HMSApp;
+import main.MainLogin;
 
 public class ReplenishRequest {
     private String requestID;          // Unique identifier for each request
@@ -18,8 +18,8 @@ public class ReplenishRequest {
         this.requestID = requestID;
         this.itemName = itemName;
         this.replenishQuantity = replenishQuantity;
-        if (HMSApp.getLoggedInUser() != null) {
-            this.requestedBy = HMSApp.getLoggedInUser().getName(); // Use the logged-in user's name
+        if (MainLogin.getLoggedInUser() != null) {
+            this.requestedBy = MainLogin.getLoggedInUser().getName(); // Use the logged-in user's name
         } else {
             throw new IllegalStateException("No user is currently logged in.");
         }
