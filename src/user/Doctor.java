@@ -59,4 +59,8 @@ public class Doctor extends User {
     public void recordAppointmentOutcome() {
 
     }
+
+    public String getHospitalID() {
+        return super.getHospitalID();
+    }
 }

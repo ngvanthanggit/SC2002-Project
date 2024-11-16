@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import appointmentManager.Appointment;
 import inventory.InventoryItem;
 
 public class CSVwrite {
@@ -107,10 +108,14 @@ public class CSVwrite {
 
             // Write each object data as a new row
             for (T object : objects) {
-                //handles InventoryItem
+                //handles InventoryItems
                 if(object instanceof InventoryItem){
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
                 } 
+                //handles Appointments
+                else if(object instanceof Appointment){
+                    output.write(((Appointment) object).toCSVFormat() + "\n");
+                }
                 //handles user based classes
                 else {
                     List<String> data = new ArrayList<>();
@@ -162,7 +167,7 @@ public class CSVwrite {
         return fields;
     }
 
-    public static String selectCSVFile() {
+    /*public static String selectCSVFile() {
 
         File[] files = listCSVFiles();
         System.out.println("Choose a CSV file to save to or Create a new one:");
@@ -227,6 +232,6 @@ public class CSVwrite {
     public static File[] listCSVFiles() {
         File folder = new File("Data"); // folder name
         return folder.listFiles((dir, name) -> name.endsWith(".csv")); // filter all CSV files
-    }
+    }*/
 
 }

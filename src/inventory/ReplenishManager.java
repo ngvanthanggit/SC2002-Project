@@ -7,8 +7,8 @@ public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
     private InventoryManager inventoryManager;
 
-    private InventoryItem item;
-    private static int idCounter = 0;
+    //private InventoryItem item;
+    //private static int idCounter = 0;
     private static String originalPath = "Data//Original/Replenish_List.csv";
     private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
 
@@ -40,16 +40,16 @@ public class ReplenishManager {
         } else {
             System.out.println("Replenish List successfully loaded: " + replenishList.size());
 
-            String lastRequestID = replenishList.get(replenishList.size() - 1).getRequestID();
-            idCounter = extractIdNumber(lastRequestID);
+            //String lastRequestID = replenishList.get(replenishList.size() - 1).getRequestID();
+            //idCounter = extractIdNumber(lastRequestID);
             
         }
     }
 
-    private static int extractIdNumber(String requestId) {
+    /*private static int extractIdNumber(String requestId) {
         String numericPart = requestId.replaceAll("[^\\d]", ""); // Removes non-digit characters
         return Integer.parseInt(numericPart); // Convert to integer
-    }
+    }*/
 
     public static List<ReplenishRequest> getReplenishList() {
         return replenishList;
@@ -60,7 +60,7 @@ public class ReplenishManager {
             System.out.println("There are no replenish request at the moment.");
         }
         else {
-            System.out.println("\nThe request in the CSV file are: ");
+            System.out.println("\nThe Requests in the CSV file are: ");
             for(ReplenishRequest request: replenishList){
                 System.out.println(request.getRequestInfo());
             }
@@ -73,7 +73,13 @@ public class ReplenishManager {
 
     public static void generateReplenish(String itemName, int replenishQuantity) {
         // Generate a unique ID for the request
-        String requestID = "REQ" + String.format("%04d", idCounter++);
+        // String requestID = "REQ" + String.format("%03d", ++idCounter);
+        String requestID = IDGenerator.generateID(
+                "REQ", 
+                replenishList, 
+                ReplenishRequest::getRequestID, // Use method reference for ID extraction
+                3
+        );
         
         // Create a new replenish request
         ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity);
@@ -88,7 +94,7 @@ public class ReplenishManager {
     public void approveReplenish(ReplenishRequest request) {
         request.setRequestStatus(RequestStatus.APPROVED);
         CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval
-        item = inventoryManager.getItem(request.getItemName());
+        InventoryItem item = inventoryManager.getItem(request.getItemName());
         inventoryManager.updateItem(request.getItemName(), item.getQuantity() + request.getReplenishQuantity());
         System.out.println("Replenish request for " + request.getItemName() + " approved.");
     }

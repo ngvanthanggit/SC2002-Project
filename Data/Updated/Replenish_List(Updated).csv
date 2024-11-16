@@ -1,3 +1,2 @@
 RequestID,Medicine,Quantity,RequestedBy,RequestDate,Status,ApprovalDate
 REQ001,Ibuprofen,10,Mary,2024-08-11,PENDING,
-REQ0001,Paracetamol,50,Mark Lee,2024-11-16,PENDING,

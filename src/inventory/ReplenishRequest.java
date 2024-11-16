@@ -90,7 +90,7 @@ public class ReplenishRequest {
 
     public String getRequestInfo() {
         return String.format(
-            "Requests[RequestID = %s, Medicine Name = %s, Replenish Quantity = %d, Requested By = %s, Request Date = %s, Status = %s, Approval Date = %s]",
+            "[RequestID = %s, Medicine Name = %s, Replenish Quantity = %d, Requested By = %s, Request Date = %s, Status = %s, Approval Date = %s]",
             requestID, itemName, replenishQuantity, requestedBy, 
             requestDate != null ? requestDate.toString() : "N/A", // Convert LocalDate to string
             status != null ? status.toString() : "N/A",           // Convert Enum to string

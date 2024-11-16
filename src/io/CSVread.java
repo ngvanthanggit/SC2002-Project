@@ -7,8 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;  
 
+import javax.print.Doc;
+
+import accounts.DoctorsAcc;
+import accounts.PatientsAcc;
+import appointmentManager.Appointment;
+import appointmentManager.ApptStatus;
 import user.*;
 import inventory.*;
 
@@ -66,18 +73,16 @@ public class CSVread {
                     records.add(patient); // Add the patient
                 }
 
-                // Handle Doctor objects, change the row.length for the amount of parameters in
-                // your class
-                else if (objectType.equals("Doctor") && row.length >= 6) {
+                // Handle Doctor objects, change the row.length for the amount of parameters in your class
+                else if (objectType.equals("Doctor") && row.length >= 6){
                     Doctor doctor = new Doctor(
-                            baseUser.getHospitalID(),
-                            baseUser.getName(),
-                            baseUser.getRole(),
-                            baseUser.getGender(),
-                            baseUser.getAge(),
-                            baseUser.getPassword());
+                        baseUser.getHospitalID(),
+                        baseUser.getName(),
+                        baseUser.getRole(),
+                        baseUser.getGender(),
+                        baseUser.getAge(),
+                        baseUser.getPassword());
                     records.add(doctor); // Add the doctor
-
                 }
                 // Handle Pharmacist objects, change the row.length for the amount of parameters
                 // in your class
@@ -118,7 +123,7 @@ public class CSVread {
         return records; // Return the list of records (depends on the class of objects)
     }
 
-    //General method to read CSV and map columns to fields dynamically for inventory
+    //general method to read CSV and map columns to fields dynamically for inventory
     public static List<InventoryItem> readItemCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = ""; 
@@ -158,7 +163,7 @@ public class CSVread {
         return inventory; // Return the list of InventoryItem object
     }
 
-    //General method to read CSV and map columns to fields dynamically for replenishrequest
+    //general method to read CSV and map columns to fields dynamically for replenishrequest
     public static List<ReplenishRequest> readReplenishCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = ""; 
@@ -229,5 +234,59 @@ public class CSVread {
             }
         }
         return replenishList; // Return the list of ReplenishRequest objects
+    }
+    public static List<Appointment> readApptCSV(String fileString, Map<String, Integer> columnMapping) {
+        BufferedReader reader = null;
+        String line = ""; 
+        List<Appointment> appointments = new ArrayList<>();
+
+        try {
+            reader = new BufferedReader(new FileReader(fileString));
+
+            // Read the first line to skip the header
+            String headerLine = reader.readLine();
+
+            // Continuously read the next line
+            while ((line = reader.readLine()) != null) {
+                // Array of Strings, split at commas
+                String[] row = line.split(",");
+
+                // Extract appointment fields based on column mapping
+                int appointmentID = Integer.parseInt(row[columnMapping.get("AppointmentID")].trim());
+                String patientID = row[columnMapping.get("PatientID")].trim();
+                String doctorID = row[columnMapping.get("DoctorID")].trim();
+                LocalDate date = LocalDate.parse(row[columnMapping.get("Date")].trim());
+                LocalTime time = LocalTime.parse(row[columnMapping.get("Time")].trim());
+                ApptStatus status = ApptStatus.valueOf(row[columnMapping.get("Status")].trim().toUpperCase());
+                String consultationNotes = row.length > columnMapping.get("ConsultationNotes") ? row[columnMapping.get("ConsultationNotes")].trim() : "";
+                String prescribedMedications = row.length > columnMapping.get("PrescribedMedications") ? row[columnMapping.get("PrescribedMedications")].trim() : "";
+                String serviceType = row.length > columnMapping.get("ServiceType") ? row[columnMapping.get("ServiceType")].trim() : "";
+
+                // Recreate Doctor and Patient objects using their IDs
+                Doctor doctor = (Doctor) DoctorsAcc.findDoctorById(doctorID);
+                Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
+
+                // Create a new Appointment object
+                Appointment appointment = new Appointment(doctor, patient, date, time, appointmentID);
+                appointment.setStatus(status);
+                appointment.setConsultationNotes(consultationNotes);
+                appointment.setPrescribedMedications(prescribedMedications);
+                appointment.setServiceType(serviceType);
+
+                appointments.add(appointment); // Add the appointment to the list
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return appointments; // Return the list of Appointment objects
     }
 }
