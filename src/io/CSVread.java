@@ -9,6 +9,8 @@ import java.util.Map;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;  
 
+import javax.print.Doc;
+
 import user.*;
 import inventory.*;
 
@@ -66,18 +68,16 @@ public class CSVread {
                     records.add(patient); // Add the patient
                 }
 
-                // Handle Doctor objects, change the row.length for the amount of parameters in
-                // your class
-                else if (objectType.equals("Doctor") && row.length >= 6) {
+                // Handle Doctor objects, change the row.length for the amount of parameters in your class
+                else if (objectType.equals("Doctor") && row.length >= 6){
                     Doctor doctor = new Doctor(
-                            baseUser.getHospitalID(),
-                            baseUser.getName(),
-                            baseUser.getRole(),
-                            baseUser.getGender(),
-                            baseUser.getAge(),
-                            baseUser.getPassword());
+                        baseUser.getHospitalID(),
+                        baseUser.getName(),
+                        baseUser.getRole(),
+                        baseUser.getGender(),
+                        baseUser.getAge(),
+                        baseUser.getPassword());
                     records.add(doctor); // Add the doctor
-
                 }
                 // Handle Pharmacist objects, change the row.length for the amount of parameters
                 // in your class

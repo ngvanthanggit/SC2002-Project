@@ -74,7 +74,7 @@ public class PatientsAcc {
 
     // find patient by hospitalID
     public static User findPatientById(String hospitalID) {
-        for (User patient : patients) {
+        for (Patient patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
                 return patient;
             }
