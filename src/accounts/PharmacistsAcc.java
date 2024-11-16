@@ -7,7 +7,9 @@ import java.util.Map;
 
 import io.*;
 import user.User;
+import user.Administrator;
 import user.Pharmacist;
+import user.Role;
 
 public class PharmacistsAcc {
     // store all Administrator objects
@@ -79,10 +81,16 @@ public class PharmacistsAcc {
     }
 
     // updating methods
-    public static void addPharmacist(Pharmacist pharmacist) {
-        // add new users to the staff List
-        pharmacists.add(pharmacist);
-        CSVwrite.writeCSV(updatedPath, pharmacist);
+    public static void addPharmacist() {
+        Pharmacist newCreatedUser = NewAccount.createNewAccount(pharmacists, Role.Pharmacist);
+
+        if(newCreatedUser!=null){
+            pharmacists.add(newCreatedUser);
+            CSVwrite.writeCSV(updatedPath, newCreatedUser);
+            System.out.println("Pharmacist " + newCreatedUser.getName() + " created!");
+        } else {
+            System.out.println("Account creation failed!");
+        }
     }
 
     public static void removePharmacist(String hospitalID) {
@@ -110,7 +118,7 @@ public class PharmacistsAcc {
 
     }
 
-    public static void updateStaff() {
+    public static void updateStaff(String hospitalID) {
 
     }
 

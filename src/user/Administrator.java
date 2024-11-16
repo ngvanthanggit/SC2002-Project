@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 
 import accounts.AdminsAcc;
+import accounts.DoctorsAcc;
+import accounts.PharmacistsAcc;
 
 public class Administrator extends User  {
     
@@ -41,7 +43,7 @@ public class Administrator extends User  {
             System.out.println("\nAdmin Menu");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View and Manage Hospital Staff");
-            System.out.println("2. View appointment details");
+            System.out.println("2. View Appointment Details");
             System.out.println("3. View and Manage Medication Inventory");
             System.out.println("4. Approve Replenishment Requests");
             System.out.println("5. Logout");
@@ -87,6 +89,7 @@ public class Administrator extends User  {
             System.out.println("5. Go Back");
             System.out.print("Choice: ");
             choice = sc.nextInt();
+            sc.nextLine();
 
             switch(choice) {
                 case 1:
@@ -126,6 +129,7 @@ public class Administrator extends User  {
             System.out.println("4. Go Back");
             System.out.print("Choice: ");
             choice = sc.nextInt();
+            sc.nextLine();
 
             //pass the List they want to filter
             switch(choice){
@@ -134,6 +138,7 @@ public class Administrator extends User  {
                     break;
                 case 2:
                     //Pharmacist List
+                    filterStaff(sc, new ArrayList<>(PharmacistsAcc.getPharmacists()));
                     break;
                 case 3:
                     //pass Administrator List
@@ -162,28 +167,25 @@ public class Administrator extends User  {
             System.out.println("6. Go Back");
             System.out.print("Choice: ");
             filter = sc.nextInt();
+            sc.nextLine();
 
             //sort using List.sort + comparator class based on custom sorting input
             switch(filter) {
                 case 1:
-                    //sort by Name
-                    copiedList.sort(Comparator.comparing(User::getName));
+                    copiedList.sort(Comparator.comparing(User::getName)); //sort by Name
                     break;
                 case 2:
                     //sort by Role, then by Hospital ID if roles are the same
                     copiedList.sort(Comparator.comparing(User::getRole).thenComparing(User::getHospitalID));
                     break;
                 case 3:
-                    //sort by Gender
-                    copiedList.sort(Comparator.comparing(User::getGender));
+                    copiedList.sort(Comparator.comparing(User::getGender)); //sort by Gender
                     break;
                 case 4:
-                    //sort by Age
-                    copiedList.sort(Comparator.comparingInt(User::getAge));
+                    copiedList.sort(Comparator.comparingInt(User::getAge)); //sort by Age
                     break;
                 case 5:
-                    // Display in the default order
-                    copiedList = AdminsAcc.getAdmins(); // Reset to original order
+                    //default order, do nothing
                     break;
                 case 6:
                     return;
@@ -201,22 +203,121 @@ public class Administrator extends User  {
     }
 
     public void addStaff(Scanner sc){
+        int choice;
+        do{
+            System.out.println("\nChoose the staff to add");
+            System.out.printf("%s\n", "-".repeat(27));
+            System.out.println("1. Doctor");
+            System.out.println("2. Pharmacist");
+            System.out.println("3. Administrator");
+            System.out.println("4. Go Back");
+            System.out.print("Choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
 
+            //pass the List they want to filter
+            switch(choice){
+                case 1:
+                    //DoctorsAcc.addDoctor();
+                    System.out.println("New Doctor Added!");
+                    break;
+                case 2:
+                    PharmacistsAcc.addPharmacist();
+                    break;
+                case 3:
+                    AdminsAcc.addAdmin();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+                    continue;
+            }
+
+        } while(choice!=4);
     }
 
     //update staff info findbyID
     public void updateStaff(Scanner sc){
+        int choice;
+        String staffID;
+        do{
+            System.out.println("\nChoose the staff to update");
+            System.out.printf("%s\n", "-".repeat(27));
+            System.out.println("1. Doctor");
+            System.out.println("2. Pharmacist");
+            System.out.println("3. Administrator");
+            System.out.println("4. Go Back");
+            System.out.print("Choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
 
+            //pass the List they want to filter
+            switch(choice){
+                case 1:
+                    //DoctorsAcc.addDoctor();
+                    System.out.println("Doctor Updated!");
+                    break;
+                case 2:
+                    System.out.print("Enter the Pharmacist ID to update: ");
+                    staffID = sc.nextLine();
+                    PharmacistsAcc.updateStaff(staffID);
+                    break;
+                case 3:
+                    System.out.print("Enter the Admin ID to update: ");
+                    staffID = sc.nextLine();
+                    AdminsAcc.updateAdmin(staffID, sc);
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+                    continue;
+            }
+
+        } while(choice!=4);
     }
 
     public void removeStaff(Scanner sc){
-        //need to use a check such that i cant remove myself
-        sc.nextLine(); //consume
-        System.out.print("Enter the Hospital ID of the staff to remove: ");
-        String staffID = sc.nextLine();
+        int choice;
+        String staffID;
+        do{
+            System.out.println("\nChoose the staff to remove");
+            System.out.printf("%s\n", "-".repeat(27));
+            System.out.println("1. Doctor");
+            System.out.println("2. Pharmacist");
+            System.out.println("3. Administrator");
+            System.out.println("4. Go Back");
+            System.out.print("Choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
 
-        //use StaffsAccount method to remove
-        AdminsAcc.removeAdmin(staffID); 
+            //pass the List they want to remove
+            switch(choice){
+                case 1:
+                    //DoctorsAcc.removeDoctor(staffID);
+                    System.out.print("Enter the Doctor ID to remove: ");
+                    staffID = sc.nextLine();
+                    System.out.println("Doctor Removed!");
+                    break;
+                case 2:
+                    System.out.print("Enter the Pharmacist ID to remove: ");
+                    staffID = sc.nextLine();
+                    PharmacistsAcc.removePharmacist(staffID);
+                    break;
+                case 3:
+                    System.out.print("Enter the Admin ID to remove: ");
+                    staffID = sc.nextLine();
+                    AdminsAcc.removeAdmin(staffID); 
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+                    continue;
+            }
+
+        } while(choice!=4);
     }
 
     /*
