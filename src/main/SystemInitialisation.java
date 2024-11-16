@@ -9,9 +9,12 @@ import inventory.InventoryManager;
 import inventory.ReplenishManager;
 import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
+import inventory.InventoryManager;
+import inventory.ReplenishManager;
+import medicalrecord.MedicalRecordManager;
+import schedule.ScheduleManager;
 
 public class SystemInitialisation {
-
     private static boolean isFirstRun = true;
 
     // simiplifies all methods needed when 1st boot up of system under 1 method
@@ -24,8 +27,9 @@ public class SystemInitialisation {
         DoctorsAcc.loadDoctors(isFirstRun);
         InventoryManager.loadInventory(isFirstRun);
         ReplenishManager.loadReplenish(isFirstRun);
+        MedicalRecordManager.loadMedicalRecords(isFirstRun);
+        ScheduleManager.loadSchedules(isFirstRun);
         ApptManager.loadAppointments(isFirstRun);
-        
 
         // save the original data into a new file to be updated
         AdminsAcc.duplicateAdmin();
@@ -34,6 +38,8 @@ public class SystemInitialisation {
         DoctorsAcc.duplicateDoctor();
         InventoryManager.duplicateInventory();
         ReplenishManager.duplicateReplenish();
+        MedicalRecordManager.duplicateMedicalRecord();
+        ScheduleManager.duplicateSchedule();
         ApptManager.duplicateAppointments();
 
         // Displaying the List of Patients and Staffs from CSV
@@ -43,8 +49,11 @@ public class SystemInitialisation {
         DoctorsAcc.displayDoctors();
         InventoryManager.displayInventory();
         ReplenishManager.displayReplenishList();
+        MedicalRecordManager.displayMedicalRecords();
+        ScheduleManager.displaySchedules();
+
         ApptManager.displayAppointments();
-        
+
         // set to false after first load
         isFirstRun = false;
     }

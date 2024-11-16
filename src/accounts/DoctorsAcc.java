@@ -13,8 +13,8 @@ import user.*;
 public class DoctorsAcc {
     // List of all doctors
     private static List<Doctor> doctors = new ArrayList<>();
-    private static String originalPath = "Data//Original/Doctor_List.csv";
-    private static String updatedPath = "Data//Updated/Doctor_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Doctor_List.csv";
+    private static String updatedPath = "../Data//Updated/Doctor_List(Updated).csv";
 
     public static void loadDoctors(boolean isFirstRun) {
         String filePath;

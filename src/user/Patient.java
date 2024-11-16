@@ -7,22 +7,21 @@ import menus.PatientMenu;
 import appointmentManager.*;
 
 public class Patient extends User implements PatientMenu {
-    private String dateOB; //date of birth
+    private String dateOB; // date of birth
     private String bloodType;
-    private String contactInfo; //changeable
-    
+    private String contactInfo; // changeable
 
-    //constructors
-    public Patient(){
+    // constructors
+    public Patient() {
         super();
         this.dateOB = null;
         this.bloodType = null;
         this.contactInfo = null;
     }
-    
+
     public Patient(String hospitalID, String name, Role role,
-                    String gender, int age, String password, String dateOB, 
-                    String bloodType, String contactInfo){
+            String gender, int age, String password, String dateOB,
+            String bloodType, String contactInfo) {
         super(hospitalID, name, role, gender, age, password);
         this.dateOB = dateOB;
         this.bloodType = bloodType;
@@ -30,10 +29,10 @@ public class Patient extends User implements PatientMenu {
     }
 
     public Patient(String hospitalID, String name) {
-        super(hospitalID, name); 
+        super(hospitalID, name);
     }
 
-    //get Methods()
+    // get Methods()
     public String getDateOB() {
         return dateOB;
     }
@@ -50,26 +49,28 @@ public class Patient extends User implements PatientMenu {
         return super.getHospitalID();
     }
 
-    //set Methods()
+    // set Methods()
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
     }
 
-    //Override SuperClass Methods
+    // Override SuperClass Methods
     @Override
-    public void logout(){
+    public void logout() {
         System.out.println("Patient Logging Out.");
         return;
     }
 
     @Override
     public String userInfo() {
-        return String.format("[PatientID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s, DateOB = %s, BloodType = %s, ContactInfo = %s]",
-        getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType, contactInfo);
+        return String.format(
+                "[PatientID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s, DateOB = %s, BloodType = %s, ContactInfo = %s]",
+                getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType,
+                contactInfo);
     }
 
-    //Interface Menus
-    public void displayMenu(){
+    // Interface Menus
+    public void displayMenu() {
         int choice;
         Scanner sc = new Scanner(System.in);
         do {
@@ -84,7 +85,7 @@ public class Patient extends User implements PatientMenu {
             System.out.println("7. Logout");
             System.out.print("Choice: ");
             choice = sc.nextInt();
-            sc.nextLine(); //consume Line
+            sc.nextLine(); // consume Line
 
             switch (choice) {
                 case 1: // done
@@ -96,7 +97,7 @@ public class Patient extends User implements PatientMenu {
                 case 3: // done
                     cancelAppointment();
                     break;
-                case 4: 
+                case 4:
                     viewScheduledAppointments();
                     break;
                 case 5: // done
@@ -111,7 +112,7 @@ public class Patient extends User implements PatientMenu {
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
-        } while(choice!=7);
+        } while (choice != 7);
     }
 
     public void scheduleAppointment(Scanner sc) {
@@ -131,9 +132,29 @@ public class Patient extends User implements PatientMenu {
         service.scheduleAppointment(patientID, doctorID, date, time);
     }
 
-    public void rescheduleAppointment();
-    public void cancelAppointment();
-    public void viewScheduledAppointments();
-    public void viewAppointmentStatus();
-    public void viewAppointmentOutcomes();
+    public void rescheduleAppointment() {
+
+    }
+
+    public void cancelAppointment() {
+
+    }
+
+    public void viewScheduledAppointments() {
+
+    }
+
+    public void viewAppointmentStatus() {
+
+    }
+
+    public void viewAppointmentOutcomes() {
+
+    }
+
+    @Override
+    public void scheduleAppointment() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'scheduleAppointment'");
+    }
 }

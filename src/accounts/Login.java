@@ -39,7 +39,7 @@ public class Login {
                     case Pharmacist:
                         // create new pharmacist class
                         return new Pharmacist(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
-                        user.getAge(), user.getPassword());
+                                user.getAge(), user.getPassword());
 
                     case Doctor:
                         // create new Doctor Class
@@ -64,7 +64,7 @@ public class Login {
             System.out.print("Enter your password: ");
             String newPassword = scanner.nextLine(); // set new Password
 
-            //update password based on the role
+            // update password based on the role
             switch (user.getRole()) {
                 case Patient:
                     PatientsAcc.updatePassword(user.getHospitalID(), newPassword);

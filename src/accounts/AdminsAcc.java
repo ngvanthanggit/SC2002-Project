@@ -15,8 +15,8 @@ import user.Role;
 public class AdminsAcc {
     // store all Administrator objects
     private static List<Administrator> admins = new ArrayList<>();
-    private static String originalPath = "Data//Original/Admin_List.csv";
-    private static String updatedPath = "Data//Updated/Admin_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Admin_List.csv";
+    private static String updatedPath = "../Data//Updated/Admin_List(Updated).csv";
 
     // read in csv file of staffs
     public static void loadAdmins(boolean isFirstRun) {
