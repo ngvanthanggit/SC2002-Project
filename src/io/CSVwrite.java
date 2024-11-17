@@ -11,10 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import appointmentManager.Appointment;
+//import appointmentManager.Appointment;
 import inventory.InventoryItem;
 import medicalrecord.MedicalRecord;
 import schedule.Schedule;
+import appointment.Appointment;
 
 public class CSVwrite {
 

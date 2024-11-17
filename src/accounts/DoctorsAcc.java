@@ -84,6 +84,15 @@ public class DoctorsAcc {
         return null;
     }
 
+    public static Doctor getDoctorByID(String hospitalID) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getHospitalID().equals(hospitalID)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
     private static void addDoctor(Doctor doctor) {
         doctors.add(doctor);
         CSVwrite.writeCSV(updatedPath, null);
