@@ -46,7 +46,8 @@ public class Schedule {
     }
 
     public String getScheduleDetails() {
-        return "- Date: " + date + '\n' +
+        return "- Doctor ID: " + doctorID + '\n' +
+                "  Date: " + date + '\n' +
                 "  Time slots: " + timeSlots +
                 "\n";
     }
@@ -63,5 +64,9 @@ public class Schedule {
         this.timeSlots.add(timeSlot);
         // sort the time slots
         Collections.sort(this.timeSlots);
+    }
+
+    public void removeTimeSlot(LocalTime timeSlot) {
+        this.timeSlots.remove(timeSlot);
     }
 }
