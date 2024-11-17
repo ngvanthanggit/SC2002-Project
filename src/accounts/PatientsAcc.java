@@ -73,7 +73,7 @@ public class PatientsAcc {
     }
 
     // find patient by hospitalID
-    public static User findPatientById(String hospitalID) {
+    public static Patient findPatientById(String hospitalID) {
         for (Patient patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
                 return patient;
