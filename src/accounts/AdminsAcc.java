@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import io.*;
+import main.MainLogin;
 import user.User;
 import user.Administrator;
+import user.Role;
 
 public class AdminsAcc {
     // store all Administrator objects
@@ -79,13 +82,27 @@ public class AdminsAcc {
     }
 
     // updating methods
-    public static void addAdmin(Administrator administrator) {
-        // add new users to the staff List
-        admins.add(administrator);
-        CSVwrite.writeCSV(updatedPath, administrator);
+    public static void addAdmin() {
+        Administrator newCreatedUser = NewAccount.createNewAccount(admins, Role.Administrator);
+
+        if(newCreatedUser!=null){
+            admins.add(newCreatedUser);
+            CSVwrite.writeCSV(updatedPath, newCreatedUser);
+            System.out.println("Admin " + newCreatedUser.getName() + " created!");
+        } else {
+            System.out.println("Account creation failed!");
+        }
     }
 
     public static void removeAdmin(String hospitalID) {
+        User currentAdmin = MainLogin.getLoggedInUser();
+
+        //admin shouldn't be able to remove themself while logged in
+        if(currentAdmin.getHospitalID().equalsIgnoreCase(hospitalID)){
+            System.out.println("Error! You can't remove yourself while logged in!");
+            return;
+        }
+
         User adminToRemove = findStaffById(hospitalID);
 
         if (adminToRemove != null) {
@@ -97,11 +114,22 @@ public class AdminsAcc {
         }
     }
 
-    public static void updateStaff(String hospitalID) {
+    public static void updateAdmin(String hospitalID, Scanner sc) {
         User adminToUpdate = findStaffById(hospitalID);
 
         if(adminToUpdate != null){
-
+            System.out.print("Enter your Name: ");
+            adminToUpdate.setName(sc.nextLine());
+            System.out.print("Enter your Gender: ");
+            adminToUpdate.setGender(sc.nextLine());
+            System.out.print("Enter your Age: ");
+            adminToUpdate.setAge(sc.nextInt());
+            sc.nextLine(); //consume
+            System.out.print("Enter your Password: ");
+            adminToUpdate.setPassword(sc.nextLine());
+            System.out.println("Administrator with Hospital ID " + hospitalID + " has been updated.");
+            duplicateAdmin(); // rewrite the CSV file with updated version
+        
         } else {
             System.out.println("Administrator with Hospital ID " + hospitalID + " not found.");
         }
