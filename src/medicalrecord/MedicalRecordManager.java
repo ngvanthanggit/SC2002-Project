@@ -2,12 +2,12 @@ package medicalrecord;
 
 import java.util.*;
 
-import io.*;
+import utility.*;
 
 public class MedicalRecordManager {
     private static List<MedicalRecord> medicalRecords = new ArrayList<>();
-    private static String originalPath = "../Data//Original/MedicalRecord_List.csv";
-    private static String updatedPath = "../Data//Updated/MedicalRecord_List(Updated).csv";
+    private static String originalPath = "Data//Original/MedicalRecord_List.csv";
+    private static String updatedPath = "Data//Updated/MedicalRecord_List(Updated).csv";
 
     public static void loadMedicalRecords(boolean isFirstRun) {
         String filePath;

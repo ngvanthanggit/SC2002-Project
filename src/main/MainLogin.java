@@ -45,13 +45,13 @@ public class MainLogin {
                 patient.displayMenu();
             } else if (loggedIn instanceof Pharmacist) {
                 Pharmacist pharmacist = (Pharmacist) loggedIn;
-                pharmacist.displayMenu();
+                pharmacist.displayUI();
             } else if (loggedIn instanceof Doctor) {
                 Doctor doctor = (Doctor) loggedIn;
                 doctor.displayMenu();
             } else if (loggedIn instanceof Administrator) {
                 Administrator admin = (Administrator) loggedIn;
-                admin.displayMenu();
+                admin.displayUI();
             }
         } else {
             System.out.println("Login failed! Incorrect ID or password.");

@@ -1,12 +1,25 @@
-package io;
+package utility;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Utility class for clearing data from CSV files while retaining the header row
+ * CSV manipulation
+ */
 public class CSVclear {
-    //clear data from CSV but keep the header
+
+    /**
+     * Clears all data from the specified CSV file but preserves the header row
+     * <p>
+     * The method reads the first line of the CSV file (assumed to be the header) and then overwrites
+     * the file with only this header line, effectively removing all other data.
+     * 
+     * @param filePath the path to the CSV file to be cleared
+     * @throws IOException if an I/O error occurs while reading from or writing to the file.
+     */
     public static void clearFile(String filePath) {
         try {
             //read the header line
@@ -16,19 +29,15 @@ public class CSVclear {
             }
 
             //overwrite the file, keeping only the header, resulting in empty file
-            try (FileWriter writer = new FileWriter(filePath, false)) { //false for overwrite mode
+            //false for overwrite mode
+            try (FileWriter writer = new FileWriter(filePath, false)) 
+            {
                 if (header != null) {
                     writer.write(header + "\n"); //rewrite the header
                 }
             }
-
-            //System.out.println("CSV data cleared, header preserved.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void removeRow(){
-        
     }
 }

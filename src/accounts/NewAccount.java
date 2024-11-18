@@ -1,11 +1,9 @@
 package accounts;
 import java.util.Scanner;
-
-import io.IDGenerator;
-
 import java.util.List;
 
 import user.*;
+import utility.IDGenerator;
 
 public class NewAccount {
 
@@ -15,16 +13,20 @@ public class NewAccount {
         String prefix, name, gender, password; //common variables
         int age, numDigits = 3;
 
-        //common details
+        //common details, might want to capatalise first letter
         System.out.print("Enter your Name: ");
-        name = sc.nextLine();
+        name = sc.nextLine().trim();
         System.out.print("Enter your Gender: ");
-        gender = sc.nextLine();
+        gender = sc.nextLine().trim();
         System.out.print("Enter your Age: ");
         age = sc.nextInt();
         sc.nextLine(); //consume
         System.out.print("Enter your Password: ");
-        password = sc.nextLine();
+        password = sc.nextLine().trim();
+
+        //changing 1st letter to uppercase
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
 
         //determine prefix based on role passed
         switch (role){

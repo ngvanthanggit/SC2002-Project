@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import user.*;
-import io.*;
+import utility.*;
 
 public class PatientsAcc {
 
     // store the list of patients
     private static List<Patient> patients = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Patient_List.csv";
-    private static String updatedPath = "../Data//Updated/Patient_List(Updated).csv";
+    private static String originalPath = "Data//Original/Patient_List.csv";
+    private static String updatedPath = "Data//Updated/Patient_List(Updated).csv";
 
     // static method to load patients from CSV file and return as a list
     public static void loadPatients(boolean isFirstRun) {

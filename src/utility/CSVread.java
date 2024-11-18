@@ -1,17 +1,14 @@
-package io;
+package utility;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.print.Doc;
 
 import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
@@ -216,16 +213,6 @@ public class CSVread {
                         approvalDate = LocalDate.parse(approvalDateString, formatter);
                     }
                 }
-
-                // Create a new ReplenishRequest with parsed data
-                // ReplenishRequest request = new ReplenishRequest(requestID, itemName,
-                // replenishQuantity);
-                // request.setRequestedBy(requestedBy);
-                // request.setRequestDate(requestDate);
-                // request.setRequestStatus(status);
-                // request.setApprovalDate(approvalDate); // Manually set approval date if it
-                // exists
-
                 ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity, requestedBy,
                         requestDate, status, approvalDate);
 

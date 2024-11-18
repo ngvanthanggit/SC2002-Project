@@ -1,12 +1,13 @@
 package schedule;
 
 import java.util.*;
-import io.*;
+
+import utility.*;
 
 public class ScheduleManager {
     private static List<Schedule> schedules = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Schedule_List.csv";
-    private static String updatedPath = "../Data//Updated/Schedule_List(Updated).csv";
+    private static String originalPath = "Data//Original/Schedule_List.csv";
+    private static String updatedPath = "Data//Updated/Schedule_List(Updated).csv";
 
     public static void removeInvalidSchedules() {
         // remove schedules that are in the past

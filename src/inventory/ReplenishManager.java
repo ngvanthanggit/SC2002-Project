@@ -1,8 +1,9 @@
 package inventory;
 
+import java.time.LocalDate;
 import java.util.*;
 
-import io.*;
+import utility.*;
 
 public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
@@ -40,13 +41,7 @@ public class ReplenishManager {
             System.out.println("No items were loaded.");
         } else {
             System.out.println("Replenish List successfully loaded: " + replenishList.size());
-
-            // String lastRequestID = replenishList.get(replenishList.size() -
-            // 1).getRequestID();
-            // idCounter = extractIdNumber(lastRequestID);
-
         }
-        displayReplenishList();
     }
 
     /*
@@ -95,17 +90,63 @@ public class ReplenishManager {
         System.out.println("Replenish request submitted for " + itemName + " (" + replenishQuantity + " units).");
     }
 
-    public void approveReplenish(ReplenishRequest request) {
-        request.setRequestStatus(RequestStatus.APPROVED);
-        CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect approval
-        InventoryItem item = inventoryManager.getItem(request.getItemName());
-        inventoryManager.updateItem(request.getItemName(), item.getQuantity() + request.getReplenishQuantity());
-        System.out.println("Replenish request for " + request.getItemName() + " approved.");
+    public static ReplenishRequest findReplenishRequest(String requestID){
+        for (ReplenishRequest request : replenishList){
+            if (request.getRequestID().equals(requestID)){
+                return request;
+            }
+        }
+        return null;
     }
 
-    public void rejectReplenish(ReplenishRequest request) {
-        request.setRequestStatus(RequestStatus.REJECTED);
-        CSVwrite.writeCSV(updatedPath, request); // Update CSV to reflect rejection
-        System.out.println("Replenish request for " + request.getItemName() + " rejected.");
+    public static void manageReplenish(String requestID, Scanner sc){
+        ReplenishRequest request = findReplenishRequest(requestID); //returns request object
+
+        if(request!=null){
+            System.out.println("Do you want to approve or reject request " + requestID + "?");
+            System.out.print("Choice Y/N: ");
+            char choice = Character.toUpperCase(sc.next().charAt(0));
+            switch (choice){
+                case 'Y':
+                    approveReplenish(request);
+                    break;
+                case 'N':
+                    rejectReplenish(request);
+                    break;
+                default: System.out.println("Invalid choice!");
+            }
+        } else {
+            System.out.println("Replenish Request " + requestID + " not found.");
+        }
+    }
+
+    //error able to approve/reject request even after approved/rejected
+    public static void approveReplenish(ReplenishRequest request) {
+        if(request.getRequestStatus() == RequestStatus.PENDING){
+            request.setRequestStatus(RequestStatus.APPROVED);
+            request.setApprovalDate(LocalDate.now()); //set approvalDate to now
+            
+            //update inventory stock level
+            InventoryItem item = InventoryManager.findItemByName(request.getItemName());
+            int updateQuantity = item.getQuantity() + request.getReplenishQuantity();
+            
+            //change this to use add/update method inventormyManager later
+            InventoryManager.updateItemStockHelper(request.getItemName(), updateQuantity);
+            duplicateReplenish(); 
+            System.out.println("Replenish request for " + request.getItemName() + " approved.");
+        } else {
+            System.out.println("You can't approve " + request.getRequestID() + ". It has already been " + request.getRequestStatus());
+        }
+        
+    }
+
+    public static void rejectReplenish(ReplenishRequest request) {
+        if(request.getRequestStatus() == RequestStatus.PENDING){
+            request.setRequestStatus(RequestStatus.REJECTED);
+            duplicateReplenish(); //update CSV for rejection
+            System.out.println("Replenish request for " + request.getItemName() + " rejected.");
+        } else {
+            System.out.println("You can't reject " + request.getRequestID() + ". It has already been " + request.getRequestStatus());
+        }
     }
 }

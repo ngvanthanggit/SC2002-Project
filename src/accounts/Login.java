@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import user.*;
-import accounts.*;
 
 public class Login {
 
     private List<User> users; // Accepts a list of users
+    private static String defaultPW = "password1234";
 
     public Login(List<User> users) {
         this.users = users;
@@ -59,7 +59,7 @@ public class Login {
 
     // check if user is using default pw "password1234"
     public static void checkDefPw(User user, Scanner scanner) {
-        if (user.getPassword().equals("password1234")) {
+        if (user.getPassword().equals(defaultPW)) {
             System.out.println("You are logging in with a default password, please change your password. ");
             System.out.print("Enter your password: ");
             String newPassword = scanner.nextLine(); // set new Password

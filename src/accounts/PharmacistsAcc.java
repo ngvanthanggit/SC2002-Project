@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
-import io.*;
 import user.User;
-import user.Administrator;
+import utility.*;
 import user.Pharmacist;
 import user.Role;
 
 public class PharmacistsAcc {
     // store all Administrator objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Pharm_List.csv";
-    private static String updatedPath = "../Data//Updated/Pharm_List(Updated).csv";
+    private static String originalPath = "Data//Original/Pharm_List.csv";
+    private static String updatedPath = "Data//Updated/Pharm_List(Updated).csv";
 
     // read in csv file of staffs
     public static void loadPharmacists(boolean isFirstRun) {
@@ -70,9 +70,9 @@ public class PharmacistsAcc {
         CSVwrite.writeCSVList(updatedPath, pharmacists);
     }
 
-    // find admin by hospitalID
-    private static User findStaffById(String hospitalID) {
-        for (User pharmacist : pharmacists) {
+    // find Pharmacist by hospitalID
+    private static Pharmacist findStaffById(String hospitalID) {
+        for (Pharmacist pharmacist : pharmacists) {
             if (pharmacist.getHospitalID().equals(hospitalID)) {
                 return pharmacist;
             }
@@ -93,21 +93,47 @@ public class PharmacistsAcc {
         }
     }
 
-    public static void removePharmacist(String hospitalID) {
-        User pharmacistToRemove = findStaffById(hospitalID);
+    public static void updatePharmacist(Scanner sc) {
+        displayPharmacists();
+        System.out.print("Enter the Pharmacist ID to update: ");
+        String hospitalID = sc.nextLine();
+        Pharmacist adminToUpdate = findStaffById(hospitalID);
+
+        if(adminToUpdate != null){
+            System.out.print("Enter your Name: ");
+            adminToUpdate.setName(sc.nextLine());
+            System.out.print("Enter your Gender: ");
+            adminToUpdate.setGender(sc.nextLine());
+            System.out.print("Enter your Age: ");
+            adminToUpdate.setAge(sc.nextInt());
+            sc.nextLine(); //consume
+            System.out.print("Enter your Password: ");
+            adminToUpdate.setPassword(sc.nextLine());
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been updated.");
+            duplicatePharmacist(); // rewrite the CSV file with updated version
+        
+        } else {
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
+        }
+    }
+
+    public static void removePharmacist(Scanner sc) {
+        System.out.print("Enter the Pharmacist ID to remove: ");
+        String hospitalID = sc.nextLine();
+        Pharmacist pharmacistToRemove = findStaffById(hospitalID);
 
         if (pharmacistToRemove != null) {
             pharmacists.remove(pharmacistToRemove); // remove Data from pharmacist List
-            System.out.println("Staff member with Hospital ID " + hospitalID + " has been removed.");
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been removed.");
             duplicatePharmacist(); // rewrite the CSV file without the row removed
         } else {
-            System.out.println("Staff member with Hospital ID " + hospitalID + " not found.");
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
         }
     }
 
     public static void updatePassword(String hospitalID, String newPassword) {
         // find the staff ID to update
-        User pharmacistPWToUpdate = findStaffById(hospitalID);
+        Pharmacist pharmacistPWToUpdate = findStaffById(hospitalID);
 
         if (pharmacistPWToUpdate != null) {
             pharmacistPWToUpdate.setPassword(newPassword);
@@ -115,11 +141,5 @@ public class PharmacistsAcc {
             System.out.println("Your password has been changed");
             return;
         }
-
     }
-
-    public static void updateStaff(String hospitalID) {
-
-    }
-
 }

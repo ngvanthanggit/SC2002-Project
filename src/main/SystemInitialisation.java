@@ -9,8 +9,6 @@ import inventory.InventoryManager;
 import inventory.ReplenishManager;
 import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
-import inventory.InventoryManager;
-import inventory.ReplenishManager;
 import medicalrecord.MedicalRecordManager;
 import schedule.ScheduleManager;
 

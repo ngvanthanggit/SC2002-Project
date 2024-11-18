@@ -5,10 +5,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import inventory.InventoryItem;
-import io.CSVclear;
-import io.CSVread;
-import io.CSVwrite;
 import user.User;
+import utility.CSVclear;
+import utility.CSVread;
+import utility.CSVwrite;
 
 //holds the List of All Appointments from CSV
 public class ApptManager {
