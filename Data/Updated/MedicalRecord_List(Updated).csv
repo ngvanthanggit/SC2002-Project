@@ -1,3 +1,3 @@
-Doctor ID,Patient ID,Diagnoses,Prescriptions,Treatment Plan
-D001,P1001,"Diabetes;Hypertension","Metformin;Amlodipine","Plan1;Plan2"
-D002,P1001,"Asthma","Salbutamol","Plan4;Plan5"
+MedicalR ID,Doctor ID,Patient ID,Diagnoses,Prescriptions,Treatment Plan, Prescription Status
+MR001,D001,P1001,""Diabetes;Hypertension"","Paracetamol: 10; Ibuprofen: 20",""Plan1;Plan2"",PENDING
+MR002,D002,P1001,""Asthma"","Amoxicillin: 15",""Plan4;Plan5"",PENDING

@@ -1,4 +1,4 @@
-package menus;
+package interfaces;
 
 /**
  * The interface defines common functionalities for menus used in the HMS

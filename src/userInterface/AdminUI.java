@@ -1,11 +1,16 @@
 package userInterface;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import menus.AdminMenu;
-import menus.CommonMenu;
+
+import interfaces.AdminMenu;
+import interfaces.AdminApptInterface;
+import interfaces.CommonMenu;
+import interfaces.InvenManageInterface;
+import interfaces.ReplenishManageInterface;
+import interfaces.StaffManageInterface;
 import user.Administrator;
 import user.Role;
-import user.User;
 
 /**
  * The class implements the {@link AdminMenu} interface to provide a UI for administrators. 
@@ -14,21 +19,29 @@ import user.User;
  */
 public class AdminUI implements AdminMenu{
     /** The administrator object associated with this UI. */
-    private Administrator administrator;
+    private final Administrator administrator;
+    private final StaffManageInterface staffManageInterface;
+    private final AdminApptInterface adminApptInterface; 
+    private final InvenManageInterface invenManageInterface;
+    private final ReplenishManageInterface replenishManageInterface;
 
     /**
      * Constructs an {@code AdminUI} with the specified administrator.
      * @param administrator The {@link Administrator} object associated with this UI.
      */
-    public AdminUI(Administrator administrator){
+    public AdminUI(Administrator administrator, StaffManageInterface staffManageInterface, AdminApptInterface adminApptInterface,
+                    InvenManageInterface invenManageInterface, ReplenishManageInterface replenishManageInterface){
         this.administrator = administrator;
+        this.staffManageInterface = staffManageInterface;
+        this.adminApptInterface = adminApptInterface;
+        this.invenManageInterface = invenManageInterface;
+        this.replenishManageInterface = replenishManageInterface;
     }
 
     /**
      * Logs out Administrator 
-     * Overrides the {@link User#logout()} method
+     * Implements the {@link CommonMenu#logout()} method
      */
-    @Override
     public void logout(){
         System.out.println("Administrator Logging Out.");
         return;
@@ -39,19 +52,25 @@ public class AdminUI implements AdminMenu{
      * Implements the {@link CommonMenu#displayMenu()} method
      */
     public void displayMenu() {
-        int choice;
+        int choice = -1;
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println("\n|-------- Admin Menu --------|");
             System.out.printf("%s\n", "-".repeat(30));
-            System.out.println("1. Manage Hospital Staff");
+            System.out.println("1. Manage Hospital Staff & Patients");
             System.out.println("2. Manage Appointment Details");
             System.out.println("3. Manage Medication Inventory");
             System.out.println("4. Manage Replenishment Requests");
             System.out.println("5. Logout");
             System.out.print("Choice: ");   
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch(choice) {
                 case 1:
@@ -81,17 +100,25 @@ public class AdminUI implements AdminMenu{
      * @param sc A {@link Scanner} object for user input.
      */
     public void chooseStaff(Scanner sc){
-        int choice;
+        //gonna include patient
+        int choice = -1;
         do {
-            System.out.println("\nChoose the type of Staffs");
+            System.out.println("\nChoose the type of Staffs or Patients");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. Doctors");
             System.out.println("2. Pharmacists");
             System.out.println("3. Administrators");
-            System.out.println("4. Go Back");
+            System.out.println("4. Patients");
+            System.out.println("5. Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             Role role = null;
 
@@ -106,6 +133,8 @@ public class AdminUI implements AdminMenu{
                     role = Role.Administrator;
                     break;
                 case 4:
+                    role = Role.Patient;
+                case 5:
                     return;
                 default:
                     System.out.println("Invalid choice, please try again."); 
@@ -118,7 +147,7 @@ public class AdminUI implements AdminMenu{
             } else {
                 System.out.println("Invalid choice, please try again.");
             }
-        } while(choice!=4);
+        } while(choice!=5);
     }
 
     /**
@@ -128,7 +157,7 @@ public class AdminUI implements AdminMenu{
      * @param role The {@link Role} of the staff to manage.
      */
     public void manageHospitalStaff(Scanner sc, Role role){
-        int choice;
+        int choice = -1;
         do {
             System.out.println("\nView & Manage " + role + "s");
             System.out.printf("%s\n", "-".repeat(27));
@@ -138,21 +167,27 @@ public class AdminUI implements AdminMenu{
             System.out.println("4. Remove " + role);
             System.out.println("5. Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch(choice) {
                 case 1:
-                    StaffManageUI.viewStaff(sc, role);
+                    staffManageInterface.viewStaff(sc, role);
                     break;
                 case 2:
-                    StaffManageUI.addStaff(sc, role);
+                    staffManageInterface.addStaff(sc, role);
                     break;
                 case 3:
-                    StaffManageUI.updateStaff(sc, role);
+                    staffManageInterface.updateStaff(sc, role);
                     break;
                 case 4:
-                    StaffManageUI.removeStaff(sc, role);
+                    staffManageInterface.removeStaff(sc, role);
                     break;
                 case 5:
                     return; //go back to main menu
@@ -170,7 +205,40 @@ public class AdminUI implements AdminMenu{
      * @param sc A {@link Scanner} object for user input.
      */
     public void manageAppointments(Scanner sc){
+        //display all appointmnets, status confirmed cancelled completed
+        //display appointment outcome records for completed 
 
+        int choice =-1;
+        do {
+            System.out.println("\n|---- Appointmnets Menu ----|");
+            System.out.printf("%s\n", "-".repeat(36));
+            System.out.println("1. View All Appointments");
+            System.out.println("2. View All Appointment Outcome Records");
+            System.out.println("3. Go Back");
+            System.out.print("Choice: ");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
+
+            switch(choice){
+                case 1:
+                    adminApptInterface.filterAppointments(sc);
+                    break;
+                case 2:
+                    adminApptInterface.filterOutcomes(sc);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+
+        } while(choice!=3);
     }
 
     /**
@@ -179,7 +247,7 @@ public class AdminUI implements AdminMenu{
      * @param sc A {@link Scanner} object for user input.
      */
     public void manageInventory(Scanner sc){
-        int choice;
+        int choice = -1;
         do {
             System.out.println("\n|---- Medication Inventory Menu ----|");
             System.out.printf("%s\n", "-".repeat(36));
@@ -187,15 +255,21 @@ public class AdminUI implements AdminMenu{
             System.out.println("2. Choose Medication Stock to Manage");
             System.out.println("3. Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch(choice) {
                 case 1:
-                    InvenManageUI.viewMedicationInven();
+                    invenManageInterface.viewMedicationInven();
                     break;
                 case 2:
-                    InvenManageUI.chooseMedicine(sc, administrator.getRole());
+                    invenManageInterface.chooseMedicine(sc, administrator.getRole());
                     break;
                 case 3:
                     return; //go back to main menu
@@ -213,7 +287,7 @@ public class AdminUI implements AdminMenu{
      * @param sc A {@link Scanner} object for user input.
      */
     public void manageReplenishRequest(Scanner sc){
-        int choice;
+        int choice = -1;
         do {
             System.out.println("\nReplenish Request Menu");
             System.out.printf("%s\n", "-".repeat(27));
@@ -221,15 +295,21 @@ public class AdminUI implements AdminMenu{
             System.out.println("2. Approve/Reject Request");
             System.out.println("3. Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch(choice){
                 case 1:
-                    ReplenishManageUI.viewReplenishRequest();
+                    replenishManageInterface.viewReplenishRequest();
                     break;
                 case 2:
-                    ReplenishManageUI.manageReplenish(sc);
+                    replenishManageInterface.manageReplenish(sc);
                     break;
                 case 3:
                     return;

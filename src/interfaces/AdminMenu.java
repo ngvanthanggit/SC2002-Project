@@ -1,4 +1,4 @@
-package menus;
+package interfaces;
 import java.util.Scanner;
 import user.Role;
 

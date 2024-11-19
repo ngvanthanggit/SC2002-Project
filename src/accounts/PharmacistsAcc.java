@@ -2,6 +2,7 @@ package accounts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -71,7 +72,7 @@ public class PharmacistsAcc {
     }
 
     // find Pharmacist by hospitalID
-    private static Pharmacist findStaffById(String hospitalID) {
+    private static Pharmacist findPharmById(String hospitalID) {
         for (Pharmacist pharmacist : pharmacists) {
             if (pharmacist.getHospitalID().equals(hospitalID)) {
                 return pharmacist;
@@ -81,8 +82,8 @@ public class PharmacistsAcc {
     }
 
     // updating methods
-    public static void addPharmacist() {
-        Pharmacist newCreatedUser = NewAccount.createNewAccount(pharmacists, Role.Pharmacist);
+    public static void addPharmacist(Scanner sc) {
+        Pharmacist newCreatedUser = NewAccount.createNewAccount(sc, pharmacists, Role.Pharmacist);
 
         if(newCreatedUser!=null){
             pharmacists.add(newCreatedUser);
@@ -95,20 +96,35 @@ public class PharmacistsAcc {
 
     public static void updatePharmacist(Scanner sc) {
         displayPharmacists();
-        System.out.print("Enter the Pharmacist ID to update: ");
+        System.out.print("\nEnter the Pharmacist ID to update: ");
         String hospitalID = sc.nextLine();
-        Pharmacist adminToUpdate = findStaffById(hospitalID);
+        Pharmacist pharmToUpdate = findPharmById(hospitalID);
 
-        if(adminToUpdate != null){
+        if(pharmToUpdate != null){
             System.out.print("Enter your Name: ");
-            adminToUpdate.setName(sc.nextLine());
+            String name = sc.nextLine();
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            pharmToUpdate.setName(name);
+
             System.out.print("Enter your Gender: ");
-            adminToUpdate.setGender(sc.nextLine());
+            String gender = sc.nextLine();
+            gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
+            pharmToUpdate.setGender(gender);
+
             System.out.print("Enter your Age: ");
-            adminToUpdate.setAge(sc.nextInt());
-            sc.nextLine(); //consume
+            int age;
+            try {
+                age = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                return;
+            }
+            pharmToUpdate.setAge(age);
+
             System.out.print("Enter your Password: ");
-            adminToUpdate.setPassword(sc.nextLine());
+            pharmToUpdate.setPassword(sc.nextLine());
             System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been updated.");
             duplicatePharmacist(); // rewrite the CSV file with updated version
         
@@ -118,9 +134,10 @@ public class PharmacistsAcc {
     }
 
     public static void removePharmacist(Scanner sc) {
-        System.out.print("Enter the Pharmacist ID to remove: ");
+        displayPharmacists();
+        System.out.print("\nEnter the Pharmacist ID to remove: ");
         String hospitalID = sc.nextLine();
-        Pharmacist pharmacistToRemove = findStaffById(hospitalID);
+        Pharmacist pharmacistToRemove = findPharmById(hospitalID);
 
         if (pharmacistToRemove != null) {
             pharmacists.remove(pharmacistToRemove); // remove Data from pharmacist List
@@ -133,12 +150,11 @@ public class PharmacistsAcc {
 
     public static void updatePassword(String hospitalID, String newPassword) {
         // find the staff ID to update
-        Pharmacist pharmacistPWToUpdate = findStaffById(hospitalID);
+        Pharmacist pharmacistPWToUpdate = findPharmById(hospitalID);
 
         if (pharmacistPWToUpdate != null) {
             pharmacistPWToUpdate.setPassword(newPassword);
             duplicatePharmacist();
-            System.out.println("Your password has been changed");
             return;
         }
     }

@@ -163,32 +163,10 @@ public class InventoryManager {
      * @param sc           A {@link Scanner} object for user input.
      * @param medicineName The {@link Medicine} to deduct stock from.
      */
-    public static void deductItemStock(Scanner sc, Medicine medicineName){
-        try {
-            //pass the name as a string
-            InventoryItem itemName = findItemByName(medicineName.name()); //returns itemName
-            if(itemName!=null){
-                int currentQuantity = itemName.getQuantity();
-                System.out.println("\nThe current quantity of " + itemName.getItemName() + " is: " + currentQuantity);
-                System.out.println("How much " + itemName.getItemName() + " are you deducting?");
-                System.out.print("Amount (ex. 5): ");
-                int amount = sc.nextInt();
-                sc.nextLine();//consume
-
-                if (amount <=0){
-                    System.out.println("Invalid amount. Must be greater than 0.");
-                    return;
-                }
-
-                itemName.setQuantity(currentQuantity - amount);
-                System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
-                duplicateInventory(); // update CSV file
-            } else {
-                System.out.println(medicineName + " does not exist in the inventory.");
-            }
-        } catch (Exception e) {
-            System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
-        }
+    public static void deductItemStock(InventoryItem itemName, int quanity){
+        itemName.setQuantity(quanity);
+        System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
+        duplicateInventory(); // update CSV file
     }
 
     /**
@@ -276,49 +254,4 @@ public class InventoryManager {
             System.out.println(medicineName + " does not exist in the inventory.");
         }
     }
-
-    /*
-     * creating & deleting Item
-     */
-
-    //add new item to Inventory
-    /*public void addItem(String itemName, int quantity, int minimumQuantity) {
-        try {
-            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
-            //check for negative numbers
-            if (quantity < 0) {
-                System.out.println("Invalid quantity value.");
-                return;
-            }
-
-            if (findItemByName(itemName) == null) {
-                InventoryItem newItem = new InventoryItem(medicine, quantity, minimumQuantity);
-                inventory.add(newItem);
-                CSVwrite.writeCSV(updatedPath, newItem);
-                System.out.println(quantity + " units of " + medicine + " have been added to the inventory.");
-            } else {
-                System.out.println("That item already exists in the inventory.");
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid medicine name: " + itemName);
-        }
-    }
-
-    //delete Item from Inventory
-    public void removeItem(String itemName) {
-        try {
-            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
-            InventoryItem item = findItemByName(itemName);
-            if (item != null) {
-                inventory.remove(item);
-                System.out.println(medicine + " has been removed from the inventory.");
-                duplicateInventory(); // Update CSV file
-            } else {
-                System.out.println("The item does not exist in the inventory.");
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid medicine name: " + itemName);
-        }
-    }*/
-
 }

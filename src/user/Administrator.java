@@ -1,5 +1,13 @@
 package user;
+import interfaces.AdminApptInterface;
+import interfaces.InvenManageInterface;
+import interfaces.ReplenishManageInterface;
+import interfaces.StaffManageInterface;
+import userInterface.AdminApptUI;
 import userInterface.AdminUI;
+import userInterface.InvenManageUI;
+import userInterface.ReplenishManageUI;
+import userInterface.StaffManageUI;
 
 /**
  * represents a Administrator in HMS
@@ -43,7 +51,13 @@ public class Administrator extends User  {
      */
     @Override 
     public void displayUI(){
-        AdminUI adminUI = new AdminUI(this);
+        StaffManageInterface staffManageInterface = new StaffManageUI();
+        AdminApptInterface adminApptInterface = new AdminApptUI();
+        ReplenishManageInterface replenishManageInterface = new ReplenishManageUI();
+        InvenManageInterface invenManageInterface = new InvenManageUI(replenishManageInterface);
+        
+        AdminUI adminUI = new AdminUI(this, staffManageInterface, adminApptInterface,
+                invenManageInterface, replenishManageInterface);
         adminUI.displayMenu();
     }
 }

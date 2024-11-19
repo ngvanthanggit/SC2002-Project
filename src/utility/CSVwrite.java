@@ -119,9 +119,15 @@ public class CSVwrite {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
                 }
                 // handles MedicalRecord
-                else if (object instanceof MedicalRecord) {
+                /*else if (object instanceof MedicalRecord) {
                     output.write(((MedicalRecord) object).toCSVRow() + "\n");
+                }*/
+                //updated above
+                else if (object instanceof MedicalRecord) {
+                    MedicalRecord record = (MedicalRecord) object;
+                    output.write(record.toCSVRow() + "\n"); // Use toCSVRow from MedicalRecord
                 }
+                
                 // handles Schedule
                 else if (object instanceof Schedule) {
                     output.write(((Schedule) object).toCSVRow() + "\n");

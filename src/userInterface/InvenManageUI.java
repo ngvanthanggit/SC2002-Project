@@ -1,6 +1,11 @@
 package userInterface;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import interfaces.InvenManageInterface;
+import interfaces.ReplenishManageInterface;
+import inventory.InventoryItem;
 import inventory.InventoryManager;
 import inventory.Medicine;
 import user.Role;
@@ -11,20 +16,26 @@ import user.Role;
  * It includes methods for viewing inventory, managing stock levels, and handling low-level alerts.
  * This class is designed to be used by administrators and pharmacists.
  */
-public class InvenManageUI {
+public class InvenManageUI implements InvenManageInterface{
+
+    private final ReplenishManageInterface replenishManageInterface;
+    //constructor
+    public InvenManageUI(ReplenishManageInterface replenishManageInterface){
+        this.replenishManageInterface = replenishManageInterface;
+    }
 
     /** Displays the full list of medications and their stock levels. */
-    public static void viewMedicationInven(){
+    public void viewMedicationInven(){
         InventoryManager.displayInventory();
     }
 
     /** Displays a list of medications with stock levels below the low-level alert threshold. */
-    public static void viewLowStockInventory(){
+    public void viewLowStockInventory(){
         InventoryManager.displayLowItem();
     }
 
     /** Displays a combination of {@link InvenManageUI#viewMedicationInven} and {@link InvenManageUI#viewLowStockInventory} */
-    public static void viewInventory(){
+    public void viewInventory(){
         InventoryManager.displayInventory();
         InventoryManager.displayLowItem();
     }
@@ -37,8 +48,8 @@ public class InvenManageUI {
      * @param sc   A {@link Scanner} object for user input.
      * @param role The {@link Role} of the user (Administrator or Pharmacist).
      */
-    public static void chooseMedicine(Scanner sc, Role role){
-        int choice;
+    public void chooseMedicine(Scanner sc, Role role){
+        int choice=-1;
         do {
             int counter = 1;
             System.out.println("\nChoose the Medicine");
@@ -47,10 +58,16 @@ public class InvenManageUI {
                 System.out.println(counter + ". " + medicine);
                 counter++;
             }
-            System.out.println("4. Go Back");
+            System.out.println(counter + ". Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
             Medicine medicine = null;
 
             switch(choice) {
@@ -75,7 +92,7 @@ public class InvenManageUI {
                 if(role == Role.Administrator){
                     manageMedicine(sc, medicine); //admin method
                 } else if (role == Role.Pharmacist) {
-                    ReplenishManageUI.submitReplenish(sc, medicine);//pharmacist method
+                    replenishManageInterface.addReplenish(sc, medicine);//pharmacist method
                 }
             } else {
                 System.out.println("Invalid choice, please try again.");
@@ -90,8 +107,8 @@ public class InvenManageUI {
      * @param sc       A {@link Scanner} object for user input.
      * @param medicine The selected {@link Medicine} to manage.
      */
-    public static void manageMedicine(Scanner sc, Medicine medicine){
-        int choice;
+    public void manageMedicine(Scanner sc, Medicine medicine){
+        int choice =-1;
         do {
             System.out.println("\nManage " + medicine);
             System.out.printf("%s\n", "-".repeat(27));
@@ -101,8 +118,14 @@ public class InvenManageUI {
             System.out.println("4. Change " + medicine + " Low Level Stock Alert");
             System.out.println("5. Go Back");
             System.out.print("Choice: ");
-            choice = sc.nextInt();
-            sc.nextLine();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch(choice) {
                 case 1:
@@ -132,7 +155,7 @@ public class InvenManageUI {
      * @param sc       A {@link Scanner} object for user input.
      * @param medicine The {@link Medicine} to update.
      */
-    public static void addStock(Scanner sc, Medicine medicine){
+    public void addStock(Scanner sc, Medicine medicine){
         InventoryManager.addItemStock(sc, medicine);
     }
 
@@ -142,8 +165,31 @@ public class InvenManageUI {
      * @param sc       A {@link Scanner} object for user input.
      * @param medicine The {@link Medicine} to update.
      */
-    public static void deductStock(Scanner sc, Medicine medicine){
-        InventoryManager.deductItemStock(sc, medicine);
+    public void deductStock(Scanner sc, Medicine medicine){
+        try {
+            //pass the name as a string
+            InventoryItem itemName = InventoryManager.findItemByName(medicine.name()); //returns itemName
+            if(itemName!=null){
+                int currentQuantity = itemName.getQuantity();
+                System.out.println("\nThe current quantity of " + itemName.getItemName() + " is: " + currentQuantity);
+                System.out.println("How much " + itemName.getItemName() + " are you deducting?");
+                System.out.print("Amount (ex. 5): ");
+                int amount = sc.nextInt();
+                sc.nextLine();//consume
+
+                if (amount <=0){
+                    System.out.println("Invalid amount. Must be greater than 0.");
+                    return;
+                }
+
+                int newAmt = currentQuantity - amount;
+                InventoryManager.deductItemStock(itemName, newAmt);
+            } else {
+                System.out.println(medicine + " does not exist in the inventory.");
+            }
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
+        }
     }
 
     /**
@@ -152,7 +198,7 @@ public class InvenManageUI {
      * @param sc       A {@link Scanner} object for user input.
      * @param medicine The {@link Medicine} to update.
      */
-    public static void updateStock(Scanner sc, Medicine medicine){
+    public void updateStock(Scanner sc, Medicine medicine){
         InventoryManager.updateItemStock(sc, medicine);
     }
 
@@ -162,7 +208,7 @@ public class InvenManageUI {
      * @param sc       A {@link Scanner} object for user input.
      * @param medicine The {@link Medicine} to update.
      */
-    public static void updateLevelAlert(Scanner sc, Medicine medicine){
+    public void updateLevelAlert(Scanner sc, Medicine medicine){
         InventoryManager.updateItemLowLevelAlert(sc, medicine);
     }
 }

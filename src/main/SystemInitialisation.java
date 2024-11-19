@@ -44,7 +44,7 @@ public class SystemInitialisation {
         // ApptManager.duplicateAppointments();
 
         // Displaying the List of Patients and Staffs from CSV
-        AdminsAcc.displayAdmins();
+        /*AdminsAcc.displayAdmins();
         PatientsAcc.displayPatients();
         PharmacistsAcc.displayPharmacists();
         DoctorsAcc.displayDoctors();
@@ -52,7 +52,7 @@ public class SystemInitialisation {
         ReplenishManager.displayReplenishList();
         MedicalRecordManager.displayMedicalRecords();
         ScheduleManager.displaySchedules();
-        AppointmentManager.displayAppointments();
+        AppointmentManager.displayAppointments();*/
 
         // ApptManager.displayAppointments();
 

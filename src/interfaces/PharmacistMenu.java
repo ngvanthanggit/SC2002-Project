@@ -1,10 +1,9 @@
-package menus;
+package interfaces;
 
 import java.util.*;
 
 public interface PharmacistMenu extends CommonMenu{
 
-    // show all items & low level warning
+    public void viewAppointmentOutcomes(Scanner sc);
     public void viewInventory(Scanner sc);
-    public void submitReplenish(Scanner sc);
 }

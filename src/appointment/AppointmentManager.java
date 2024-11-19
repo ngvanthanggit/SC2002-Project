@@ -1,18 +1,21 @@
 package appointment;
 
-import io.*;
+import utility.*;
 
 import java.time.*;
 import java.util.*;
 
 import user.*;
+import userInterface.ScheduleUI;
 import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
+import interfaces.ScheduleInterface;
 
 public class AppointmentManager {
     private static List<Appointment> appointments = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Appt_List.csv";
-    private static String updatedPath = "../Data//Updated/Appt_List(Updated).csv";
+    private static ScheduleInterface scheduleInterface = new ScheduleUI();
+    private static String originalPath = "Data//Original/Appt_List.csv";
+    private static String updatedPath = "Data//Updated/Appt_List(Updated).csv";
 
     public static void loadAppointments(boolean isFirstRun) {
         String filePath;
@@ -51,10 +54,6 @@ public class AppointmentManager {
         }
     }
 
-    public static void duplicateAppointments() {
-        CSVwrite.writeCSVList(updatedPath, appointments);
-    }
-
     public static Appointment getAppointment(String appointmentID) {
         for (Appointment appt : appointments) {
             if (appt.getAppointmentID().equals(appointmentID)) {
@@ -64,6 +63,21 @@ public class AppointmentManager {
         return null;
     }
 
+    public static void displayAppointments() {
+        if (appointments.isEmpty()) {
+            System.out.println("The appointment list is currently empty.");
+        } else {
+            System.out.println("\nThe Appointments in the CSV file are: ");
+            for (Appointment appt : appointments) {
+                System.out.println(appt.getApptInfo());
+            }
+        }
+    }
+
+    public static void duplicateAppointments() {
+        CSVwrite.writeCSVList(updatedPath, appointments);
+    }
+    
     // getting appointments by patient
     public static List<Appointment> getAppointmentsByPatient(String patientID) {
         List<Appointment> patientAppts = new ArrayList<>();
@@ -114,35 +128,33 @@ public class AppointmentManager {
         // check if the appointment was scheduled
         if (appt.getStatus() == ApptStatus.SCHEDULED) {
             // add the time slot back to the doctor's available time slots
-            Doctor doctor = DoctorsAcc.getDoctorByID(appt.getDoctor().getHospitalID());
-            doctor.addSchedule(appt.getDate(), appt.getTime());
+            Doctor doctor = DoctorsAcc.findDoctorById(appt.getDoctor().getHospitalID());
+            scheduleInterface.addSchedule(appt.getDate(), appt.getTime(), doctor);
         }
         boolean removed = appointments.remove(appt);
         if (removed) {
             System.out.println("Appointment removed successfully.");
+            duplicateAppointments();
         } else {
             System.out.println("appointmentManager::removeAppointment(): Appointment not found.");
         }
     }
 
-    public static void displayAppointments() {
-        if (appointments.isEmpty()) {
-            System.out.println("The appointment list is currently empty.");
-        } else {
-            System.out.println("\nThe Appointments in the CSV file are: ");
-            for (Appointment appt : appointments) {
-                System.out.println(appt.getApptInfo());
-            }
-        }
-    }
-
     public static void requestAppointment(String doctorID, String patientID, LocalDate date, LocalTime time) {
-        String appointmentID = IDGenerator.generateID("A", appointments, Appointment::getAppointmentID, 3);
-        Doctor doctor = DoctorsAcc.getDoctorByID(doctorID);
+        String appointmentID = IDGenerator.generateID("AP", appointments, Appointment::getAppointmentID, 3);
+        Doctor doctor = DoctorsAcc.findDoctorById(doctorID);
         Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
 
         Appointment appt = new Appointment(doctor, patient, date, time, appointmentID, ApptStatus.PENDING);
         addAppointment(appt);
         duplicateAppointments();
+    }
+
+    //called by doctor when writing medicalRecord  
+    public static void completeAppointment(Appointment appointment){
+        appointment.completeAppointment();
+        // save to file
+        duplicateAppointments();
+        System.out.println("Appointment Outcome Recorded Successfully.");
     }
 }

@@ -1,5 +1,11 @@
 package user;
+import interfaces.ApptOutcomeInterface;
+import interfaces.InvenManageInterface;
+import interfaces.ReplenishManageInterface;
+import userInterface.ApptOutcomeUI;
+import userInterface.InvenManageUI;
 import userInterface.PharmacistUI;
+import userInterface.ReplenishManageUI;
 
 /**
  * represents a Pharmacist in HMS
@@ -43,7 +49,11 @@ public class Pharmacist extends User{
      */
     @Override
     public void displayUI(){
-        PharmacistUI pharmUI = new PharmacistUI(this);
+        ApptOutcomeInterface apptOutcomeInterface = new ApptOutcomeUI();
+        ReplenishManageInterface replenishManageInterface = new ReplenishManageUI();
+        InvenManageInterface invenManageInterface = new InvenManageUI(replenishManageInterface);
+
+        PharmacistUI pharmUI = new PharmacistUI(this, invenManageInterface, replenishManageInterface, apptOutcomeInterface);
         pharmUI.displayMenu();
     }
 }

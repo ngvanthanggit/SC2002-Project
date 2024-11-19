@@ -1,9 +1,13 @@
 package userInterface;
 
 import java.util.Scanner;
+
+import interfaces.InvenManageInterface;
+import interfaces.ReplenishManageInterface;
 import inventory.InventoryManager;
 import inventory.Medicine;
 import inventory.ReplenishManager;
+import user.Pharmacist;
 
 /**
  * This class provides a user interface for managing inventory replenish requests. 
@@ -11,10 +15,13 @@ import inventory.ReplenishManager;
  * This class includes methods for viewing, submitting, and managing replenish requests
  * for inventory items. It is designed for use by administrators and pharmacists.
  */
-public class ReplenishManageUI {
+public class ReplenishManageUI implements ReplenishManageInterface{
+
+    //constructor
+    public ReplenishManageUI(){}
 
     /** Displays the list of all replenish requests. */
-    public static void viewReplenishRequest(){
+    public void viewReplenishRequest(){
         ReplenishManager.displayReplenishList();
     }
 
@@ -27,7 +34,7 @@ public class ReplenishManageUI {
      * @param sc           A {@link Scanner} object for user input.
      * @param medicineName The {@link Medicine} for which the replenish request is to be submitted.
      */
-    public static void submitReplenish(Scanner sc, Medicine medicineName) {
+    public void addReplenish(Scanner sc, Medicine medicineName){
         String itemName = medicineName.name();
         int quantity = 0;
         boolean valid = false;
@@ -67,10 +74,16 @@ public class ReplenishManageUI {
      * 
      * @param sc A {@link Scanner} object for user input.
      */
-    public static void manageReplenish(Scanner sc){
+    public void manageReplenish(Scanner sc){
         viewReplenishRequest(); //display list of requests
         System.out.println("Enter the replenish request ID");
         System.out.print("Request ID: ");
         ReplenishManager.manageReplenish(sc.nextLine() ,sc); //pass reqID
+    }
+
+    public void submitReplenish(Scanner sc, Pharmacist pharmacist, 
+    ReplenishManageInterface replenishManageInterface, InvenManageInterface invenManageInterface){
+        replenishManageInterface.viewReplenishRequest();
+        invenManageInterface.chooseMedicine(sc, pharmacist.getRole());
     }
 }
