@@ -1,8 +1,9 @@
 package schedule;
 
 import java.util.*;
-
-import utility.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import io.*;
 
 public class ScheduleManager {
     private static List<Schedule> schedules = new ArrayList<>();
@@ -75,6 +76,17 @@ public class ScheduleManager {
         return doctorSchedules;
     }
 
+    public static boolean isDoctorAvailable(String doctorID, LocalDate date, LocalTime time) {
+        removeInvalidSchedules();
+        for (Schedule schedule : schedules) {
+            if (schedule.getDoctorID().equalsIgnoreCase(doctorID) && schedule.getDate().isEqual(date)
+                    && schedule.getTimeSlots().contains(time)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static List<Schedule> getSchedules() {
         removeInvalidSchedules();
         return schedules;
@@ -85,8 +97,13 @@ public class ScheduleManager {
         schedules.add(schedule);
         duplicateSchedule();
     }
-}
 
-// Doctor will have to add, remove their schedule
-// in the add() or remove() we will have to loop through
-// the list of schedules to find the doctorID and the date matched
+    // check if the time is in the future
+    public static boolean checkValidTime(LocalDate date, LocalTime time) {
+        if ((date.isEqual(LocalDate.now()) && time.isAfter(LocalTime.now())) ||
+                date.isAfter(LocalDate.now())) {
+            return true;
+        }
+        return false;
+    }
+}

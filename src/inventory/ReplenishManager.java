@@ -11,8 +11,8 @@ public class ReplenishManager {
 
     // private InventoryItem item;
     // private static int idCounter = 0;
-    private static String originalPath = "Data//Original/Replenish_List.csv";
-    private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Replenish_List.csv";
+    private static String updatedPath = "../Data//Updated/Replenish_List(Updated).csv";
 
     public static void loadReplenish(boolean isFirstRun) {
         String filePath;

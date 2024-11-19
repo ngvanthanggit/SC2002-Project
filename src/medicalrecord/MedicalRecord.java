@@ -3,6 +3,10 @@ package medicalrecord;
 import java.util.ArrayList;
 import java.util.List;
 
+import accounts.PatientsAcc;
+import user.Patient;
+import user.Doctor;
+
 public class MedicalRecord {
     private String doctorID; // Unique identifier for the doctor
     private String patientID; // Unique identifier for the patient
@@ -78,6 +82,16 @@ public class MedicalRecord {
                 ", prescriptions=" + prescriptions +
                 ", treatmentPlans='" + treatmentPlans + '\'' +
                 "}";
+    }
+
+    public String getRecordDetailsWithPersonalInfo() {
+        Patient patient = PatientsAcc.findPatientById(patientID);
+        return "Medical Record for " + patient.getName() + " (" + patient.getHospitalID() + "):\n" +
+                "- Contact: " + patient.getContactInfo() + "\n" +
+                "- Blood Type: " + patient.getBloodType() + "\n" +
+                "- Diagnoses: " + diagnoses + "\n" +
+                "- Prescriptions: " + prescriptions + "\n" +
+                "- Treatment Plans: " + treatmentPlans + "\n";
     }
 
     public String toCSVRow() {

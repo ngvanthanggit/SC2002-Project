@@ -34,7 +34,8 @@ public class Login {
                 switch (user.getRole()) {
                     case Patient:
                         // create new patient class
-                        break;
+                        Patient patient = (Patient) user;
+                        return patient;
 
                     case Pharmacist:
                         // create new pharmacist class

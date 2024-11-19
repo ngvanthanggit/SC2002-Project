@@ -12,12 +12,11 @@ import java.time.format.DateTimeFormatter;
 
 import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
-import appointmentManager.Appointment;
-import appointmentManager.ApptStatus;
 import user.*;
 import inventory.*;
 import medicalrecord.*;
 import schedule.*;
+import appointment.*;
 
 public class CSVread {
 
@@ -357,7 +356,7 @@ public class CSVread {
                 String[] row = line.split(",");
 
                 // Extract appointment fields based on column mapping
-                int appointmentID = Integer.parseInt(row[columnMapping.get("AppointmentID")].trim());
+                String appointmentID = row[columnMapping.get("AppointmentID")].trim();
                 String patientID = row[columnMapping.get("PatientID")].trim();
                 String doctorID = row[columnMapping.get("DoctorID")].trim();
                 LocalDate date = LocalDate.parse(row[columnMapping.get("Date")].trim());

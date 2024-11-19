@@ -41,6 +41,17 @@ public class MedicalRecordManager {
         }
     }
 
+    // getting medical records by patient
+    public static List<MedicalRecord> getMedicalRecordsByPatient(String patientID) {
+        List<MedicalRecord> patientRecords = new ArrayList<>();
+        for (MedicalRecord record : medicalRecords) {
+            if (record.getPatientID().equalsIgnoreCase(patientID)) {
+                patientRecords.add(record);
+            }
+        }
+        return patientRecords;
+    }
+
     public static MedicalRecord getMedicalRecord(String doctorID, String patientID) {
         for (MedicalRecord record : medicalRecords) {
             if (record.getDoctorID().equalsIgnoreCase(doctorID) && record.getPatientID().equalsIgnoreCase(patientID)) {
@@ -81,94 +92,5 @@ public class MedicalRecordManager {
         } else {
             System.out.println("Medical record not found.");
         }
-    }
-
-    public static void updateMedicalRecord() {
-
-    }
-
-    // Methods for Diagnoses
-    public void addDiagnose(String doctorID, String patientID, String newDiagnose) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> diagnoses = medicalRecord.getDiagnoses();
-                diagnoses.add(newDiagnose);
-                medicalRecord.setDiagnoses(diagnoses);
-                System.out.println("Diagnoses added successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
-    }
-
-    public void clearDiagnoses(String doctorID, String patientID) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> diagnoses = medicalRecord.getDiagnoses();
-                diagnoses.clear();
-                medicalRecord.setDiagnoses(diagnoses);
-                System.out.println("Diagnoses cleared successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
-    }
-
-    // Methods for Prescriptions
-    public void addPrescription(String doctorID, String patientID, String newPrescription) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> prescriptions = medicalRecord.getPrescriptions();
-                prescriptions.add(newPrescription);
-                medicalRecord.setPrescriptions(prescriptions);
-                System.out.println("Prescription added successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
-    }
-
-    public void clearPrescriptions(String doctorID, String patientID) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> prescriptions = new ArrayList<String>();
-                medicalRecord.setPrescriptions(prescriptions);
-                System.out.println("Prescriptions cleared successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
-    }
-
-    // Methods for treatment plans
-    public void addTreatmentPlan(String doctorID, String patientID, String newTreatmentPlan) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> treatmenPlans = medicalRecord.getTreatmentPlans();
-                treatmenPlans.add(newTreatmentPlan);
-                medicalRecord.setTreatmentPlans(treatmenPlans);
-                System.out.println("Treatment Plan added successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
-    }
-
-    public void clearTreatmentPlans(String doctorID, String patientID) {
-        for (MedicalRecord medicalRecord : medicalRecords) {
-            if (medicalRecord.getDoctorID().equalsIgnoreCase(doctorID)
-                    && medicalRecord.getPatientID().equalsIgnoreCase(patientID)) {
-                List<String> TreatmentPlans = new ArrayList<String>();
-                medicalRecord.setTreatmentPlans(TreatmentPlans);
-                System.out.println("TreatmentPlans cleared successfully.");
-                return;
-            }
-        }
-        System.out.println("No medical record found for this patient.");
     }
 }
