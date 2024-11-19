@@ -14,8 +14,8 @@ import interfaces.ScheduleInterface;
 public class AppointmentManager {
     private static List<Appointment> appointments = new ArrayList<>();
     private static ScheduleInterface scheduleInterface = new ScheduleUI();
-    private static String originalPath = "Data//Original/Appt_List.csv";
-    private static String updatedPath = "Data//Updated/Appt_List(Updated).csv";
+    private static String originalPath = "../../Data//Original/Appt_List.csv";
+    private static String updatedPath = "../../Data//Updated/Appt_List(Updated).csv";
 
     public static void loadAppointments(boolean isFirstRun) {
         String filePath;

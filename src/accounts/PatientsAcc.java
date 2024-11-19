@@ -16,8 +16,8 @@ public class PatientsAcc {
 
     // store the list of patients
     private static List<Patient> patients = new ArrayList<>();
-    private static String originalPath = "Data//Original/Patient_List.csv";
-    private static String updatedPath = "Data//Updated/Patient_List(Updated).csv";
+    private static String originalPath = "../../Data//Original/Patient_List.csv";
+    private static String updatedPath = "../../Data//Updated/Patient_List(Updated).csv";
 
     // static method to load patients from CSV file and return as a list
     public static void loadPatients(boolean isFirstRun) {
@@ -102,7 +102,7 @@ public class PatientsAcc {
         System.out.printf("%s\n", "-".repeat(40));
         Patient newCreatedUser = NewAccount.createNewAccount(sc, patients, Role.Patient);
 
-        if(newCreatedUser!=null){
+        if (newCreatedUser != null) {
             patients.add(newCreatedUser);
             CSVwrite.writeCSV(updatedPath, newCreatedUser);
             System.out.println("Patient " + newCreatedUser.getName() + " created!");
@@ -111,12 +111,12 @@ public class PatientsAcc {
         }
     }
 
-    public static void updatePatient(Scanner sc, Patient patient){
+    public static void updatePatient(Scanner sc, Patient patient) {
         String name, gender, password, bloodType;
         Patient patientToUpdate;
         String hospitalID;
-        //no patient object passed, from admin
-        if(patient==null){
+        // no patient object passed, from admin
+        if (patient == null) {
             displayPatients();
             System.out.print("Enter the Patient ID to update: ");
             hospitalID = sc.nextLine();
@@ -126,9 +126,9 @@ public class PatientsAcc {
             hospitalID = patient.getHospitalID();
             patientToUpdate = patient;
         }
-        
-        if(patientToUpdate!=null){
-            //catch any invalid types, date format and age
+
+        if (patientToUpdate != null) {
+            // catch any invalid types, date format and age
             try {
                 System.out.print("\nEnter your Name: ");
                 name = sc.nextLine().trim();
@@ -142,10 +142,10 @@ public class PatientsAcc {
 
                 System.out.print("Enter your Age: ");
                 patientToUpdate.setAge(sc.nextInt());
-                sc.nextLine(); //consume
+                sc.nextLine(); // consume
                 System.out.print("Enter your Password: ");
                 password = sc.nextLine();
-    
+
                 // Validate Date of Birth
                 String DOB = null;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

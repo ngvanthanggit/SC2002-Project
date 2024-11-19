@@ -12,14 +12,32 @@ import interfaces.ScheduleInterface;
 import medicalrecord.MedicalRecord;
 import user.Doctor;
 
+/**
+ * This class is responsible for displaying the Doctor's menu.
+ * <p>
+ * This includes the Medical Record, Schedule, and Appointment menus.
+ * The class interacts with the {@code MedicalRecInterface},
+ * {@code ScheduleInterface},
+ * and {@code DocApptInterface} interfaces to handle the respective
+ * functionalities.
+ */
 public class DoctorUI implements DoctorMenu {
     private final Doctor doctor;
     private final MedicalRecInterface medicalRecInterface;
     private final ScheduleInterface scheduleInterface;
     private final DocApptInterface docApptInterface;
 
+    /**
+     * Creates a new DoctorUI object with the specified Doctor, Medical Record,
+     * Schedule, and Appointment interfaces.
+     * 
+     * @param doctor              the Doctor object
+     * @param medicalRecInterface the Medical Record interface
+     * @param scheduleInterface   the Schedule interface
+     * @param docApptInterface    the Appointment interface
+     */
     public DoctorUI(Doctor doctor, MedicalRecInterface medicalRecInterface,
-    ScheduleInterface scheduleInterface, DocApptInterface docApptInterface){
+            ScheduleInterface scheduleInterface, DocApptInterface docApptInterface) {
         this.doctor = doctor;
         this.medicalRecInterface = medicalRecInterface;
         this.scheduleInterface = scheduleInterface;
@@ -27,10 +45,10 @@ public class DoctorUI implements DoctorMenu {
     }
 
     /**
-     * Logs out Doctor 
+     * Logs out the Doctor.
      * Implements the {@link CommonMenu#logout()} method
      */
-    public void logout(){
+    public void logout() {
         System.out.println("Doctor Logging Out.");
         return;
     }
@@ -39,7 +57,7 @@ public class DoctorUI implements DoctorMenu {
      * Display main menu for Administrators
      * Implements the {@link CommonMenu#displayMenu()} method
      */
-    public void displayMenu(){
+    public void displayMenu() {
         Scanner sc = new Scanner(System.in);
         int choice = -1;
 
@@ -54,7 +72,7 @@ public class DoctorUI implements DoctorMenu {
             try {
                 choice = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 continue; // Restart the loop to prompt the user again
@@ -77,14 +95,14 @@ public class DoctorUI implements DoctorMenu {
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice!=4);
+        } while (choice != 4);
     }
 
     public void medicalRecordMenu(Scanner sc, Doctor doctor) {
         int choice = -1;
         MedicalRecord record = medicalRecInterface.choosePatient(sc, doctor);
 
-        if(record == null){
+        if (record == null) {
             return;
         }
 
@@ -98,7 +116,7 @@ public class DoctorUI implements DoctorMenu {
             try {
                 choice = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 continue; // Restart the loop to prompt the user again
@@ -106,7 +124,7 @@ public class DoctorUI implements DoctorMenu {
 
             switch (choice) {
                 case 1:
-                    //null record handled earlier, a patient will be returned and passed
+                    // null record handled earlier, a patient will be returned and passed
                     medicalRecInterface.viewPatientMedicalRecords(PatientsAcc.findPatientById(record.getPatientID()));
                     break;
                 case 2:
@@ -118,15 +136,15 @@ public class DoctorUI implements DoctorMenu {
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice!=3);
+        } while (choice != 3);
     }
 
     public void scheduleMenu(Scanner sc) {
-        int choice =-1;
+        int choice = -1;
 
         do {
-            //is remove schedule gonna be implemented for doctor 
-            //so that they can personally remove their own schedule?
+            // is remove schedule gonna be implemented for doctor
+            // so that they can personally remove their own schedule?
             System.out.println("\nSchedule Menu");
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. View Availability Schedule");
@@ -136,7 +154,7 @@ public class DoctorUI implements DoctorMenu {
             try {
                 choice = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 continue; // Restart the loop to prompt the user again
@@ -155,7 +173,7 @@ public class DoctorUI implements DoctorMenu {
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice!=3);
+        } while (choice != 3);
     }
 
     public void appointmentMenu(Scanner sc) {
@@ -172,7 +190,7 @@ public class DoctorUI implements DoctorMenu {
             try {
                 choice = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 continue; // Restart the loop to prompt the user again
@@ -194,7 +212,7 @@ public class DoctorUI implements DoctorMenu {
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice!=4);
+        } while (choice != 4);
     }
 
 }

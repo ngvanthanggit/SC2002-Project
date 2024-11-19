@@ -15,8 +15,8 @@ import user.Role;
 public class PharmacistsAcc {
     // store all Administrator objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static String originalPath = "Data//Original/Pharm_List.csv";
-    private static String updatedPath = "Data//Updated/Pharm_List(Updated).csv";
+    private static String originalPath = "../../Data//Original/Pharm_List.csv";
+    private static String updatedPath = "../../Data//Updated/Pharm_List(Updated).csv";
 
     // read in csv file of staffs
     public static void loadPharmacists(boolean isFirstRun) {
@@ -85,7 +85,7 @@ public class PharmacistsAcc {
     public static void addPharmacist(Scanner sc) {
         Pharmacist newCreatedUser = NewAccount.createNewAccount(sc, pharmacists, Role.Pharmacist);
 
-        if(newCreatedUser!=null){
+        if (newCreatedUser != null) {
             pharmacists.add(newCreatedUser);
             CSVwrite.writeCSV(updatedPath, newCreatedUser);
             System.out.println("Pharmacist " + newCreatedUser.getName() + " created!");
@@ -100,7 +100,7 @@ public class PharmacistsAcc {
         String hospitalID = sc.nextLine();
         Pharmacist pharmToUpdate = findPharmById(hospitalID);
 
-        if(pharmToUpdate != null){
+        if (pharmToUpdate != null) {
             System.out.print("Enter your Name: ");
             String name = sc.nextLine();
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -116,7 +116,7 @@ public class PharmacistsAcc {
             try {
                 age = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 return;
@@ -127,7 +127,7 @@ public class PharmacistsAcc {
             pharmToUpdate.setPassword(sc.nextLine());
             System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been updated.");
             duplicatePharmacist(); // rewrite the CSV file with updated version
-        
+
         } else {
             System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
         }
