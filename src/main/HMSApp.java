@@ -1,53 +1,41 @@
 package main;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.List;
-
-import accounts.*;
-import user.*;
 
 public class HMSApp {
-    private static String format = "|%-30s|\n";
-
     public static void main(String[] args) {
 
-        /*
-         * Initialise the system by importing all data from any CSV files
-         * Print out all information imported in a List/Database format
-         * Create new Account/Login method
-         * Depending on the role of the person, we will call the corresponding
-         * classes/methods
-         */
-
-        SystemInitialisation.start();
+        //initialise the system by importing all data from any CSV files
+        SystemInitialisation.start(); 
         Scanner sc = new Scanner(System.in);
-        int choice;
+        int choice = -1;
+        String format = "|%-30s|\n";
 
-        // After importing Data prompt user for Login or Create New Account
-
+        //after importing Data prompt user for Login or Create New Patient Account
         do {
-            // create and retrieve the list instances holding all staff & patients
-            // refresh the List every run
-            //List<User> admins = AdminsAcc.getAdmins();
-            List<User> patients = PatientsAcc.getPatients();
-            //List<User> pharmacists = PharmacistsAcc.getPharmacists();
-            //List<User> doctors = DoctorsAcc.getDoctors();
-
-            System.out.println("\nWelcome to the HMS App");
+            System.out.println("\n|--- Welcome to the HMS App ---|");
             System.out.printf("%s\n", "-".repeat(32));
             System.out.printf(format, "1. Login");
             System.out.printf(format, "2. Create new Patient account");
             System.out.printf(format, "3. Exit");
             System.out.printf("%s\n", "-".repeat(32));
             System.out.print("Choice: ");
-            choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
 
             switch (choice) {
                 case 1:
-                    MainLogin.login(sc);// login
+                    MainUI.login(sc);// login
                     break;
                 case 2:
-                    System.out.println("Creating new patient account!");
+                    MainUI.createPatientAccount(sc);
                     break;
                 case 3:
                     System.out.println("Exiting App, System Terminating!");
@@ -55,9 +43,7 @@ public class HMSApp {
                 default:
                     System.out.println("Invalid choice, please try again.");
                     continue;
-
             }
-
         } while (choice != 3);
     }
 }

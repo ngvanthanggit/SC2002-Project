@@ -4,16 +4,31 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Scanner;
 
-import io.*;
-import user.Patient;
+import utility.*;
 
+/**
+ * This class manages the inventory of medicines.
+ * <p>
+ * This class provides methods for loading inventory data, displaying inventory items, 
+ * updating stock levels, and managing low-stock alerts.
+ */
 public class InventoryManager {
     // List of inventory items
     private static List<InventoryItem> inventory = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Medicine_List.csv";
-    private static String updatedPath = "../Data//Updated/Medicine_List(Updated).csv";
+    private static String originalPath = "Data//Original/Medicine_List.csv";
+    private static String updatedPath = "Data//Updated/Medicine_List(Updated).csv";
 
+    /**
+     * Loads inventory data from a CSV file.
+     * <p>
+     * If it's the first run, the data is loaded from the original file and the updated file is cleared.
+     * Otherwise, data is loaded from the updated file.
+     * 
+     * @param isFirstRun {@code true} if the application is running for the first time;
+     *                   {@code false} otherwise.
+     */
     public static void loadInventory(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
@@ -45,7 +60,13 @@ public class InventoryManager {
         }
     }
 
-    public static InventoryItem getItem(String itemName) {
+    /**
+     * Finds an inventory item by its name.
+     * 
+     * @param itemName The name of the item as a {@code String}.
+     * @return The {@link InventoryItem} object if found; {@code null} otherwise.
+     */
+    public static InventoryItem findItemByName(String itemName) {
         try {
             Medicine medicine = Medicine.valueOf(itemName);
             for (InventoryItem item : inventory) {
@@ -57,21 +78,18 @@ public class InventoryManager {
             System.out.println("Invalid medicine name: " + itemName);
         }
         return null;
-        /*
-         * for (InventoryItem item : inventory) {
-         * if(item.getItemName().equalsIgnoreCase(itemName)) {
-         * return item;
-         * }
-         * }
-         * return null;
-         */
     }
 
-    // return all items in the list
+    /**
+     * Returns the list of all inventory items.
+     * 
+     * @return A {@code List} of {@link InventoryItem} objects.
+     */
     public static List<InventoryItem> getInventory() {
         return inventory;
     }
 
+    /** Displays all inventory items. */
     public static void displayInventory() {
         if (inventory.isEmpty()) {
             System.out.println("The inventory is currently empty.");
@@ -83,134 +101,157 @@ public class InventoryManager {
         }
     }
 
+    /** Displays items with stock levels below the low-stock threshold. */ 
     public static void displayLowItem() {
+        boolean lowStockFound = false;
+        System.out.println("\nChecking for low-stock items...");
         for (InventoryItem inventoryItem : inventory) {
-            if (inventoryItem.getQuantity() <= inventoryItem.getMinimumQualtity()) {
-                System.out.println("Warning: " + inventoryItem.getItemName() + " is low in stock.");
+            if (inventoryItem.getQuantity() <= inventoryItem.getMinimumQuantity()) {
+                System.out.println(inventoryItem.getItemInfo());
+                lowStockFound = true;
             }
+        }
+        if (!lowStockFound) {
+            System.out.println("All items are sufficiently stocked.");
         }
     }
 
+    /** Duplicates the current inventory list to the updated CSV file. */
     public static void duplicateInventory() {
         CSVwrite.writeCSVList(updatedPath, inventory);
     }
 
-    // Add new item to inventory
-    public void addItem(String itemName, int quantity, int minimumQuantity) {
-        // Check for valid parameters
-        /*
-         * if (itemName == null || itemName.isEmpty()) {
-         * System.out.println("Item name cannot be null or empty.");
-         * return;
-         * }
-         * if (quantity < 0) {
-         * System.out.println("Invalid quantity value.");
-         * return;
-         * }
-         * // Add item to list only if there are no duplicates
-         * if (getItem(itemName) == null) {
-         * InventoryItem newItem = new InventoryItem(itemName, quantity,
-         * minimumQuantity);
-         * inventory.add(newItem);
-         * CSVwrite.writeCSV(updatedPath, newItem);
-         * System.out.println(quantity + " units of " + itemName +
-         * " have been added to the inventory.");
-         * } else {
-         * System.out.println("That item already exists in the inventory.");
-         * }
-         */
-        try {
-            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
-            if (quantity < 0) {
-                System.out.println("Invalid quantity value.");
-                return;
-            }
+    // Methods for modifying item quantities
 
-            if (getItem(itemName) == null) {
-                InventoryItem newItem = new InventoryItem(medicine, quantity, minimumQuantity);
-                inventory.add(newItem);
-                CSVwrite.writeCSV(updatedPath, newItem);
-                System.out.println(quantity + " units of " + medicine + " have been added to the inventory.");
+    /**
+     * Adds stock to a specified inventory item.
+     * 
+     * @param sc           A {@link Scanner} object for user input.
+     * @param medicineName The {@link Medicine} to add stock for.
+     */
+    public static void addItemStock(Scanner sc, Medicine medicineName){
+        try {
+            //pass the name as a string
+            InventoryItem itemName = findItemByName(medicineName.name()); //returns itemName
+            if(itemName!=null){
+                int currentQuantity = itemName.getQuantity();
+                System.out.println("\nThe current quantity of " + itemName.getItemName() + " is: " + currentQuantity);
+                System.out.println("How much " + itemName.getItemName() + " are you adding?");
+                System.out.print("Amount (ex. 5): ");
+                int amount = sc.nextInt();
+                sc.nextLine();//consume
+
+                if (amount <=0){
+                    System.out.println("Invalid amount. Must be greater than 0.");
+                    return;
+                }
+
+                itemName.setQuantity(amount + currentQuantity); //set new quantity
+                System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
+                duplicateInventory(); // update CSV file
             } else {
-                System.out.println("That item already exists in the inventory.");
+                System.out.println(medicineName + " does not exist in the inventory.");
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid medicine name: " + itemName);
+        } catch (Exception e) {
+                System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
         }
     }
 
-    // Delete item from inventory
-    public void removeItem(String itemName) {
-        // Check for valid parameters
-        /*
-         * if (itemName == null || itemName.isEmpty()) {
-         * System.out.println("Item name cannot be null or empty.");
-         * return;
-         * }
-         * // Remove only if item exist in inventory
-         * InventoryItem item = getItem(itemName);
-         * if (item != null) {
-         * inventory.remove(item);
-         * // need to remove in csv file also
-         * System.out.println(item + " has been removed from the inventory");
-         * } else {
-         * System.out.println("The item does not exist in the inventory.");
-         * }
-         */
+    /**
+     * Deducts stock from a specified inventory item.
+     * 
+     * @param sc           A {@link Scanner} object for user input.
+     * @param medicineName The {@link Medicine} to deduct stock from.
+     */
+    public static void deductItemStock(InventoryItem itemName, int quanity){
+        itemName.setQuantity(quanity);
+        System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
+        duplicateInventory(); // update CSV file
+    }
+
+    /**
+     * Updates the stock level of a specified inventory item.
+     * 
+     * @param sc           A {@link Scanner} object for user input.
+     * @param medicineName The {@link Medicine} to update.
+     */
+    public static void updateItemStock(Scanner sc, Medicine medicineName) {
         try {
-            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
-            InventoryItem item = getItem(itemName);
-            if (item != null) {
-                inventory.remove(item);
-                System.out.println(medicine + " has been removed from the inventory.");
-                duplicateInventory(); // Update CSV file
+            //pass the name as a string
+            String itemName = medicineName.name();
+            InventoryItem item = findItemByName(itemName); //returns itemName
+            
+            if(item!=null){
+                int currentQuantity = item.getQuantity();
+                System.out.println("\nThe current quantity of " + item.getItemName() + " is: " + currentQuantity);
+                System.out.println("Enter the new quanity for " + item.getItemName());
+                System.out.print("Amount (ex. 5): ");
+                int amount = sc.nextInt();
+                sc.nextLine();//consume
+
+                updateItemStockHelper(itemName, amount);
             } else {
-                System.out.println("The item does not exist in the inventory.");
+                System.out.println(medicineName + " does not exist in the inventory.");
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid medicine name: " + itemName);
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
         }
     }
 
-    // Update item quantity
-    public void updateItem(String itemName, int quantity) {
-        // Check for valid parameters
-        /*
-         * if (itemName == null || itemName.isEmpty()) {
-         * System.out.println("Item name cannot be null or empty.");
-         * return;
-         * }
-         * if (quantity < 0) {
-         * System.out.println("Invalid quantity value.");
-         * return;
-         * }
-         * InventoryItem item = getItem(itemName);
-         * if (item != null) {
-         * item.setQuantity(quantity);
-         * // need to write data in csv file
-         * System.out.println("There are now " + quantity + " " + itemName +
-         * " in the inventory.");
-         * } else {
-         * System.out.println("The item does not exist in the inventory.");
-         * }
-         */
+    /**
+     * Helper method to update the stock level of an inventory item programmatically.
+     * 
+     * @param itemName The name of the item as a {@code String}.
+     * @param quantity The new quantity to set for the item.
+     */
+    public static void updateItemStockHelper(String itemName, int quantity) {
+        //Check for valid parameters
+        if (itemName == null || itemName.isEmpty()) {
+            System.out.println("Item name cannot be null or empty.");
+            return;
+        }
+        if (quantity < 0) {
+            System.out.println("Invalid quantity value.");
+            return;
+        }
+
+        InventoryItem item = findItemByName(itemName); //returns itemName
+        if(item != null) {
+            item.setQuantity(quantity);
+            System.out.println("The new quantity of " + item.getItemName() + " is: " + item.getQuantity());
+            duplicateInventory(); // update CSV file
+        }
+        else {
+            System.out.println("The item does not exist in the inventory.");
+        }
+    }
+
+    /**
+     * Updates the low-stock alert threshold for a specified inventory item.
+     * 
+     * @param sc           A {@link Scanner} object for user input.
+     * @param medicineName The {@link Medicine} to update.
+     */
+    public static void updateItemLowLevelAlert(Scanner sc, Medicine medicineName) {
         try {
-            Medicine medicine = Medicine.valueOf(itemName); // Parse item name to enum
-            if (quantity < 0) {
-                System.out.println("Invalid quantity value.");
-                return;
-            }
-            InventoryItem item = getItem(itemName);
-            if (item != null) {
-                item.setQuantity(quantity);
-                System.out.println("There are now " + quantity + " units of " + medicine + " in the inventory.");
-                duplicateInventory(); // Update CSV file
+            //pass the name as a string
+            InventoryItem itemName = findItemByName(medicineName.name()); //returns itemName
+            if(itemName!=null){
+                int currentLevel = itemName.getMinimumQuantity();
+                System.out.println("\nThe current low-level-alert of " + itemName.getItemName() + " is: " + currentLevel);
+                System.out.println("Enter the new low-level-alert for" + itemName.getItemName());
+                System.out.print("Amount (ex. 5): ");
+                int amount = sc.nextInt();
+                sc.nextLine();//consume
+
+                itemName.setMinimumQuantity(amount);
+                System.out.println("The new low-level-alert for " + itemName.getItemName() + " is: " + itemName.getMinimumQuantity());
+                duplicateInventory();
             } else {
                 System.out.println("The item does not exist in the inventory.");
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid medicine name: " + itemName);
+        } catch (Exception e){
+            System.out.println(medicineName + " does not exist in the inventory.");
         }
-
     }
 }

@@ -2,20 +2,21 @@ package accounts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
-import io.*;
 import user.User;
-import user.Administrator;
+import utility.*;
 import user.Pharmacist;
 import user.Role;
 
 public class PharmacistsAcc {
     // store all Administrator objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Pharm_List.csv";
-    private static String updatedPath = "../Data//Updated/Pharm_List(Updated).csv";
+    private static String originalPath = "Data//Original/Pharm_List.csv";
+    private static String updatedPath = "Data//Updated/Pharm_List(Updated).csv";
 
     // read in csv file of staffs
     public static void loadPharmacists(boolean isFirstRun) {
@@ -70,9 +71,9 @@ public class PharmacistsAcc {
         CSVwrite.writeCSVList(updatedPath, pharmacists);
     }
 
-    // find admin by hospitalID
-    private static User findStaffById(String hospitalID) {
-        for (User pharmacist : pharmacists) {
+    // find Pharmacist by hospitalID
+    private static Pharmacist findPharmById(String hospitalID) {
+        for (Pharmacist pharmacist : pharmacists) {
             if (pharmacist.getHospitalID().equals(hospitalID)) {
                 return pharmacist;
             }
@@ -81,8 +82,8 @@ public class PharmacistsAcc {
     }
 
     // updating methods
-    public static void addPharmacist() {
-        Pharmacist newCreatedUser = NewAccount.createNewAccount(pharmacists, Role.Pharmacist);
+    public static void addPharmacist(Scanner sc) {
+        Pharmacist newCreatedUser = NewAccount.createNewAccount(sc, pharmacists, Role.Pharmacist);
 
         if(newCreatedUser!=null){
             pharmacists.add(newCreatedUser);
@@ -93,33 +94,68 @@ public class PharmacistsAcc {
         }
     }
 
-    public static void removePharmacist(String hospitalID) {
-        User pharmacistToRemove = findStaffById(hospitalID);
+    public static void updatePharmacist(Scanner sc) {
+        displayPharmacists();
+        System.out.print("\nEnter the Pharmacist ID to update: ");
+        String hospitalID = sc.nextLine();
+        Pharmacist pharmToUpdate = findPharmById(hospitalID);
+
+        if(pharmToUpdate != null){
+            System.out.print("Enter your Name: ");
+            String name = sc.nextLine();
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            pharmToUpdate.setName(name);
+
+            System.out.print("Enter your Gender: ");
+            String gender = sc.nextLine();
+            gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
+            pharmToUpdate.setGender(gender);
+
+            System.out.print("Enter your Age: ");
+            int age;
+            try {
+                age = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                return;
+            }
+            pharmToUpdate.setAge(age);
+
+            System.out.print("Enter your Password: ");
+            pharmToUpdate.setPassword(sc.nextLine());
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been updated.");
+            duplicatePharmacist(); // rewrite the CSV file with updated version
+        
+        } else {
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
+        }
+    }
+
+    public static void removePharmacist(Scanner sc) {
+        displayPharmacists();
+        System.out.print("\nEnter the Pharmacist ID to remove: ");
+        String hospitalID = sc.nextLine();
+        Pharmacist pharmacistToRemove = findPharmById(hospitalID);
 
         if (pharmacistToRemove != null) {
             pharmacists.remove(pharmacistToRemove); // remove Data from pharmacist List
-            System.out.println("Staff member with Hospital ID " + hospitalID + " has been removed.");
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been removed.");
             duplicatePharmacist(); // rewrite the CSV file without the row removed
         } else {
-            System.out.println("Staff member with Hospital ID " + hospitalID + " not found.");
+            System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
         }
     }
 
     public static void updatePassword(String hospitalID, String newPassword) {
         // find the staff ID to update
-        User pharmacistPWToUpdate = findStaffById(hospitalID);
+        Pharmacist pharmacistPWToUpdate = findPharmById(hospitalID);
 
         if (pharmacistPWToUpdate != null) {
             pharmacistPWToUpdate.setPassword(newPassword);
             duplicatePharmacist();
-            System.out.println("Your password has been changed");
             return;
         }
-
     }
-
-    public static void updateStaff(String hospitalID) {
-
-    }
-
 }

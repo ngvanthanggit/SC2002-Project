@@ -2,26 +2,24 @@ package accounts;
 
 import java.util.List;
 import java.util.Scanner;
-
 import user.*;
-import accounts.*;
 
 public class Login {
 
     private List<User> users; // Accepts a list of users
+    private static String defaultPW = "password1234";
 
     public Login(List<User> users) {
         this.users = users;
     }
 
-    public User authenticate() {
-        Scanner scanner = new Scanner(System.in);
+    public User authenticate(Scanner sc) {
 
         System.out.print("Enter your hospital ID: ");
-        String enteredId = scanner.nextLine();
+        String enteredId = sc.nextLine();
 
         System.out.print("Enter your password: ");
-        String enteredPassword = scanner.nextLine();
+        String enteredPassword = sc.nextLine();
 
         for (User user : users) {
             if (user.getHospitalID().equals(enteredId) && user.getPassword().equals(enteredPassword)) {
@@ -29,7 +27,7 @@ public class Login {
                 System.out.println("Login successful! Welcome, " + user.getRole() + " " + user.getName());
 
                 // prompt user to change password if it is default password
-                checkDefPw(user, scanner);
+                checkDefPw(user, sc);
 
                 switch (user.getRole()) {
                     case Patient:
@@ -39,28 +37,30 @@ public class Login {
 
                     case Pharmacist:
                         // create new pharmacist class
-                        return new Pharmacist(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
-                                user.getAge(), user.getPassword());
+                        Pharmacist pharmacist = (Pharmacist) user;
+                        return pharmacist;
 
                     case Doctor:
                         // create new Doctor Class
-                        return new Doctor(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
-                                user.getAge(), user.getPassword());
+                        Doctor doctor = (Doctor) user;
+                        return doctor;
 
                     case Administrator:
-                        return new Administrator(user.getHospitalID(), user.getName(), user.getRole(), user.getGender(),
-                                user.getAge(), user.getPassword());
+                        // create new Administrator Class
+                        Administrator administrator = (Administrator) user;
+                        return administrator;
                     default:
-                        return null;
+                        break;
                 }
             }
         }
+        System.out.println("Login failed! Incorrect ID or password.");
         return null; // Return null if login fails
     }
 
     // check if user is using default pw "password1234"
     public static void checkDefPw(User user, Scanner scanner) {
-        if (user.getPassword().equals("password1234")) {
+        if (user.getPassword().equals(defaultPW)) {
             System.out.println("You are logging in with a default password, please change your password. ");
             System.out.print("Enter your password: ");
             String newPassword = scanner.nextLine(); // set new Password
@@ -83,7 +83,7 @@ public class Login {
                     System.out.println("Invalid role. Password update failed.");
                     break;
             }
-
+            System.out.println("Your password has been changed");
         }
     }
 }

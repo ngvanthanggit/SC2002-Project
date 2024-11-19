@@ -9,8 +9,6 @@ import inventory.InventoryManager;
 import inventory.ReplenishManager;
 import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
-import inventory.InventoryManager;
-import inventory.ReplenishManager;
 import medicalrecord.MedicalRecordManager;
 import schedule.ScheduleManager;
 import appointment.AppointmentManager;
@@ -46,15 +44,17 @@ public class SystemInitialisation {
         // ApptManager.duplicateAppointments();
 
         // Displaying the List of Patients and Staffs from CSV
-        AdminsAcc.displayAdmins();
-        PatientsAcc.displayPatients();
-        PharmacistsAcc.displayPharmacists();
-        DoctorsAcc.displayDoctors();
-        InventoryManager.displayInventory();
-        ReplenishManager.displayReplenishList();
-        MedicalRecordManager.displayMedicalRecords();
-        ScheduleManager.displaySchedules();
-        AppointmentManager.displayAppointments();
+        /*
+         * AdminsAcc.displayAdmins();
+         * PatientsAcc.displayPatients();
+         * PharmacistsAcc.displayPharmacists();
+         * DoctorsAcc.displayDoctors();
+         * InventoryManager.displayInventory();
+         * ReplenishManager.displayReplenishList();
+         * MedicalRecordManager.displayMedicalRecords();
+         * ScheduleManager.displaySchedules();
+         * AppointmentManager.displayAppointments();
+         */
 
         // ApptManager.displayAppointments();
 
