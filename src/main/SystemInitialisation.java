@@ -4,7 +4,6 @@ package main;
 
 import accounts.PatientsAcc;
 import accounts.PharmacistsAcc;
-//import appointmentManager.ApptManager;
 import inventory.InventoryManager;
 import inventory.ReplenishManager;
 import accounts.AdminsAcc;
@@ -29,7 +28,6 @@ public class SystemInitialisation {
         MedicalRecordManager.loadMedicalRecords(isFirstRun);
         ScheduleManager.loadSchedules(isFirstRun);
         AppointmentManager.loadAppointments(isFirstRun);
-        // ApptManager.loadAppointments(isFirstRun);
 
         // save the original data into a new file to be updated
         AdminsAcc.duplicateAdmin();
@@ -41,20 +39,6 @@ public class SystemInitialisation {
         MedicalRecordManager.duplicateMedicalRecord();
         ScheduleManager.duplicateSchedule();
         AppointmentManager.duplicateAppointments();
-        // ApptManager.duplicateAppointments();
-
-        // Displaying the List of Patients and Staffs from CSV
-        /*AdminsAcc.displayAdmins();
-        PatientsAcc.displayPatients();
-        PharmacistsAcc.displayPharmacists();
-        DoctorsAcc.displayDoctors();
-        InventoryManager.displayInventory();
-        ReplenishManager.displayReplenishList();
-        MedicalRecordManager.displayMedicalRecords();
-        ScheduleManager.displaySchedules();
-        AppointmentManager.displayAppointments();*/
-
-        // ApptManager.displayAppointments();
 
         // set to false after first load
         isFirstRun = false;
