@@ -1,14 +1,16 @@
 package schedule;
 
 import java.util.*;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import io.*;
+import utility.*;
+import user.Doctor;
 
 public class ScheduleManager {
     private static List<Schedule> schedules = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Schedule_List.csv";
-    private static String updatedPath = "../Data//Updated/Schedule_List(Updated).csv";
+    private static String originalPath = "Data//Original/Schedule_List.csv";
+    private static String updatedPath = "Data//Updated/Schedule_List(Updated).csv";
 
     public static void removeInvalidSchedules() {
         // remove schedules that are in the past
@@ -56,9 +58,9 @@ public class ScheduleManager {
     public static void displaySchedules() {
         removeInvalidSchedules();
         if (schedules.isEmpty()) {
-            System.out.println("The schedules is currently empty.");
+            System.out.println("\nThe schedules is currently empty.");
         } else {
-            System.out.println("The Schedules in the CSV file are:");
+            System.out.println("\nThe Schedules in the CSV file are:");
             for (Schedule schedule : schedules) {
                 System.out.println(schedule.getScheduleDetails());
             }
@@ -96,6 +98,49 @@ public class ScheduleManager {
         removeInvalidSchedules();
         schedules.add(schedule);
         duplicateSchedule();
+    }
+
+    // checks duplicate time schedule for doctor
+    public static boolean checkDuplicateSchedule(LocalDate date, LocalTime time, Doctor doctor) {
+        // loop through the entire schedules list
+        for (Schedule schedule : schedules) {
+            // if a schedule for the Doctor with date passed is found
+            if (schedule.getDoctorID().equals(doctor.getHospitalID()) && schedule.getDate().equals(date)) {
+                // check the timeSlots
+                if (schedule.getTimeSlots().contains(time)) {
+                    return true; // Conflict found
+                }
+            }
+        }
+        return false; // no conflicts
+    }
+
+    // check for 1hr-interval
+    public static boolean checkInterval(LocalDate date, LocalTime time, Doctor doctor) {
+        for (Schedule schedule : schedules) {
+            if (schedule.getDoctorID().equals(doctor.getHospitalID()) &&
+                    schedule.getDate().equals(date)) {
+                // check whether incoming timeSlot has a 1hr difference between before and after
+                // time
+                // example before < incoming < after, 1hr interval
+                for (LocalTime existingTime : schedule.getTimeSlots()) {
+                    if (Math.abs(Duration.between(existingTime, time).toMinutes()) < 60) {
+                        return true; // Conflict found
+                    }
+                }
+            }
+        }
+        return false; // No conflict
+    }
+
+    public static boolean checkValidSchedule(LocalDate date, LocalTime time, Doctor doctor) {
+        boolean isDuplicate = checkDuplicateSchedule(date, time, doctor);
+        boolean isIntervalConflict = checkInterval(date, time, doctor);
+
+        if (isDuplicate || isIntervalConflict) {
+            return false; // Conflict found
+        }
+        return true; // No conflicts
     }
 
     // check if the time is in the future

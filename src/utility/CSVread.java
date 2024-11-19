@@ -1,17 +1,16 @@
-package io;
+package utility;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.print.Doc;
 
 import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
@@ -215,16 +214,6 @@ public class CSVread {
                         approvalDate = LocalDate.parse(approvalDateString, formatter);
                     }
                 }
-
-                // Create a new ReplenishRequest with parsed data
-                // ReplenishRequest request = new ReplenishRequest(requestID, itemName,
-                // replenishQuantity);
-                // request.setRequestedBy(requestedBy);
-                // request.setRequestDate(requestDate);
-                // request.setRequestStatus(status);
-                // request.setApprovalDate(approvalDate); // Manually set approval date if it
-                // exists
-
                 ReplenishRequest request = new ReplenishRequest(requestID, itemName, replenishQuantity, requestedBy,
                         requestDate, status, approvalDate);
 
@@ -245,50 +234,71 @@ public class CSVread {
         return replenishList; // Return the list of ReplenishRequest objects
     }
 
-    // General method to read CSV and map columns to fields dynamically for
-    // MedicalRecord
+    //updated above
     public static List<MedicalRecord> readMedicalRecordCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
         List<MedicalRecord> medicalRecords = new ArrayList<>();
-
+    
         try {
             reader = new BufferedReader(new FileReader(fileString));
-
+    
             // Read the first line to skip the header
             String headerLine = reader.readLine();
-
+    
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
                 // Skip empty lines
                 if (line.trim().isEmpty()) {
                     continue;
                 }
-
-                // Array of Strings, split at commas
+    
+                // Array of Strings, split at commas (prescriptions field may use colons internally)
                 String[] row = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-
-                // Check if row has sufficient columns
-                if (row.length < columnMapping.size()) {
-                    System.err.println("Skipping malformed row: " + line);
-                    continue;
-                }
-
+    
                 // Parse fields from the CSV row based on column mapping
+                String medicalRID = row[columnMapping.get("MedicalR ID")].trim();
                 String doctorID = row[columnMapping.get("Doctor ID")].trim();
                 String patientID = row[columnMapping.get("Patient ID")].trim();
-                List<String> diagnoses = List.of(row[columnMapping.get("Diagnoses")].replace("\"", "").split(";"));
-                List<String> prescriptions = List
-                        .of(row[columnMapping.get("Prescriptions")].replace("\"", "").split(";"));
-                List<String> treatmentPlans = List
-                        .of(row[columnMapping.get("Treatment Plan")].replace("\"", "").split(";"));
+                List<String> diagnoses = Arrays.asList(row[columnMapping.get("Diagnoses")].split(";"));
+                String prescriptionsString = row[columnMapping.get("Prescriptions")].replace("\"", "");
+                List<String> treatmentPlans = Arrays.asList(row[columnMapping.get("Treatment Plan")].split(";"));
+                PrescriptionStatus status = null;
+                try {
+                    status = PrescriptionStatus.valueOf(row[columnMapping.get("Prescription Status")].trim().toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid Prescription Status: " + row[columnMapping.get("Prescription Status")]);
+                }
 
+                // Parse prescriptions into a Map<String, Integer>
+                Map<String, Integer> prescriptions = new HashMap<>();
+                if (!prescriptionsString.isEmpty()) {
+                    String[] prescriptionItems = prescriptionsString.split(";");
+                    for (String item : prescriptionItems) {
+                        String[] parts = item.trim().split(": ");
+
+                        if (parts.length != 2) {
+                            System.err.println("Invalid prescription format: " + item);
+                            continue; // Skip invalid entries
+                        }
+                        
+                        if (parts.length == 2) {
+                            String medication = parts[0];
+                            try {
+                                int quantity = Integer.parseInt(parts[1]);
+                                prescriptions.put(medication, quantity);
+                            } catch (NumberFormatException e) {
+                                System.err.println("Invalid prescription quantity: " + item);
+                            }
+                        }
+                    }
+                }
+    
                 // Create a new MedicalRecord object
-                MedicalRecord record = new MedicalRecord(doctorID, patientID, diagnoses, prescriptions, treatmentPlans);
-
-                medicalRecords.add(record); // Add the record to the list
+                MedicalRecord record = new MedicalRecord(medicalRID, doctorID, patientID, diagnoses, prescriptions, treatmentPlans, status);
+                medicalRecords.add(record);
             }
-
+    
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -302,6 +312,8 @@ public class CSVread {
         }
         return medicalRecords; // Return the list of MedicalRecord objects
     }
+    
+
 
     public static List<Schedule> readScheduleCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;

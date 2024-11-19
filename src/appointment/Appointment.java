@@ -2,11 +2,6 @@ package appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-
-import accounts.DoctorsAcc;
-import accounts.PatientsAcc;
-import io.IDGenerator;
 import user.*;
 
 public class Appointment {
@@ -143,7 +138,7 @@ public class Appointment {
          * appointmentDate.toString(), appointmentTime.toString(), status,
          * consultationNotes, prescribedMedications, serviceType);
          */
-        return "Appointment ID: " + appointmentID +
+        return "\nAppointment ID: " + appointmentID +
                 "\nPatient: " + patient.getName() +
                 "\nDoctor: " + doctor.getName() +
                 "\nDate: " + appointmentDate +
@@ -151,8 +146,7 @@ public class Appointment {
                 "\nStatus: " + status +
                 "\nConsultation Notes: " + consultationNotes +
                 "\nPrescribed Medications: " + prescribedMedications +
-                "\nService Type: " + serviceType +
-                "\n";
+                "\nService Type: " + serviceType;
     }
 
     // convert appointment to CSV format
