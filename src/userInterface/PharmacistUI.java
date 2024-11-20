@@ -9,6 +9,7 @@ import interfaces.InvenManageInterface;
 import interfaces.PharmacistMenu;
 import interfaces.ReplenishManageInterface;
 import inventory.ReplenishManager;
+import main.HMSApp;
 import user.Pharmacist;
 
 public class PharmacistUI implements PharmacistMenu {
@@ -31,6 +32,7 @@ public class PharmacistUI implements PharmacistMenu {
      */
     public void logout(){
         System.out.println("Pharmacist Logging Out.");
+        HMSApp.resetSessionColor(); // Reset terminal color
         return;
     }
 

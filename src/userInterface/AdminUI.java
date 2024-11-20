@@ -9,6 +9,7 @@ import interfaces.CommonMenu;
 import interfaces.InvenManageInterface;
 import interfaces.ReplenishManageInterface;
 import interfaces.StaffManageInterface;
+import main.HMSApp;
 import user.Administrator;
 import user.Role;
 
@@ -44,6 +45,7 @@ public class AdminUI implements AdminMenu{
      */
     public void logout(){
         System.out.println("Administrator Logging Out.");
+        HMSApp.resetSessionColor(); // Reset terminal color
         return;
     }
 
