@@ -9,6 +9,7 @@ import interfaces.DocApptInterface;
 import interfaces.DoctorMenu;
 import interfaces.MedicalRecInterface;
 import interfaces.ScheduleInterface;
+import main.HMSApp;
 import medicalrecord.MedicalRecord;
 import user.Doctor;
 
@@ -32,6 +33,7 @@ public class DoctorUI implements DoctorMenu {
      */
     public void logout(){
         System.out.println("Doctor Logging Out.");
+        HMSApp.resetSessionColor(); // Reset terminal color
         return;
     }
 

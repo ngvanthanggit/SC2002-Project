@@ -3,8 +3,15 @@ package main;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import utility.ColoredPrintStream;
+
 public class HMSApp {
+    private static ColoredPrintStream coloredOut;
     public static void main(String[] args) {
+        
+        // Redirect System.out to ColoredPrintStream
+        coloredOut = new ColoredPrintStream(System.out);
+        System.setOut(coloredOut);
 
         //initialise the system by importing all data from any CSV files
         SystemInitialisation.start(); 
@@ -45,5 +52,15 @@ public class HMSApp {
                     continue;
             }
         } while (choice != 3);
+    }
+
+    // Set color for current session
+    public static void setSessionColor(String roleColor) {
+        coloredOut.setColor(roleColor);
+    }
+
+    // Reset color at the end of a session
+    public static void resetSessionColor() {
+        coloredOut.resetColor();
     }
 }

@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import accounts.*;
 import user.*;
+import utility.TerminalColors;
 
 public class MainUI {
     private static User loggedInUser; // store logged-in user. static becuz only 1 at a time
@@ -46,20 +47,13 @@ public class MainUI {
         }
         
         if (loggedIn != null) {
-            loggedInUser = loggedIn; // Store the logged-in user
-            if (loggedIn instanceof Patient) {
-                Patient patient = (Patient) loggedIn;
-                patient.displayUI();
-            } else if (loggedIn instanceof Pharmacist) {
-                Pharmacist pharmacist = (Pharmacist) loggedIn;
-                pharmacist.displayUI();
-            } else if (loggedIn instanceof Doctor) {
-                Doctor doctor = (Doctor) loggedIn;
-                doctor.displayUI();
-            } else if (loggedIn instanceof Administrator) {
-                Administrator admin = (Administrator) loggedIn;
-                admin.displayUI();
-            } 
+            loggedInUser = loggedIn;
+
+            // Set the terminal color for the logged-in user
+            HMSApp.setSessionColor(TerminalColors.getColorByRole(loggedIn.getRole().name()));
+
+            System.out.println("Welcome, " + loggedIn.getName() + "! You are logged in as " + loggedIn.getRole() + ".");
+            loggedIn.displayUI(); // Display user-specific UI
         }
     }
 
@@ -83,6 +77,11 @@ public class MainUI {
             return -1; //returns -1 indicate invalid
         }
         return choice;
+    }
+
+    public static void logout() {
+        System.out.println("Logging out...");
+        HMSApp.resetSessionColor(); // Reset terminal color
     }
 
     public static User getLoggedInUser() {

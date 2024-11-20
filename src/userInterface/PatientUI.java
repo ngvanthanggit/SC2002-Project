@@ -7,6 +7,7 @@ import accounts.PatientsAcc;
 import interfaces.CommonMenu;
 import interfaces.PatientApptInterface;
 import interfaces.PatientMenu;
+import main.HMSApp;
 import user.Patient;
 
 public class PatientUI implements PatientMenu{
@@ -28,6 +29,7 @@ public class PatientUI implements PatientMenu{
      */
     public void logout(){
         System.out.println("Patient Logging Out.");
+        HMSApp.resetSessionColor(); // Reset terminal color
         return;
     }
 
