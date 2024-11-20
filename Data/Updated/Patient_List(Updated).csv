@@ -1,4 +1,4 @@
 Patient ID,Name          ,Role,Gender ,Age,Password,Date of Birth ,Blood Type ,Contact Information
-P1001,Alice Brown,Patient,Female,30,pass,14/05/1980,A+,alice.brown@example.com
+P1001,Alice Brown,Patient,Female,30,password1234,14/05/1980,A+,alice.brown@example.com
 P1002,Bob Stone,Patient,Male,40,password1234,22/11/1975,B+,bob.stone@example.com
 P1003,Charlie White,Patient,Male,35,password1234,08/07/1990,O-,charlie.white@example.com
