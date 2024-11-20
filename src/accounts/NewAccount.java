@@ -8,9 +8,26 @@ import java.util.List;
 import user.*;
 import utility.IDGenerator;
 
+/**
+ * This class handles the creation of new user accounts for different roles (Patient, Doctor, Pharmacist, Administrator).
+ * <p>
+ * It collects user information such as name, gender, age, password, and additional role-specific details like date of birth and blood type.
+ * Also generates a unique hospital ID for each user.
+ */
 public class NewAccount {
 
-
+    /**
+     * Creates a new account based on the user's role. 
+     * <p>
+     * Prompts the user for their personal details, and generates a unique hospital ID 
+     * before creating and returning an appropriate user object (Patient, Doctor, Pharmacist, or Administrator).
+     * 
+     * @param <T> The type of user (Patient, Doctor, Pharmacist, Administrator) that is being created.
+     * @param sc A {@link Scanner} object to capture user input.
+     * @param usersList The list of existing users used to generate a unique hospital ID for the new user.
+     * @param role The role of the new user (Patient, Doctor, Pharmacist, Administrator).
+     * @return The newly created {@link User} object, or {@code null} if there is an issue with the input or role.
+     */
     @SuppressWarnings("unchecked")
     public static <T extends User> T createNewAccount(Scanner sc, List<T> usersList, Role role){
         String prefix, name, gender, password; //common variables

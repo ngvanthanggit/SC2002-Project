@@ -78,6 +78,7 @@ public class AdminsAcc {
 
     /**
      * Returns a copy of the list of all administrators.
+     * 
      * @return A list of {@link User} objects representing administrators.
      */
     public static List<User> getAdmins() {
@@ -99,6 +100,7 @@ public class AdminsAcc {
 
     /**
      * Finds an administrator by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the administrator to find.
      * @return The {@link Administrator} object if found; {@code null} otherwise.
      */
@@ -128,6 +130,7 @@ public class AdminsAcc {
      * Updates an administrator's details based on their hospital ID.
      * <p>
      * Prompts the user to enter updated details for the administrator.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void updateAdmin(Scanner sc) {
@@ -173,6 +176,7 @@ public class AdminsAcc {
      * Removes an administrator from the list based on their hospital ID.
      * <p>
      * Prevents the currently logged-in administrator from removing themselves.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void removeAdmin(Scanner sc) {
