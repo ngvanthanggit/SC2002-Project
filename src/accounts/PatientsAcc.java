@@ -25,8 +25,8 @@ public class PatientsAcc {
 
     // store the list of patients
     private static List<Patient> patients = new ArrayList<>();
-    private static String originalPath = "../../Data//Original/Patient_List.csv";
-    private static String updatedPath = "../../Data//Updated/Patient_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Patient_List.csv";
+    private static String updatedPath = "../Data//Updated/Patient_List(Updated).csv";
 
     /**
      * Loads patient accounts from a CSV file.
@@ -173,45 +173,9 @@ public class PatientsAcc {
         if (patientToUpdate != null) {
             // catch any invalid types, date format and age
             try {
-                System.out.print("\nEnter your Name: ");
-                name = sc.nextLine().trim();
-                name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                patientToUpdate.setName(name);
-
-                System.out.print("Enter your Gender: ");
-                gender = sc.nextLine().trim();
-                gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
-                patientToUpdate.setGender(gender);
-
-                System.out.print("Enter your Age: ");
-                patientToUpdate.setAge(sc.nextInt());
-                sc.nextLine(); // consume
-                System.out.print("Enter your Password: ");
-                password = sc.nextLine();
-
-                // Validate Date of Birth
-                String DOB = null;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateFormat.setLenient(false); // Strict validation
-                while (DOB == null) {
-                    System.out.print("Enter your Date of Birth (DD/MM/YYYY): ");
-                    String inputDOB = sc.nextLine().trim();
-                    try {
-                        dateFormat.parse(inputDOB);
-                        DOB = inputDOB; // Valid date
-                    } catch (ParseException e) {
-                        System.out.println("Invalid date format. Please use DD/MM/YYYY.\n");
-                    }
-                }
-                patientToUpdate.setDateOB(DOB);
-                System.out.print("Enter your Blood Type: ");
-                bloodType = sc.nextLine();
-                bloodType = bloodType.substring(0, 1).toUpperCase() + bloodType.substring(1);
-                patientToUpdate.setBloodType(bloodType);
-                System.out.print("Enter your Contact Info @gmail: ");
+                System.out.print("Enter your Contact Info: ");
                 patientToUpdate.setContactInfo(sc.nextLine());
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
-                updatePassword(patientToUpdate.getHospitalID(), password);
                 duplicatePatient(); // rewrite the CSV file with updated version
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input type detected. Please enter the correct type for each field.");

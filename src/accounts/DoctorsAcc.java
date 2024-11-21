@@ -15,23 +15,27 @@ import utility.CSVwrite;
 /**
  * This class is responsible for managing doctor accounts.
  * <p>
- * This includes loading data from CSV files, displaying, adding, updating, finding, and removing doctors, 
- * as well as managing password updates. The class interacts with utility classes like {@code CSVread}, 
+ * This includes loading data from CSV files, displaying, adding, updating,
+ * finding, and removing doctors,
+ * as well as managing password updates. The class interacts with utility
+ * classes like {@code CSVread},
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class DoctorsAcc {
     // List of all doctors
     private static List<Doctor> doctors = new ArrayList<>();
-    private static String originalPath = "../../Data//Original/Doctor_List.csv";
-    private static String updatedPath = "../../Data//Updated/Doctor_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Doctor_List.csv";
+    private static String updatedPath = "../Data//Updated/Doctor_List(Updated).csv";
 
     /**
      * Loads doctor accounts from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original file path and clears the updated file.
+     * If it is the first run, it loads from the original file path and clears the
+     * updated file.
      * Otherwise, it loads from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadDoctors(boolean isFirstRun) {
@@ -70,6 +74,7 @@ public class DoctorsAcc {
 
     /**
      * Returns a copy of the list of all doctors.
+     * 
      * @return A list of {@link User} objects representing doctors.
      */
     public static List<User> getDoctors() {
@@ -91,6 +96,7 @@ public class DoctorsAcc {
 
     /**
      * Finds a doctor by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the doctor to find.
      * @return The {@link Doctor} object if found; {@code null} otherwise.
      */
@@ -103,10 +109,11 @@ public class DoctorsAcc {
         return null;
     }
 
-    /**  
+    /**
      * Gets doctor name by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the doctor to get name of.
-    */
+     */
     public String getDoctorName(String hospitalID) {
         for (User doctor : doctors) {
             if (doctor.getHospitalID().equals(hospitalID)) {
@@ -133,6 +140,7 @@ public class DoctorsAcc {
      * Updates a doctor's details based on their hospital ID.
      * <p>
      * Prompts the user to enter updated details for the doctor.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void updateDoctor(Scanner sc) {
@@ -177,6 +185,7 @@ public class DoctorsAcc {
     /**
      * Removes a doctor from the list based on their hospital ID.
      * <p>
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void removeDoctor(Scanner sc) {
@@ -197,7 +206,8 @@ public class DoctorsAcc {
     /**
      * Updates the password of a doctor based on their hospital ID.
      * 
-     * @param hospitalID The hospital ID of the doctor whose password is to be updated.
+     * @param hospitalID  The hospital ID of the doctor whose password is to be
+     *                    updated.
      * @param newPassword The new password to set for the doctor.
      */
     public static void updatePassword(String hospitalID, String newPassword) {

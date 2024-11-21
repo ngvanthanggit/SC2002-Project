@@ -27,9 +27,9 @@ public class AppointmentManager {
     /** The interface used for interacting with the schedule. */
     private static ScheduleInterface scheduleInterface = new ScheduleUI();
     /** The path to the original appointments CSV file. */
-    private static String originalPath = "Data//Original/Appt_List.csv";
+    private static String originalPath = "../Data//Original/Appt_List.csv";
     /** The path to the updated appointments CSV file. */
-    private static String updatedPath = "Data//Updated/Appt_List(Updated).csv";
+    private static String updatedPath = "../Data//Updated/Appt_List(Updated).csv";
 
     /**
      * Loads appointments from a CSV file.
@@ -237,6 +237,37 @@ public class AppointmentManager {
         Appointment appt = new Appointment(doctor, patient, date, time, appointmentID, ApptStatus.PENDING);
         addAppointment(appt);
         duplicateAppointments();
+    }
+
+    /**
+     * Schedules an appointment by updating the appointment status to scheduled.
+     * 
+     * @param appointment The {@link Appointment} object to be scheduled.
+     */
+    public static void scheduleAppointment(String doctorID, String patientID, LocalDate date, LocalTime time) {
+        String appointmentID = IDGenerator.generateID("AP", appointments, Appointment::getAppointmentID, 3);
+        Doctor doctor = DoctorsAcc.findDoctorById(doctorID);
+        Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
+
+        Appointment appt = new Appointment(doctor, patient, date, time, appointmentID, ApptStatus.SCHEDULED);
+        addAppointment(appt);
+
+        // remove the time slot from the doctor's available time slots
+        scheduleInterface.removeSchedule(date, time, doctor);
+
+        duplicateAppointments();
+    }
+
+    public static void cancelAppointment(Appointment appointment) {
+        if (appointment.getStatus() == ApptStatus.SCHEDULED) {
+            // add the time slot back to the doctor's available time slots
+            Doctor doctor = DoctorsAcc.findDoctorById(appointment.getDoctor().getHospitalID());
+            scheduleInterface.addSchedule(appointment.getDate(), appointment.getTime(), doctor);
+        }
+        appointment.cancelAppointment();
+        // save to file
+        duplicateAppointments();
+        System.out.println("Appointment Cancelled Successfully.");
     }
 
     /**

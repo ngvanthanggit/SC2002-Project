@@ -14,12 +14,16 @@ import user.Doctor;
 
 /**
  * This class represents a patient's medical record, including diagnoses,
- * prescriptions, treatment plans, and prescription status. It provides functionality
- * for managing and displaying patient medical data, as well as handling updates to diagnoses,
+ * prescriptions, treatment plans, and prescription status. It provides
+ * functionality
+ * for managing and displaying patient medical data, as well as handling updates
+ * to diagnoses,
  * prescriptions, and treatment plans.
  * <p>
- * This class is used to track the medical history of a patient, including details
- * about the doctor who manages the case, the patient's condition, and prescribed treatments.
+ * This class is used to track the medical history of a patient, including
+ * details
+ * about the doctor who manages the case, the patient's condition, and
+ * prescribed treatments.
  * </p>
  */
 public class MedicalRecord {
@@ -29,9 +33,12 @@ public class MedicalRecord {
     private List<String> diagnoses; // List of diagnoses for the patient
     private Map<String, Integer> prescriptions; // Medication and its quantity
     private List<String> treatmentPlans; // Treatment plan for the patient
-    private PrescriptionStatus status; 
+    private PrescriptionStatus status;
 
-    /** Default constructor that initializes a new MedicalRecord object with empty values. */
+    /**
+     * Default constructor that initializes a new MedicalRecord object with empty
+     * values.
+     */
     public MedicalRecord() {
         this.medicalRID = null;
         this.doctorID = null;
@@ -43,7 +50,8 @@ public class MedicalRecord {
     }
 
     /**
-     * Constructor that initializes a new MedicalRecord with specified values, without the prescription status.
+     * Constructor that initializes a new MedicalRecord with specified values,
+     * without the prescription status.
      * 
      * @param medicalRID     The unique medical record ID.
      * @param doctorID       The unique identifier for the doctor.
@@ -53,7 +61,7 @@ public class MedicalRecord {
      * @param treatmentPlans A list of treatment plans for the patient.
      */
     public MedicalRecord(String medicalRID, String doctorID, String patientID, List<String> diagnoses,
-    Map<String, Integer> prescriptions, List<String> treatmentPlans) {
+            Map<String, Integer> prescriptions, List<String> treatmentPlans) {
         this.medicalRID = medicalRID;
         this.doctorID = doctorID;
         this.patientID = patientID;
@@ -64,7 +72,8 @@ public class MedicalRecord {
     }
 
     /**
-     * Constructor that initializes a new MedicalRecord with all specified values, including the prescription status.
+     * Constructor that initializes a new MedicalRecord with all specified values,
+     * including the prescription status.
      * 
      * @param medicalRID     The unique medical record ID.
      * @param doctorID       The unique identifier for the doctor.
@@ -75,7 +84,7 @@ public class MedicalRecord {
      * @param status         The prescription status of the medical record.
      */
     public MedicalRecord(String medicalRID, String doctorID, String patientID, List<String> diagnoses,
-    Map<String, Integer> prescriptions, List<String> treatmentPlans, PrescriptionStatus status) {
+            Map<String, Integer> prescriptions, List<String> treatmentPlans, PrescriptionStatus status) {
         this.medicalRID = medicalRID;
         this.doctorID = doctorID;
         this.patientID = patientID;
@@ -92,7 +101,7 @@ public class MedicalRecord {
      * 
      * @return the medical record ID.
      */
-    public String getMedicalRID(){
+    public String getMedicalRID() {
         return medicalRID;
     }
 
@@ -101,7 +110,7 @@ public class MedicalRecord {
      * 
      * @param medicalRID the medical record ID to set.
      */
-    public void setMedicalRID(String medicalRID){
+    public void setMedicalRID(String medicalRID) {
         this.medicalRID = medicalRID;
     }
 
@@ -221,12 +230,27 @@ public class MedicalRecord {
                 prescriptionDetails.append(entry.getKey()).append(": ").append(entry.getValue());
             }
         }
-        return String.format("MedicalR ID: %s, Doctor ID: %s, Patient ID: %s, Diagnoses: %s, Prescriptions: %s, Treatment Plans: %s, Prescription Status: %s",
-                medicalRID, doctorID, patientID, String.join(";", diagnoses), prescriptionDetails, String.join(";", treatmentPlans), status);
+        // need to include the patient's personal information
+        Patient patient = PatientsAcc.findPatientById(patientID);
+        String patientInfo = patient.userInfo();
+
+        String medicalRecordDetails = "\n--- Medical Record Details ---\n" +
+                "Medical Record ID: " + medicalRID + "\n" +
+                "Doctor ID: " + doctorID + "\n" +
+                "- Patient Information: \n" +
+                patientInfo + "\n" +
+                "- Medical Information: \n" +
+                "Diagnoses: " + String.join(", ", diagnoses) + "\n" +
+                "Prescriptions: " + prescriptionDetails + "\n" +
+                "Treatment Plans: " + String.join(", ", treatmentPlans) + "\n" +
+                "Prescription Status: " + status;
+
+        return medicalRecordDetails;
     }
 
     /**
-     * Returns a string with the medical record details along with the patient's personal information.
+     * Returns a string with the medical record details along with the patient's
+     * personal information.
      * 
      * @return A {@code string} containing the medical record with personal info.
      */
@@ -250,20 +274,20 @@ public class MedicalRecord {
         String diagnosesStr = (diagnoses != null && !diagnoses.isEmpty())
                 ? "\"" + String.join(";", diagnoses) + "\"" // Wrap in quotes
                 : "\"\"";
-    
+
         // Format prescriptions as "Medication: Quantity; Medication: Quantity"
         String prescriptionsStr = (prescriptions != null && !prescriptions.isEmpty())
                 ? "\"" + prescriptions.entrySet().stream()
-                    .map(entry -> entry.getKey() + ": " + entry.getValue())
-                    .reduce((a, b) -> a + "; " + b)
-                    .orElse("") + "\"" // Wrap in quotes
+                        .map(entry -> entry.getKey() + ": " + entry.getValue())
+                        .reduce((a, b) -> a + ";" + b)
+                        .orElse("") + "\"" // Wrap in quotes
                 : "\"\"";
-    
+
         // Join treatment plans with semicolon
         String treatmentPlansStr = (treatmentPlans != null && !treatmentPlans.isEmpty())
                 ? "\"" + String.join(";", treatmentPlans) + "\"" // Wrap in quotes
                 : "\"\"";
-    
+
         // Format as CSV row
         return String.format("%s,%s,%s,%s,%s,%s,%s",
                 medicalRID != null ? medicalRID : "",
@@ -274,8 +298,6 @@ public class MedicalRecord {
                 treatmentPlansStr,
                 (status != null) ? status.name() : "");
     }
-    
-    
 
     /**
      * Adds new diagnoses to the medical record.
@@ -287,7 +309,7 @@ public class MedicalRecord {
             System.out.println("Invalid diagnose input. Cannot be empty.");
             return;
         }
-    
+
         // Split the input by semicolon to allow multiple entries
         String[] diagnosesArray = newDiagnose.split(";");
         for (String diagnose : diagnosesArray) {
@@ -298,7 +320,7 @@ public class MedicalRecord {
         }
         System.out.println("Diagnoses added successfully: " + String.join(", ", this.diagnoses));
     }
-    
+
     /** Clears all diagnoses from the medical record. */
     public void clearDiagnoses() {
         this.diagnoses.clear();
@@ -323,7 +345,8 @@ public class MedicalRecord {
             try {
                 Medicine.valueOf(medication); // Throws IllegalArgumentException if not found
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid medication: " + medication + ". Must be one of: " + Arrays.toString(Medicine.values()));
+                throw new IllegalArgumentException("Invalid medication: " + medication + ". Must be one of: "
+                        + Arrays.toString(Medicine.values()));
             }
 
             // Validate and parse quantity
@@ -352,14 +375,15 @@ public class MedicalRecord {
     /**
      * Adds a new treatment plan to the medical record.
      * 
-     * @param newTreatmentPlan A semicolon-separated list of treatment plans to be added.
+     * @param newTreatmentPlan A semicolon-separated list of treatment plans to be
+     *                         added.
      */
     public void addTreatmentPlan(String newTreatmentPlan) {
         if (newTreatmentPlan == null || newTreatmentPlan.trim().isEmpty()) {
             System.out.println("Invalid treatment plan input. Cannot be empty.");
             return;
         }
-    
+
         // Split the input by semicolon to allow multiple entries
         String[] plansArray = newTreatmentPlan.split(";");
         for (String plan : plansArray) {
@@ -370,7 +394,7 @@ public class MedicalRecord {
         }
         System.out.println("Treatment plans added successfully: " + String.join(", ", this.treatmentPlans));
     }
-    
+
     /** Clears all treatment plans from the medical record. */
     public void clearTreatmentPlans() {
         this.treatmentPlans.clear();

@@ -28,10 +28,10 @@ public class AdminsAcc {
     private static List<Administrator> admins = new ArrayList<>();
 
     /** The file path to the original administrator CSV file. */
-    private static String originalPath = "../../Data//Original/Admin_List.csv";
+    private static String originalPath = "../Data//Original/Admin_List.csv";
 
     /** The file path to the updated administrator CSV file. */
-    private static String updatedPath = "../../Data//Updated/Admin_List(Updated).csv";
+    private static String updatedPath = "../Data//Updated/Admin_List(Updated).csv";
 
     /**
      * Loads administrator accounts from a CSV file.

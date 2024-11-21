@@ -18,8 +18,8 @@ import utility.*;
 public class InventoryManager {
     // List of inventory items
     private static List<InventoryItem> inventory = new ArrayList<>();
-    private static String originalPath = "../../Data//Original/Medicine_List.csv";
-    private static String updatedPath = "../../Data//Updated/Medicine_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Medicine_List.csv";
+    private static String updatedPath = "../Data//Updated/Medicine_List(Updated).csv";
 
     /**
      * Loads inventory data from a CSV file.

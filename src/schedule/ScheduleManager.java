@@ -21,10 +21,10 @@ public class ScheduleManager {
     private static List<Schedule> schedules = new ArrayList<>();
 
     /** The file path for the original schedule list */
-    private static String originalPath = "Data//Original/Schedule_List.csv";
+    private static String originalPath = "../Data//Original/Schedule_List.csv";
 
     /** The file path for the updated schedule list */
-    private static String updatedPath = "Data//Updated/Schedule_List(Updated).csv";
+    private static String updatedPath = "../Data//Updated/Schedule_List(Updated).csv";
 
     /** Removes any schedules that are in the past. */
     public static void removeInvalidSchedules() {
@@ -150,6 +150,18 @@ public class ScheduleManager {
     public static void addSchedule(Schedule schedule) {
         removeInvalidSchedules();
         schedules.add(schedule);
+        duplicateSchedule();
+    }
+
+    /**
+     * Removes a schedule from the system and duplicates the schedule list in the
+     * updated CSV file.
+     * 
+     * @param schedule The schedule to remove
+     */
+    public static void removeSchedule(Schedule schedule) {
+        removeInvalidSchedules();
+        schedules.remove(schedule);
         duplicateSchedule();
     }
 
