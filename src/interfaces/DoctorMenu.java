@@ -2,7 +2,6 @@ package interfaces;
 
 import java.util.Scanner;
 import user.Doctor;
-
 /**
  * This interface extends {@link CommonMenu} to provide additional functionalities
  * specific to Doctors. It defines methods for managing medical records, schedules, and appointments.
@@ -19,7 +18,7 @@ public interface DoctorMenu extends CommonMenu{
      * @param sc  A {@link Scanner} object for user input.
      * @param doctor A {@link Doctor} object representing the doctor whose medical records are managed
      */
-    public void medicalRecordMenu(Scanner sc);
+    public void medicalRecordMenu(Scanner sc, Doctor doctor );
 
     /**
      * Displays the menu for managing a doctor's schedule.
@@ -34,19 +33,4 @@ public interface DoctorMenu extends CommonMenu{
      * @param sc  A {@link Scanner} object for user input.
      */
     public void appointmentMenu(Scanner sc);
-
-
-    /*public void viewPatientRecords();
-
-    public void updatePatientRecords();
-
-    public void viewSchedule();
-
-    public void setSchedule();
-
-    public void viewAppointments();
-
-    public void updateAppointmentRequest();
-
-    public void recordAppointmentOutcome();*/
 }

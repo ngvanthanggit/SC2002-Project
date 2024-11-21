@@ -1,9 +1,9 @@
 package interfaces;
 
+import java.util.List;
 import java.util.Scanner;
 import user.Role;
 import user.User;
-
 /**
  * This interface defines methods related to managing hospital staff.
  * It includes functionality for viewing, filtering, adding, updating, and removing staff based on their roles.
@@ -29,7 +29,7 @@ public interface StaffManageInterface {
      * @param role     The {@link Role} to filter the staff list by.
      * @param userList The list of {@link User} objects representing the staff to be filtered.
      */
-    public void filterStaff(Scanner sc, Role role, List<User> userList);
+    public void filterStaff(Scanner sc, Role role, List<User> copiedList);
 
     /**
      * Allows the user to add a new staff member based on the specified role.

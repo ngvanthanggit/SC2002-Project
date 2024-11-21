@@ -2,6 +2,7 @@ package interfaces;
 
 import java.util.Scanner;
 import user.Role;
+import inventory.Medicine;
 
 /**
  * This interface defines methods related to managing the inventory of medications.

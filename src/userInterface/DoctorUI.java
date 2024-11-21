@@ -82,7 +82,7 @@ public class DoctorUI implements DoctorMenu {
 
             switch (choice) {
                 case 1:
-                    medicalRecordMenu(sc);
+                    medicalRecordMenu(sc, doctor);
                     break;
                 case 2:
                     scheduleMenu(sc);
