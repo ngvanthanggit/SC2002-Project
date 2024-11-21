@@ -172,6 +172,7 @@ public class PatientsAcc {
     public static void updatePatient(Scanner sc, Patient patient) {
         Patient patientToUpdate;
         String hospitalID;
+        String setEmail;
         // no patient object passed, from admin
         if (patient == null) {
             displayPatients();
@@ -188,7 +189,12 @@ public class PatientsAcc {
             // catch any invalid types, date format and age
             try {
                 System.out.print("Enter your Contact Info: ");
-                patientToUpdate.setEmail(sc.nextLine());
+                setEmail = sc.nextLine();
+                if (!setEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                    System.out.println("Invalid email format. Please provide a valid email address.");
+                    return;
+                }
+                patientToUpdate.setEmail(setEmail);
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
                 duplicatePatient(); // rewrite the CSV file with updated version
             } catch (InputMismatchException e) {
@@ -239,5 +245,4 @@ public class PatientsAcc {
             return;
         }
     }
-
 }
