@@ -186,7 +186,6 @@ public class MedicalRecordUI implements MedicalRecInterface {
                 case 3:
                     if (choice2 == 1) {
                         System.out.println("Enter new treatment plan (separated by ';'): ");
-                        sc.nextLine();
                         String newTreatmentPlan = sc.nextLine();
                         record.addTreatmentPlan(newTreatmentPlan);
                     } else if (choice2 == 2) {
