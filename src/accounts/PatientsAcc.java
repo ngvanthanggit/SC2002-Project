@@ -1,7 +1,5 @@
 package accounts;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -172,7 +170,6 @@ public class PatientsAcc {
      * @param sc A {@link Scanner} object for user input.
      */
     public static void updatePatient(Scanner sc, Patient patient) {
-        String name, gender, password, bloodType;
         Patient patientToUpdate;
         String hospitalID;
         // no patient object passed, from admin
