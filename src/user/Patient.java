@@ -12,36 +12,35 @@ import userInterface.PatientUI;
 public class Patient extends User {
     private String dateOB; // date of birth
     private String bloodType;
-    private String contactInfo; // changeable
+    private String email; // changeable
 
     /** default constructor for creating a Patient with no attributes */
     public Patient() {
         super();
         this.dateOB = null;
         this.bloodType = null;
-        this.contactInfo = null;
+        this.email = null;
     }
 
     /**
      * constructs a Patient object
-     * 
-     * @param hospitalID  The hospital ID of the patient
-     * @param name        The name of the patient
-     * @param role        The role of the patient (must be {@link Role#Patient}).
-     * @param gender      The gender of the patient
-     * @param age         The age of the patient
-     * @param password    The password of the patient
-     * @param dateOB      The date of birth of the patient
-     * @param bloodType   The blood type of the patient
-     * @param contactInfo The contact information of the patient
+     * @param hospitalID The hospital ID of the patient
+     * @param name The name of the patient
+     * @param role The role of the patient (must be {@link Role#Patient}).
+     * @param gender The gender of the patient
+     * @param age The age of the patient
+     * @param password The password of the patient
+     * @param dateOB The date of birth of the patient
+     * @param bloodType The blood type of the patient
+     * @param email The contact information of the patient
      */
     public Patient(String hospitalID, String name, Role role,
             String gender, int age, String password, String dateOB,
-            String bloodType, String contactInfo) {
+            String bloodType, String email) {
         super(hospitalID, name, role, gender, age, password);
         this.dateOB = dateOB;
         this.bloodType = bloodType;
-        this.contactInfo = contactInfo;
+        this.email = email;
     }
 
     // getter Methods()
@@ -69,8 +68,8 @@ public class Patient extends User {
      * 
      * @return the contact information
      */
-    public String getContactInfo() {
-        return contactInfo;
+    public String getEmail() {
+        return email;
     }
 
     // setter Methods()
@@ -98,8 +97,8 @@ public class Patient extends User {
      * 
      * @param contactInfo
      */
-    public void setContactInfo(String contactInfo) {
-        this.contactInfo = contactInfo;
+    public void setEmail(String contactInfo) {
+        this.email = contactInfo;
     }
 
     /**
@@ -110,13 +109,10 @@ public class Patient extends User {
      */
     @Override
     public String userInfo() {
-        String patientInfo = "Patient ID: " + this.getHospitalID() + "\n" +
-                "Name: " + this.getName() + "\n" +
-                "Date of Birth: " + this.getDateOB() + "\n" +
-                "Gender: " + this.getGender() + "\n" +
-                "Contact: " + this.getContactInfo() + "\n" +
-                "Blood Type: " + this.getBloodType();
-        return patientInfo;
+        return String.format(
+                "[PatientID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s, DateOB = %s, BloodType = %s, ContactInfo = %s]",
+                getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType,
+                email);
     }
 
     /**

@@ -15,8 +15,6 @@ import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 import medicalrecord.PrescriptionStatus;
 import user.Doctor;
-import user.User;
-import utility.CSVwrite;
 import utility.IDGenerator;
 
 /**

@@ -1,7 +1,5 @@
 package accounts;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -9,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import main.SystemInitialisation;
 import user.*;
 import utility.*;
 
@@ -23,10 +22,32 @@ import utility.*;
  */
 public class PatientsAcc {
 
-    // store the list of patients
+     /** A list to store all {@link Patient} objects. */
     private static List<Patient> patients = new ArrayList<>();
-    private static String originalPath = "../Data//Original/Patient_List.csv";
-    private static String updatedPath = "../Data//Updated/Patient_List(Updated).csv";
+    /** The file path to the original patient CSV file. */
+    private static String originalPath;
+    /** The file path to the updated patient CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving patient data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("PatientsOriginal");
+        updatedPath = SystemInitialisation.getFilePath("PatientsUpdated");
+    }
 
     /**
      * Loads patient accounts from a CSV file.
@@ -40,14 +61,8 @@ public class PatientsAcc {
      *                   {@code false} otherwise.
      */
     public static void loadPatients(boolean isFirstRun) {
-
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
 
         // clear the list to avoid having duplicate data
         patients.clear();
@@ -155,7 +170,6 @@ public class PatientsAcc {
      * @param sc A {@link Scanner} object for user input.
      */
     public static void updatePatient(Scanner sc, Patient patient) {
-        String name, gender, password, bloodType;
         Patient patientToUpdate;
         String hospitalID;
         // no patient object passed, from admin
@@ -174,7 +188,7 @@ public class PatientsAcc {
             // catch any invalid types, date format and age
             try {
                 System.out.print("Enter your Contact Info: ");
-                patientToUpdate.setContactInfo(sc.nextLine());
+                patientToUpdate.setEmail(sc.nextLine());
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
                 duplicatePatient(); // rewrite the CSV file with updated version
             } catch (InputMismatchException e) {

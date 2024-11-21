@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import accounts.*;
 import user.*;
+import utility.PasswordResetManager;
+import utility.PasswordResetRequest;
 import utility.TerminalColors;
 
 /**
@@ -110,6 +112,39 @@ public class MainUI {
     public static void logout() {
         System.out.println("Logging out...");
         HMSApp.resetSessionColor(); // Reset terminal color
+    }
+
+    /**
+     * Submits a password reset request for a user.
+     * <p>
+     * This method collects the user's ID and name via input, creates a new {@link PasswordResetRequest}, 
+     * and submits it to the {@link PasswordResetManager} for processing.
+     * If the request is successfully submitted, a confirmation message is displayed.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * 
+     * <p>
+     * Process:
+     * <ul>
+     *   <li>Prompts the user to enter their User ID and Name.</li>
+     *   <li>Creates a {@link PasswordResetRequest} object with the provided details.</li>
+     *   <li>Submits the request to the {@link PasswordResetManager}.</li>
+     *   <li>Displays a confirmation message if the request is successfully added.</li>
+     * </ul>
+     */
+    public static void resetPassword(Scanner sc){
+        System.out.println("\n|--- Password Reset Request ---|");
+        System.out.print("Enter your User ID: ");
+        String userId = sc.nextLine().trim();
+        System.out.print("Enter your Name: ");
+        String userName = sc.nextLine().trim();
+
+        PasswordResetRequest request = new PasswordResetRequest(userId, userName);
+        boolean success = PasswordResetManager.addRequest(request);
+        if (success) {
+            System.out.println("Your password reset request has been submitted.");
+        }
+        return;
     }
 
     /**

@@ -11,16 +11,16 @@ public class TerminalColors {
     /** ANSI reset color code to reset the terminal text color. */
     public static final String RESET = "\u001B[0m";
 
-    /** ANSI color code for yellow, typically used for Administrator role. */
-    public static final String YELLOW = "\u001B[93m";   // For Administrator
+    /** ANSI color code for orange used for Administrator role. */
+    public static final String ORANGE = "\u001B[38;5;172m";   // For Administrator
 
-    /** ANSI color code for green, typically used for Pharmacist role. */
+    /** ANSI color code for green used for Pharmacist role. */
     public static final String GREEN = "\u001B[32m"; // For Pharmacist
 
-    /** ANSI color code for blue, typically used for Doctor role. */
+    /** ANSI color code for blue used for Doctor role. */
     public static final String BLUE = "\u001B[34m";  // For Doctor
 
-    /** ANSI color code for cyan, typically used for Patient role. */
+    /** ANSI color code for cyan used for Patient role. */
     public static final String CYAN = "\u001B[36m";  // For Patient
 
     /**
@@ -33,7 +33,7 @@ public class TerminalColors {
     public static String getColorByRole(String role) {
         switch (role) {
             case "Administrator":
-                return YELLOW;
+                return ORANGE;
             case "Pharmacist":
                 return GREEN;
             case "Doctor":

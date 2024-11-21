@@ -11,6 +11,7 @@ import java.util.List;
 
 //import appointmentManager.Appointment;
 import inventory.InventoryItem;
+import leave.Leave;
 import medicalrecord.MedicalRecord;
 import schedule.Schedule;
 import appointment.Appointment;
@@ -23,8 +24,6 @@ import appointment.Appointment;
  * the header is missing, it generates a default header based on the object type.
  */
 public class CSVwrite {
-
-    private static boolean headersWritten = false;
 
     /**
      * Writes a single object to a CSV file. The method checks the type of the object
@@ -76,7 +75,6 @@ public class CSVwrite {
                 // System.out.println("Data written successfully!");
             }
         } catch (IOException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (output != null) {
@@ -133,15 +131,10 @@ public class CSVwrite {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
                 }
                 // handles MedicalRecord
-                /*else if (object instanceof MedicalRecord) {
-                    output.write(((MedicalRecord) object).toCSVRow() + "\n");
-                }*/
-                //updated above
                 else if (object instanceof MedicalRecord) {
                     MedicalRecord record = (MedicalRecord) object;
                     output.write(record.toCSVRow() + "\n"); // Use toCSVRow from MedicalRecord
                 }
-                
                 // handles Schedule
                 else if (object instanceof Schedule) {
                     output.write(((Schedule) object).toCSVRow() + "\n");
@@ -149,6 +142,10 @@ public class CSVwrite {
                 // handles Appointments
                 else if (object instanceof Appointment) {
                     output.write(((Appointment) object).toCSVFormat() + "\n");
+                } 
+                // handles Leave
+                else if (object instanceof Leave){
+                    output.write(((Leave) object).toCSVFormat() + "\n");
                 }
                 // handles user based classes
                 else {

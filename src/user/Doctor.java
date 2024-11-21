@@ -1,11 +1,12 @@
 package user;
 
 import interfaces.DocApptInterface;
+import interfaces.LeaveInterface;
 import interfaces.MedicalRecInterface;
 import interfaces.ScheduleInterface;
 import userInterface.DocApptUI;
 import userInterface.DoctorUI;
-import userInterface.InvenManageUI;
+import userInterface.LeaveUI;
 import userInterface.MedicalRecordUI;
 import userInterface.ScheduleUI;
 
@@ -55,9 +56,10 @@ public class Doctor extends User {
         MedicalRecInterface medicalRecInterface = new MedicalRecordUI();
         ScheduleInterface scheduleInterface = new ScheduleUI();
         DocApptInterface docApptInterface = new DocApptUI(scheduleInterface);
+        LeaveInterface leaveInterface = new LeaveUI();
 
         DoctorUI doctorUI = new DoctorUI(this, medicalRecInterface,
-                scheduleInterface, docApptInterface);
+                scheduleInterface, docApptInterface, leaveInterface);
         doctorUI.displayMenu();
     }
 }

@@ -4,6 +4,7 @@ import java.util.*;
 
 import inventory.InventoryItem;
 import inventory.InventoryManager;
+import main.SystemInitialisation;
 import utility.*;
 
 /**
@@ -17,9 +18,35 @@ import utility.*;
  * </p>
  */
 public class MedicalRecordManager {
+
+    /** A list to store all {@link MedicalRecord} objects. */
     private static List<MedicalRecord> medicalRecords = new ArrayList<>();
-    private static String originalPath = "../Data//Original/MedicalRecord_List.csv";
-    private static String updatedPath = "../Data//Updated/MedicalRecord_List(Updated).csv";
+    
+    /** The file path to the original medical record CSV file. */
+    private static String originalPath;
+    
+    /** The file path to the updated medical record CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving medical record data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("MedicalRecordOriginal");
+        updatedPath = SystemInitialisation.getFilePath("MedicalRecordUpdated");
+    }
 
     /**
      * Loads the medical records from a CSV file. Depending on whether it is the
@@ -31,13 +58,9 @@ public class MedicalRecordManager {
      *                   {@code false} otherwise.
      */
     public static void loadMedicalRecords(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
+
         medicalRecords.clear();
 
         Map<String, Integer> medicalRecordsColumnMapping = new HashMap<>();

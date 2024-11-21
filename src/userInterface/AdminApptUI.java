@@ -10,7 +10,6 @@ import accounts.PatientsAcc;
 import appointment.Appointment;
 import appointment.AppointmentManager;
 import interfaces.AdminApptInterface;
-import interfaces.ApptOutcomeInterface;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 import user.Doctor;

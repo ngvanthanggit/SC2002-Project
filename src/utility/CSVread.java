@@ -19,14 +19,13 @@ import inventory.*;
 import medicalrecord.*;
 import schedule.*;
 import appointment.*;
+import leave.*;
 
 /**
  * The class provides utility methods for reading various types of CSV files
- * and mapping the data into different object types, such as {@link User},
- * {@link Patient},
- * {@link Doctor}, {@link Pharmacist}, {@link Administrator},
- * {@link InventoryItem}, {@link ReplenishRequest},
- * {@link MedicalRecord}, {@link Schedule}, and {@link Appointment}.
+ * and mapping the data into different object types, such as {@link User}, {@link Patient}, 
+ * {@link Doctor}, {@link Pharmacist}, {@link Administrator}, {@link InventoryItem}, {@link ReplenishRequest}, 
+ * {@link MedicalRecord}, {@link Schedule}, {@link Appointment} and {@link Leave}.
  * <p>
  * It dynamically maps CSV columns to object fields using a column mapping
  * provided by the caller,
@@ -81,7 +80,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -182,7 +181,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -232,7 +231,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -309,8 +308,8 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
-
+            reader.readLine();
+    
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
                 // Skip empty lines
@@ -406,7 +405,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -469,7 +468,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -519,5 +518,62 @@ public class CSVread {
             }
         }
         return appointments; // Return the list of Appointment objects
+    }
+
+    /**
+     * Reads leave data from a CSV file and converts it into a list of {@link Leave} objects.
+     * <p>
+     * Parses each row of the CSV based on the provided column mapping, recreating {@link Leave} 
+     * objects with associated staff details.
+     *
+     * @param fileString    The path to the CSV file to read.
+     * @param columnMapping A map specifying the column names and their corresponding indices.
+     * @return A {@link List} of {@link Leave} objects parsed from the CSV file.
+     */
+    public static List<Leave> readLeaveCSV(String fileString, Map<String, Integer> columnMapping) {
+        BufferedReader reader = null;
+        String line = "";
+        List<Leave> leaves = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        try {
+            reader = new BufferedReader(new FileReader(fileString));
+
+            // Read the first line to skip the header
+            reader.readLine();
+
+            // Continuously read the next line
+            while ((line = reader.readLine()) != null) {
+                // Array of Strings, split at commas
+                String[] row = line.split(",");
+
+                // Parse fields from the CSV row based on column mapping
+                String leaveID = row[columnMapping.get("leaveID")].trim();
+                String staffID = row[columnMapping.get("staffID")].trim();
+                LocalDate date = LocalDate.parse(row[columnMapping.get("date")].trim(), formatter);
+                LeaveStatus status = LeaveStatus.valueOf(row[columnMapping.get("status")].trim());
+                String reason = row[columnMapping.get("reason")].trim();
+
+                // Recreate Staff objects using their IDs, only handle doctorIDs for now but expandable
+                Doctor doctor = null;
+                if(staffID.charAt(0) == 'D') {
+                    doctor = (Doctor) DoctorsAcc.findDoctorById(staffID);
+                }
+
+                Leave leave = new Leave(leaveID, doctor, date, status, reason);
+                leaves.add(leave); // add item to the list
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return leaves; // Return the list of Leave object
     }
 }
