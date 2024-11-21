@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import accounts.*;
 import user.*;
+import utility.PasswordResetManager;
+import utility.PasswordResetRequest;
 import utility.TerminalColors;
 
 /**
@@ -110,6 +112,21 @@ public class MainUI {
     public static void logout() {
         System.out.println("Logging out...");
         HMSApp.resetSessionColor(); // Reset terminal color
+    }
+
+    public static void resetPassword(Scanner sc){
+        System.out.println("\n|--- Password Reset Request ---|");
+        System.out.print("Enter your User ID: ");
+        String userId = sc.nextLine().trim();
+        System.out.print("Enter your Name: ");
+        String userName = sc.nextLine().trim();
+
+        PasswordResetRequest request = new PasswordResetRequest(userId, userName);
+        boolean success = PasswordResetManager.addRequest(request);
+        if (success) {
+            System.out.println("Your password reset request has been submitted.");
+        }
+        return;
     }
 
     /**

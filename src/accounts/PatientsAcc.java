@@ -199,7 +199,7 @@ public class PatientsAcc {
                 bloodType = bloodType.substring(0, 1).toUpperCase() + bloodType.substring(1);
                 patientToUpdate.setBloodType(bloodType);
                 System.out.print("Enter your Contact Info @gmail: ");
-                patientToUpdate.setContactInfo(sc.nextLine());
+                patientToUpdate.setEmail(sc.nextLine());
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
                 updatePassword(patientToUpdate.getHospitalID(), password);
                 duplicatePatient(); // rewrite the CSV file with updated version

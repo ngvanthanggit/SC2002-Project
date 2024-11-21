@@ -11,6 +11,7 @@ import java.util.List;
 
 //import appointmentManager.Appointment;
 import inventory.InventoryItem;
+import leave.Leave;
 import medicalrecord.MedicalRecord;
 import schedule.Schedule;
 import appointment.Appointment;
@@ -119,15 +120,10 @@ public class CSVwrite {
                     output.write(((InventoryItem) object).toCSVRow() + "\n");
                 }
                 // handles MedicalRecord
-                /*else if (object instanceof MedicalRecord) {
-                    output.write(((MedicalRecord) object).toCSVRow() + "\n");
-                }*/
-                //updated above
                 else if (object instanceof MedicalRecord) {
                     MedicalRecord record = (MedicalRecord) object;
                     output.write(record.toCSVRow() + "\n"); // Use toCSVRow from MedicalRecord
                 }
-                
                 // handles Schedule
                 else if (object instanceof Schedule) {
                     output.write(((Schedule) object).toCSVRow() + "\n");
@@ -135,6 +131,10 @@ public class CSVwrite {
                 // handles Appointments
                 else if (object instanceof Appointment) {
                     output.write(((Appointment) object).toCSVFormat() + "\n");
+                } 
+                // handles Leave
+                else if (object instanceof Leave){
+                    output.write(((Leave) object).toCSVFormat() + "\n");
                 }
                 // handles user based classes
                 else {

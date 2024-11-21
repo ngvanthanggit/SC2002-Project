@@ -226,4 +226,14 @@ public class ScheduleManager {
         }
         return false;
     }
+
+    public static void removeDaySchedule(LocalDate date, Doctor doctor){
+        schedules.removeIf(schedule -> 
+        schedule.getDoctorID().equalsIgnoreCase(doctor.getHospitalID()) && 
+        schedule.getDate().isEqual(date));
+
+        System.out.println("All availability for " + date + " has been removed for Doctor " + doctor.getHospitalID() + ".");
+        // Save the updated schedule list to the file
+        ScheduleManager.duplicateSchedule();
+    }
 }

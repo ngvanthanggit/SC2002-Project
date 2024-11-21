@@ -1,11 +1,13 @@
 package user;
 import interfaces.AdminApptInterface;
 import interfaces.InvenManageInterface;
+import interfaces.LeaveInterface;
 import interfaces.ReplenishManageInterface;
 import interfaces.StaffManageInterface;
 import userInterface.AdminApptUI;
 import userInterface.AdminUI;
 import userInterface.InvenManageUI;
+import userInterface.LeaveUI;
 import userInterface.ReplenishManageUI;
 import userInterface.StaffManageUI;
 
@@ -55,9 +57,10 @@ public class Administrator extends User  {
         AdminApptInterface adminApptInterface = new AdminApptUI();
         ReplenishManageInterface replenishManageInterface = new ReplenishManageUI();
         InvenManageInterface invenManageInterface = new InvenManageUI(replenishManageInterface);
+        LeaveInterface leaveInterface = new LeaveUI();
         
         AdminUI adminUI = new AdminUI(this, staffManageInterface, adminApptInterface,
-                invenManageInterface, replenishManageInterface);
+                invenManageInterface, replenishManageInterface, leaveInterface);
         adminUI.displayMenu();
     }
 }

@@ -1,0 +1,4 @@
+Leave ID, Staff ID, Date, Status, Reason
+LR001 ,D001 ,2025-05-11 ,REJECTED ,travelling to Japan
+LR002 ,D001 ,2025-01-11 ,PENDING ,sick
+LR003 ,D002 ,2025-02-22 ,REJECTED ,travelling to Korea

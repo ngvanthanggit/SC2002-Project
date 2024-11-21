@@ -41,7 +41,8 @@ public class HMSApp {
             System.out.printf("%s\n", "-".repeat(32));
             System.out.printf(format, "1. Login");
             System.out.printf(format, "2. Create new Patient account");
-            System.out.printf(format, "3. Exit");
+            System.out.printf(format, "3. Reset Password");
+            System.out.printf(format, "4. Exit");
             System.out.printf("%s\n", "-".repeat(32));
             System.out.print("Choice: ");
             try {
@@ -61,13 +62,18 @@ public class HMSApp {
                     MainUI.createPatientAccount(sc);
                     break;
                 case 3:
+                    MainUI.resetPassword(sc);
+                    break;
+                case 4:
                     System.out.println("Exiting App, System Terminating!");
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice != 3);
+        } while (choice != 4);
+
+        sc.close();
     }
 
     /**

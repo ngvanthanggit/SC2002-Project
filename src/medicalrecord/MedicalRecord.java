@@ -126,7 +126,7 @@ public class MedicalRecord {
     public String getRecordDetailsWithPersonalInfo() {
         Patient patient = PatientsAcc.findPatientById(patientID);
         return "Medical Record for " + patient.getName() + " (" + patient.getHospitalID() + "):\n" +
-                "- Contact: " + patient.getContactInfo() + "\n" +
+                "- Contact: " + patient.getEmail() + "\n" +
                 "- Blood Type: " + patient.getBloodType() + "\n" +
                 "- Diagnoses: " + diagnoses + "\n" +
                 "- Prescriptions: " + prescriptions + "\n" +

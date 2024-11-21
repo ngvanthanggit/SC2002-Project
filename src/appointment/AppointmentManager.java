@@ -74,6 +74,10 @@ public class AppointmentManager {
         }
     }
 
+    public static List<Appointment> getAllAppointments(){
+        return appointments;
+    }
+
     /**
      * Retrieves an appointment by its ID.
      * @param appointmentID The ID of the appointment to retrieve.

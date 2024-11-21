@@ -6,6 +6,8 @@ import accounts.PatientsAcc;
 import accounts.PharmacistsAcc;
 import inventory.InventoryManager;
 import inventory.ReplenishManager;
+import leave.Leave;
+import leave.LeaveManager;
 import accounts.AdminsAcc;
 import accounts.DoctorsAcc;
 import medicalrecord.MedicalRecordManager;
@@ -24,6 +26,7 @@ public class SystemInitialisation {
      * It is used to control whether to load original data or updated data.
      */
     private static boolean isFirstRun = true;
+    //might want to pass file names into the admins acc for better management
 
     /**
      * Starts the system initialization process. It loads the necessary data from CSV files, stores it in
@@ -42,6 +45,7 @@ public class SystemInitialisation {
         MedicalRecordManager.loadMedicalRecords(isFirstRun);
         ScheduleManager.loadSchedules(isFirstRun);
         AppointmentManager.loadAppointments(isFirstRun);
+        LeaveManager.loadLeaves(isFirstRun);
 
         // save the original data into a new file to be updated
         AdminsAcc.duplicateAdmin();
@@ -53,6 +57,7 @@ public class SystemInitialisation {
         MedicalRecordManager.duplicateMedicalRecord();
         ScheduleManager.duplicateSchedule();
         AppointmentManager.duplicateAppointments();
+        LeaveManager.duplicateLeave();
 
         // set to false after first load
         isFirstRun = false;

@@ -7,6 +7,7 @@ import accounts.PatientsAcc;
 import interfaces.CommonMenu;
 import interfaces.DocApptInterface;
 import interfaces.DoctorMenu;
+import interfaces.LeaveInterface;
 import interfaces.MedicalRecInterface;
 import interfaces.ScheduleInterface;
 import main.HMSApp;
@@ -18,13 +19,15 @@ public class DoctorUI implements DoctorMenu {
     private final MedicalRecInterface medicalRecInterface;
     private final ScheduleInterface scheduleInterface;
     private final DocApptInterface docApptInterface;
+    private final LeaveInterface leaveInterface;
 
     public DoctorUI(Doctor doctor, MedicalRecInterface medicalRecInterface,
-    ScheduleInterface scheduleInterface, DocApptInterface docApptInterface){
+    ScheduleInterface scheduleInterface, DocApptInterface docApptInterface, LeaveInterface leaveInterface){
         this.doctor = doctor;
         this.medicalRecInterface = medicalRecInterface;
         this.scheduleInterface = scheduleInterface;
         this.docApptInterface = docApptInterface;
+        this.leaveInterface = leaveInterface;
     }
 
     /**
@@ -50,8 +53,9 @@ public class DoctorUI implements DoctorMenu {
             System.out.printf("%s\n", "-".repeat(27));
             System.out.println("1. Medical Record Menu");
             System.out.println("2. Schedule Menu");
-            System.out.println("3. Appointment Menu");
-            System.out.println("4. Logout");
+            System.out.println("3. Appointment Menu"); 
+            System.out.println("4. Manage Leaves");
+            System.out.println("5. Logout");
             System.out.print("Choice: ");
             try {
                 choice = sc.nextInt();
@@ -64,7 +68,7 @@ public class DoctorUI implements DoctorMenu {
 
             switch (choice) {
                 case 1:
-                    medicalRecordMenu(sc, doctor);
+                    medicalRecordMenu(sc);
                     break;
                 case 2:
                     scheduleMenu(sc);
@@ -73,16 +77,19 @@ public class DoctorUI implements DoctorMenu {
                     appointmentMenu(sc);
                     break;
                 case 4:
+                    manageLeave(sc);
+                    break;
+                case 5:
                     logout();
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while (choice!=4);
+        } while (choice!=5);
     }
 
-    public void medicalRecordMenu(Scanner sc, Doctor doctor) {
+    public void medicalRecordMenu(Scanner sc) {
         int choice = -1;
         MedicalRecord record = medicalRecInterface.choosePatient(sc, doctor);
 
@@ -197,6 +204,48 @@ public class DoctorUI implements DoctorMenu {
                     continue;
             }
         } while (choice!=4);
+    }
+
+    //manageLeave menu
+    public void manageLeave(Scanner sc){
+        int choice = -1;
+        do {
+            System.out.println("\n|---- Leave Management ----|");
+            System.out.printf("%s\n", "-".repeat(36));
+            System.out.println("1. Apply Leave");
+            System.out.println("2. Update Leave Requests");
+            System.out.println("3. View Pending Leave Requests");
+            System.out.println("4. View Leave Request Outcome");
+            System.out.println("5. Go Back");
+            System.out.print("Choice: ");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
+
+            switch (choice) {
+                case 1:
+                    leaveInterface.applyLeave(sc, doctor);
+                    break;
+                case 2:
+                    leaveInterface.updateLeave(sc,doctor);
+                    break;
+                case 3:
+                    leaveInterface.displayPendingLeave(sc,doctor);
+                    break;
+                case 4:
+                    leaveInterface.displayLeaveOutcome(sc,doctor);
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        } while (choice!=5);
     }
 
 }

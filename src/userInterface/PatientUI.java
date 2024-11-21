@@ -93,7 +93,7 @@ public class PatientUI implements PatientMenu{
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
-        } while (choice > 0 && choice < 10);
+        } while (choice!=9);
     }
 
     public void updatePersonalInfo(Scanner sc, Patient patient) {

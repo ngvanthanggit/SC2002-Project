@@ -104,7 +104,7 @@ public class AdminsAcc {
      * @param hospitalID The hospital ID of the administrator to find.
      * @return The {@link Administrator} object if found; {@code null} otherwise.
      */
-    private static Administrator findAdminById(String hospitalID) {
+    public static Administrator findAdminById(String hospitalID) {
         for (Administrator admin : admins) {
             if (admin.getHospitalID().equals(hospitalID)) {
                 return admin;

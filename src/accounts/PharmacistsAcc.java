@@ -97,7 +97,7 @@ public class PharmacistsAcc {
      * @param hospitalID The hospital ID of the pharmacist to find.
      * @return The {@link Pharmacist} object if found; {@code null} otherwise.
      */
-    private static Pharmacist findPharmById(String hospitalID) {
+    public static Pharmacist findPharmById(String hospitalID) {
         for (Pharmacist pharmacist : pharmacists) {
             if (pharmacist.getHospitalID().equals(hospitalID)) {
                 return pharmacist;

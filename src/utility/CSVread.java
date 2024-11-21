@@ -19,6 +19,7 @@ import inventory.*;
 import medicalrecord.*;
 import schedule.*;
 import appointment.*;
+import leave.*;
 
 public class CSVread {
 
@@ -234,7 +235,6 @@ public class CSVread {
         return replenishList; // Return the list of ReplenishRequest objects
     }
 
-    //updated above
     public static List<MedicalRecord> readMedicalRecordCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
@@ -313,8 +313,6 @@ public class CSVread {
         return medicalRecords; // Return the list of MedicalRecord objects
     }
     
-
-
     public static List<Schedule> readScheduleCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
@@ -423,5 +421,52 @@ public class CSVread {
             }
         }
         return appointments; // Return the list of Appointment objects
+    }
+
+    public static List<Leave> readLeaveCSV(String fileString, Map<String, Integer> columnMapping) {
+        BufferedReader reader = null;
+        String line = "";
+        List<Leave> leaves = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        try {
+            reader = new BufferedReader(new FileReader(fileString));
+
+            // Read the first line to skip the header
+            String headerLine = reader.readLine();
+
+            // Continuously read the next line
+            while ((line = reader.readLine()) != null) {
+                // Array of Strings, split at commas
+                String[] row = line.split(",");
+
+                // Parse fields from the CSV row based on column mapping
+                String leaveID = row[columnMapping.get("leaveID")].trim();
+                String staffID = row[columnMapping.get("staffID")].trim();
+                LocalDate date = LocalDate.parse(row[columnMapping.get("date")].trim(), formatter);
+                LeaveStatus status = LeaveStatus.valueOf(row[columnMapping.get("status")].trim());
+                String reason = row[columnMapping.get("reason")].trim();
+
+                // Recreate Staff objects using their IDs, only handle doctorIDs for now but expandable
+                Doctor doctor = null;
+                if(staffID.charAt(0) == 'D') {
+                    doctor = (Doctor) DoctorsAcc.findDoctorById(staffID);
+                }
+
+                Leave leave = new Leave(leaveID, doctor, date, status, reason);
+                leaves.add(leave); // add item to the list
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return leaves; // Return the list of Leave object
     }
 }

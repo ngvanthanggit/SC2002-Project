@@ -7,11 +7,15 @@ import interfaces.AdminMenu;
 import interfaces.AdminApptInterface;
 import interfaces.CommonMenu;
 import interfaces.InvenManageInterface;
+import interfaces.LeaveInterface;
 import interfaces.ReplenishManageInterface;
 import interfaces.StaffManageInterface;
 import main.HMSApp;
 import user.Administrator;
 import user.Role;
+import user.User;
+import utility.PasswordResetManager;
+import utility.PasswordResetRequest;
 
 /**
  * The class implements the {@link AdminMenu} interface to provide a UI for administrators. 
@@ -25,18 +29,20 @@ public class AdminUI implements AdminMenu{
     private final AdminApptInterface adminApptInterface; 
     private final InvenManageInterface invenManageInterface;
     private final ReplenishManageInterface replenishManageInterface;
+    private final LeaveInterface leaveInterface;
 
     /**
      * Constructs an {@code AdminUI} with the specified administrator.
      * @param administrator The {@link Administrator} object associated with this UI.
      */
     public AdminUI(Administrator administrator, StaffManageInterface staffManageInterface, AdminApptInterface adminApptInterface,
-                    InvenManageInterface invenManageInterface, ReplenishManageInterface replenishManageInterface){
+                    InvenManageInterface invenManageInterface, ReplenishManageInterface replenishManageInterface, LeaveInterface leaveInterface){
         this.administrator = administrator;
         this.staffManageInterface = staffManageInterface;
         this.adminApptInterface = adminApptInterface;
         this.invenManageInterface = invenManageInterface;
         this.replenishManageInterface = replenishManageInterface;
+        this.leaveInterface = leaveInterface;
     }
 
     /**
@@ -63,7 +69,9 @@ public class AdminUI implements AdminMenu{
             System.out.println("2. Manage Appointment Details");
             System.out.println("3. Manage Medication Inventory");
             System.out.println("4. Manage Replenishment Requests");
-            System.out.println("5. Logout");
+            System.out.println("5. Manage Leave Requests");
+            System.out.println("6. Manage Password Reset Requests");
+            System.out.println("7. Logout");
             System.out.print("Choice: ");   
             try {
                 choice = sc.nextInt();
@@ -88,13 +96,19 @@ public class AdminUI implements AdminMenu{
                     manageReplenishRequest(sc);
                     break;
                 case 5:
+                    manageLeaveRequests(sc);
+                    break;
+                case 6:
+                    managePasswordRequests(sc);
+                    break;
+                case 7:
                     logout(); 
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
                     continue;
             }
-        } while(choice!=5);
+        } while(choice!=7);
     }
 
     /**
@@ -321,4 +335,69 @@ public class AdminUI implements AdminMenu{
             }
         } while(choice!=3);
     }
+
+    public void manageLeaveRequests(Scanner sc){
+        int choice = -1;
+        do {
+            System.out.println("\nLeave Request Menu");
+            System.out.printf("%s\n", "-".repeat(27));
+            System.out.println("1. View Leave Request List");
+            System.out.println("2. Approve/Reject Leave Request");
+            System.out.println("3. Go Back");
+            System.out.print("Choice: ");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
+
+            switch(choice){
+                case 1:
+                    leaveInterface.displayAllLeaveRequests();
+                    break;
+                case 2:
+                    leaveInterface.manageLeaveRequests(sc);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+                    continue;
+            }
+        } while(choice!=3);
+    }
+
+    public void managePasswordRequests(Scanner sc) {
+        int choice = -1;
+    
+        do {
+            System.out.println("\n|--- Manage Password Reset Requests ---|");
+            PasswordResetManager.displayRequests();
+    
+            System.out.println("\nEnter the index of the request to approve (or 0 to exit): ");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine(); // Consume newline
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+                continue;
+            }
+    
+            if (choice == 0) {
+                System.out.println("Exiting request management.");
+                break;
+            }
+    
+            PasswordResetRequest approvedRequest = PasswordResetManager.approveRequest(choice - 1);
+            if (approvedRequest != null) {
+                System.out.println("Approved password reset request for: " + approvedRequest);
+                PasswordResetManager.resetPasswordToDefault(approvedRequest.getUserId());
+            }
+        } while (choice != 0);
+    }
+    
 }

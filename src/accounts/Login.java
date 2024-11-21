@@ -36,14 +36,30 @@ public class Login {
      */
     public User authenticate(Scanner sc) {
 
-        System.out.print("Enter your hospital ID: ");
-        String enteredId = sc.nextLine();
+        System.out.println("Enter your hospitalID for Staff or Email for Patient: ");
+        System.out.print("ID/Email: ");
+        String enteredIdOrEmail = sc.nextLine();
 
         System.out.print("Enter your password: ");
         String enteredPassword = sc.nextLine();
 
         for (User user : users) {
-            if (user.getHospitalID().equals(enteredId) && user.getPassword().equals(enteredPassword)) {
+            // Allow Patients to log in with either hospital ID or email
+            if (user instanceof Patient) {
+                Patient patient = (Patient) user;
+                if ((patient.getHospitalID().equals(enteredIdOrEmail) || patient.getEmail().equalsIgnoreCase(enteredIdOrEmail)) 
+                    && patient.getPassword().equals(enteredPassword)) {
+
+                    System.out.printf("%s\n", "-".repeat(27));
+                    System.out.println("Login successful! Welcome, " + patient.getRole() + " " + patient.getName());
+
+                    // Prompt to change the default password if applicable
+                    checkDefPw(patient, sc);
+                    return patient; // Return the authenticated Patient
+                }
+            } 
+            // Other roles log in with hospital ID
+            else if (user.getHospitalID().equals(enteredIdOrEmail) && user.getPassword().equals(enteredPassword)) {
                 System.out.printf("%s\n", "-".repeat(27));
                 System.out.println("Login successful! Welcome, " + user.getRole() + " " + user.getName());
 
