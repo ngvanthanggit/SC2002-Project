@@ -97,7 +97,7 @@ public class StaffManageUI implements StaffManageInterface{
                     copiedList.sort(Comparator.comparingInt(User::getAge)); //sort by Age
                     break;
                 case 4:
-                    //default order, do nothing
+                    copiedList.sort(Comparator.comparing(User::getHospitalID)); //sort by ID
                     break;
                 case 5:
                     return;

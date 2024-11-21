@@ -149,6 +149,7 @@ public class AdminUI implements AdminMenu{
                     break;
                 case 4:
                     role = Role.Patient;
+                    break;
                 case 5:
                     return;
                 default:
