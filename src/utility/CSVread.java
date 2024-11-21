@@ -27,7 +27,8 @@ import leave.*;
  * {@link Doctor}, {@link Pharmacist}, {@link Administrator}, {@link InventoryItem}, {@link ReplenishRequest}, 
  * {@link MedicalRecord}, {@link Schedule}, {@link Appointment} and {@link Leave}.
  * <p>
- * It dynamically maps CSV columns to object fields using a column mapping provided by the caller,
+ * It dynamically maps CSV columns to object fields using a column mapping
+ * provided by the caller,
  * making it highly flexible for different CSV structures.
  * </p>
  */
@@ -35,11 +36,13 @@ public class CSVread {
 
     /**
      * Extracts common fields for both {@link User} and {@link Patient}.
-     * This method extracts shared properties like hospital ID, name, role, gender, age, and password
+     * This method extracts shared properties like hospital ID, name, role, gender,
+     * age, and password
      * from the CSV row and creates a new {@link User} object.
      *
-     * @param row The row from the CSV file.
-     * @param columnMapping A map that associates column names with their index positions in the CSV.
+     * @param row           The row from the CSV file.
+     * @param columnMapping A map that associates column names with their index
+     *                      positions in the CSV.
      * @return A new {@link User} object populated with the extracted data.
      */
     private static User extractCommonFields(String[] row, Map<String, Integer> columnMapping) {
@@ -53,15 +56,20 @@ public class CSVread {
                 row[columnMapping.get("password")].trim());
     }
 
-   /**
-     * Reads a CSV file and maps each row to a corresponding object based on the provided {@code objectType}.
-     * The method supports reading data for different object types, such as {@code User}, {@code Patient},
+    /**
+     * Reads a CSV file and maps each row to a corresponding object based on the
+     * provided {@code objectType}.
+     * The method supports reading data for different object types, such as
+     * {@code User}, {@code Patient},
      * {@code Doctor}, {@code Pharmacist}, and {@code Administrator}.
      *
-     * @param fileString The path to the CSV file to be read.
-     * @param columnMapping A map that associates CSV column names with their index positions.
-     * @param objectType The type of object to create for each row ("User", "Patient", "Doctor", etc.).
-     * @return A list of objects created from the CSV data, based on the {@code objectType}.
+     * @param fileString    The path to the CSV file to be read.
+     * @param columnMapping A map that associates CSV column names with their index
+     *                      positions.
+     * @param objectType    The type of object to create for each row ("User",
+     *                      "Patient", "Doctor", etc.).
+     * @return A list of objects created from the CSV data, based on the
+     *         {@code objectType}.
      */
     public static List<Object> readCSV(String fileString, Map<String, Integer> columnMapping, String objectType) {
         BufferedReader reader = null;
@@ -154,11 +162,14 @@ public class CSVread {
     }
 
     /**
-     * Reads an inventory CSV file and maps the rows to a list of {@link InventoryItem} objects.
-     * This method expects columns for medicine name, initial stock, and low stock level.
+     * Reads an inventory CSV file and maps the rows to a list of
+     * {@link InventoryItem} objects.
+     * This method expects columns for medicine name, initial stock, and low stock
+     * level.
      *
-     * @param fileString The path to the CSV file.
-     * @param columnMapping A map that associates column names with their index positions in the CSV.
+     * @param fileString    The path to the CSV file.
+     * @param columnMapping A map that associates column names with their index
+     *                      positions in the CSV.
      * @return A list of {@link InventoryItem} objects created from the CSV data.
      */
     public static List<InventoryItem> readItemCSV(String fileString, Map<String, Integer> columnMapping) {
@@ -200,11 +211,14 @@ public class CSVread {
     }
 
     /**
-     * Reads a replenish request CSV file and maps the rows to a list of {@link ReplenishRequest} objects.
-     * It parses fields like request ID, medicine name, quantity, requested by, request date, and status.
+     * Reads a replenish request CSV file and maps the rows to a list of
+     * {@link ReplenishRequest} objects.
+     * It parses fields like request ID, medicine name, quantity, requested by,
+     * request date, and status.
      *
-     * @param fileString The path to the replenish request CSV file.
-     * @param columnMapping A map that associates column names with their index positions in the CSV.
+     * @param fileString    The path to the replenish request CSV file.
+     * @param columnMapping A map that associates column names with their index
+     *                      positions in the CSV.
      * @return A list of {@link ReplenishRequest} objects created from the CSV data.
      */
     public static List<ReplenishRequest> readReplenishCSV(String fileString, Map<String, Integer> columnMapping) {
@@ -275,21 +289,24 @@ public class CSVread {
     }
 
     /**
- * Reads a CSV file containing medical record information and parses it into a list of {@link MedicalRecord} objects.
- * The method uses a column mapping to identify which columns to read for each field.
- * 
- * @param fileString The path to the CSV file to read.
- * @param columnMapping A map that associates column names to their respective indices in the CSV file.
- * @return A list of {@link MedicalRecord} objects containing the parsed data.
- */
+     * Reads a CSV file containing medical record information and parses it into a
+     * list of {@link MedicalRecord} objects.
+     * The method uses a column mapping to identify which columns to read for each
+     * field.
+     * 
+     * @param fileString    The path to the CSV file to read.
+     * @param columnMapping A map that associates column names to their respective
+     *                      indices in the CSV file.
+     * @return A list of {@link MedicalRecord} objects containing the parsed data.
+     */
     public static List<MedicalRecord> readMedicalRecordCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
         List<MedicalRecord> medicalRecords = new ArrayList<>();
-    
+
         try {
             reader = new BufferedReader(new FileReader(fileString));
-    
+
             // Read the first line to skip the header
             reader.readLine();
     
@@ -299,20 +316,29 @@ public class CSVread {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
-    
-                // Array of Strings, split at commas (prescriptions field may use colons internally)
+
+                // Array of Strings, split at commas (prescriptions field may use colons
+                // internally)
                 String[] row = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-    
+
                 // Parse fields from the CSV row based on column mapping
                 String medicalRID = row[columnMapping.get("MedicalR ID")].trim();
                 String doctorID = row[columnMapping.get("Doctor ID")].trim();
                 String patientID = row[columnMapping.get("Patient ID")].trim();
-                List<String> diagnoses = Arrays.asList(row[columnMapping.get("Diagnoses")].split(";"));
+
+                String diagnosesString = row[columnMapping.get("Diagnoses")].replace("\"", "");
+                List<String> diagnoses = Arrays.asList(diagnosesString.split(";"));
+
                 String prescriptionsString = row[columnMapping.get("Prescriptions")].replace("\"", "");
-                List<String> treatmentPlans = Arrays.asList(row[columnMapping.get("Treatment Plan")].split(";"));
+                List<String> prescriptionsList = Arrays.asList(prescriptionsString.split(";"));
+
+                String treatmentPlanString = row[columnMapping.get("Treatment Plan")].replace("\"", "");
+                List<String> treatmentPlans = Arrays.asList(treatmentPlanString.split(";"));
+
                 PrescriptionStatus status = null;
                 try {
-                    status = PrescriptionStatus.valueOf(row[columnMapping.get("Prescription Status")].trim().toUpperCase());
+                    status = PrescriptionStatus
+                            .valueOf(row[columnMapping.get("Prescription Status")].trim().toUpperCase());
                 } catch (IllegalArgumentException e) {
                     System.err.println("Invalid Prescription Status: " + row[columnMapping.get("Prescription Status")]);
                 }
@@ -320,15 +346,14 @@ public class CSVread {
                 // Parse prescriptions into a Map<String, Integer>
                 Map<String, Integer> prescriptions = new HashMap<>();
                 if (!prescriptionsString.isEmpty()) {
-                    String[] prescriptionItems = prescriptionsString.split(";");
-                    for (String item : prescriptionItems) {
+                    for (String item : prescriptionsList) {
                         String[] parts = item.trim().split(": ");
 
                         if (parts.length != 2) {
                             System.err.println("Invalid prescription format: " + item);
                             continue; // Skip invalid entries
                         }
-                        
+
                         if (parts.length == 2) {
                             String medication = parts[0];
                             try {
@@ -340,12 +365,13 @@ public class CSVread {
                         }
                     }
                 }
-    
+
                 // Create a new MedicalRecord object
-                MedicalRecord record = new MedicalRecord(medicalRID, doctorID, patientID, diagnoses, prescriptions, treatmentPlans, status);
+                MedicalRecord record = new MedicalRecord(medicalRID, doctorID, patientID, diagnoses, prescriptions,
+                        treatmentPlans, status);
                 medicalRecords.add(record);
             }
-    
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -359,15 +385,16 @@ public class CSVread {
         }
         return medicalRecords; // Return the list of MedicalRecord objects
     }
-    
-
 
     /**
-     * Reads a CSV file containing schedule information and parses it into a list of {@link Schedule} objects.
-     * The method uses a column mapping to identify which columns to read for each field.
+     * Reads a CSV file containing schedule information and parses it into a list of
+     * {@link Schedule} objects.
+     * The method uses a column mapping to identify which columns to read for each
+     * field.
      * 
-     * @param fileString The path to the CSV file to read.
-     * @param columnMapping A map that associates column names to their respective indices in the CSV file.
+     * @param fileString    The path to the CSV file to read.
+     * @param columnMapping A map that associates column names to their respective
+     *                      indices in the CSV file.
      * @return A list of {@link Schedule} objects containing the parsed data.
      */
     public static List<Schedule> readScheduleCSV(String fileString, Map<String, Integer> columnMapping) {

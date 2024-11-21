@@ -11,9 +11,12 @@ import utility.*;
 import user.Doctor;
 
 /**
- * The ScheduleManager class manages all the operations related to doctor schedules.
- * It handles loading schedules from a CSV file, checking for conflicts, adding, removing, 
- * and displaying schedules, as well as validating the schedules and their time slots.
+ * The ScheduleManager class manages all the operations related to doctor
+ * schedules.
+ * It handles loading schedules from a CSV file, checking for conflicts, adding,
+ * removing,
+ * and displaying schedules, as well as validating the schedules and their time
+ * slots.
  */
 public class ScheduleManager {
 
@@ -55,9 +58,11 @@ public class ScheduleManager {
     }
 
     /**
-     * Loads the schedules from the CSV file (original or updated based on the first run).
+     * Loads the schedules from the CSV file (original or updated based on the first
+     * run).
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadSchedules(boolean isFirstRun) {
@@ -130,8 +135,8 @@ public class ScheduleManager {
      * Checks if a specific doctor is available at a given date and time.
      * 
      * @param doctorID The ID of the doctor
-     * @param date The date for the check
-     * @param time The time for the check
+     * @param date     The date for the check
+     * @param time     The time for the check
      * @return {@code true} if the doctor is available, {@code false} otherwise
      */
     public static boolean isDoctorAvailable(String doctorID, LocalDate date, LocalTime time) {
@@ -156,7 +161,8 @@ public class ScheduleManager {
     }
 
     /**
-     * Adds a new schedule to the system and duplicates the schedule list in the updated CSV file.
+     * Adds a new schedule to the system and duplicates the schedule list in the
+     * updated CSV file.
      * 
      * @param schedule The new schedule to add
      */
@@ -167,10 +173,23 @@ public class ScheduleManager {
     }
 
     /**
-     * Checks if there is a duplicate schedule (same doctor, same date, and same time).
+     * Removes a schedule from the system and duplicates the schedule list in the
+     * updated CSV file.
      * 
-     * @param date The date of the proposed schedule
-     * @param time The time of the proposed schedule
+     * @param schedule The schedule to remove
+     */
+    public static void removeSchedule(Schedule schedule) {
+        removeInvalidSchedules();
+        schedules.remove(schedule);
+        duplicateSchedule();
+    }
+
+    /**
+     * Checks if there is a duplicate schedule (same doctor, same date, and same
+     * time).
+     * 
+     * @param date   The date of the proposed schedule
+     * @param time   The time of the proposed schedule
      * @param doctor The doctor for whom the schedule is being checked
      * @return {@code true} if a conflict exists, {@code false} otherwise
      */
@@ -189,12 +208,14 @@ public class ScheduleManager {
     }
 
     /**
-     * Checks if there is a conflict with the time slots (ensures there is a 1-hour interval between slots).
+     * Checks if there is a conflict with the time slots (ensures there is a 1-hour
+     * interval between slots).
      * 
-     * @param date The date of the proposed schedule
-     * @param time The time of the proposed schedule
+     * @param date   The date of the proposed schedule
+     * @param time   The time of the proposed schedule
      * @param doctor The doctor for whom the schedule is being checked
-     * @return {@code true} if the proposed schedule conflicts with an existing one, {@code false} otherwise
+     * @return {@code true} if the proposed schedule conflicts with an existing one,
+     *         {@code false} otherwise
      */
     public static boolean checkInterval(LocalDate date, LocalTime time, Doctor doctor) {
         for (Schedule schedule : schedules) {
@@ -214,12 +235,14 @@ public class ScheduleManager {
     }
 
     /**
-     * Validates a proposed schedule by checking for any duplicate schedules and interval conflicts.
+     * Validates a proposed schedule by checking for any duplicate schedules and
+     * interval conflicts.
      * 
-     * @param date The date of the proposed schedule
-     * @param time The time of the proposed schedule
+     * @param date   The date of the proposed schedule
+     * @param time   The time of the proposed schedule
      * @param doctor The doctor for whom the schedule is being checked
-     * @return {@code true} if the schedule is valid (no conflicts), {@code false} otherwise
+     * @return {@code true} if the schedule is valid (no conflicts), {@code false}
+     *         otherwise
      */
     public static boolean checkValidSchedule(LocalDate date, LocalTime time, Doctor doctor) {
         boolean isDuplicate = checkDuplicateSchedule(date, time, doctor);
@@ -232,7 +255,8 @@ public class ScheduleManager {
     }
 
     /**
-     * Validates if the proposed time is in the future (i.e., the time is not in the past).
+     * Validates if the proposed time is in the future (i.e., the time is not in the
+     * past).
      * 
      * @param date The date of the proposed schedule
      * @param time The time of the proposed schedule

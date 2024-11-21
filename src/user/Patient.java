@@ -47,6 +47,7 @@ public class Patient extends User {
 
     /**
      * Returns the date of birth of the patient
+     * 
      * @return the date of birth
      */
     public String getDateOB() {
@@ -55,6 +56,7 @@ public class Patient extends User {
 
     /**
      * Returns the blood type of the patient
+     * 
      * @return the blood type
      */
     public String getBloodType() {
@@ -63,6 +65,7 @@ public class Patient extends User {
 
     /**
      * Returns the contact information of the patient
+     * 
      * @return the contact information
      */
     public String getEmail() {
@@ -73,6 +76,7 @@ public class Patient extends User {
 
     /**
      * Updates date of birth of the patient
+     * 
      * @param dateOB
      */
     public void setDateOB(String dateOB) {
@@ -81,6 +85,7 @@ public class Patient extends User {
 
     /**
      * Updates blood type of the patient
+     * 
      * @param bloodType
      */
     public void setBloodType(String bloodType) {
@@ -89,6 +94,7 @@ public class Patient extends User {
 
     /**
      * Updates contact information of the patient
+     * 
      * @param contactInfo
      */
     public void setEmail(String contactInfo) {

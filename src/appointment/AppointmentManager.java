@@ -15,8 +15,11 @@ import main.SystemInitialisation;
 /**
  * This class is responsible for managing appointments.
  * <p>
- * This includes loading data from CSV files, displaying, adding, updating, and removing appointments, 
- * as well as managing appointment statuses and linking appointments with doctors and patients.. The class interacts with utility classes like {@code CSVread}, 
+ * This includes loading data from CSV files, displaying, adding, updating, and
+ * removing appointments,
+ * as well as managing appointment statuses and linking appointments with
+ * doctors and patients.. The class interacts with utility classes like
+ * {@code CSVread},
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class AppointmentManager {
@@ -52,10 +55,12 @@ public class AppointmentManager {
     /**
      * Loads appointments from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original file path and clears the updated file.
+     * If it is the first run, it loads from the original file path and clears the
+     * updated file.
      * Otherwise, it loads from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadAppointments(boolean isFirstRun) {
@@ -96,6 +101,7 @@ public class AppointmentManager {
 
     /**
      * Retrieves an appointment by its ID.
+     * 
      * @param appointmentID The ID of the appointment to retrieve.
      * @return The {@link Appointment} object, or {@code null} if not found.
      */
@@ -120,7 +126,10 @@ public class AppointmentManager {
         }
     }
 
-    /** Duplicates the current appointments list to the updated appointments CSV file. */
+    /**
+     * Duplicates the current appointments list to the updated appointments CSV
+     * file.
+     */
     public static void duplicateAppointments() {
         CSVwrite.writeCSVList(updatedPath, appointments);
     }
@@ -128,8 +137,10 @@ public class AppointmentManager {
     /**
      * Retrieves a list of appointments for a given patient.
      * 
-     * @param patientID The hospital ID of the patient whose appointments are to be retrieved.
-     * @return A list of {@link Appointment} objects associated with the given patient.
+     * @param patientID The hospital ID of the patient whose appointments are to be
+     *                  retrieved.
+     * @return A list of {@link Appointment} objects associated with the given
+     *         patient.
      */
     public static List<Appointment> getAppointmentsByPatient(String patientID) {
         List<Appointment> patientAppts = new ArrayList<>();
@@ -144,9 +155,11 @@ public class AppointmentManager {
     /**
      * Retrieves a list of appointments for a given patient with a specified status.
      * 
-     * @param patientID The hospital ID of the patient whose appointments are to be retrieved.
-     * @param status The status of the appointments to retrieve.
-     * @return A list of {@link Appointment} objects matching the patient and status.
+     * @param patientID The hospital ID of the patient whose appointments are to be
+     *                  retrieved.
+     * @param status    The status of the appointments to retrieve.
+     * @return A list of {@link Appointment} objects matching the patient and
+     *         status.
      */
 
     public static List<Appointment> getAppointmentsByPatient(String patientID, ApptStatus status) {
@@ -162,8 +175,10 @@ public class AppointmentManager {
     /**
      * Retrieves a list of appointments for a given doctor.
      * 
-     * @param doctorID The hospital ID of the doctor whose appointments are to be retrieved.
-     * @return A list of {@link Appointment} objects associated with the given doctor.
+     * @param doctorID The hospital ID of the doctor whose appointments are to be
+     *                 retrieved.
+     * @return A list of {@link Appointment} objects associated with the given
+     *         doctor.
      */
     public static List<Appointment> getAppointmentsByDoctor(String doctorID) {
         List<Appointment> doctorAppts = new ArrayList<>();
@@ -178,8 +193,9 @@ public class AppointmentManager {
     /**
      * Retrieves a list of appointments for a given doctor with a specified status.
      * 
-     * @param doctorID The hospital ID of the doctor whose appointments are to be retrieved.
-     * @param status The status of the appointments to retrieve.
+     * @param doctorID The hospital ID of the doctor whose appointments are to be
+     *                 retrieved.
+     * @param status   The status of the appointments to retrieve.
      * @return A list of {@link Appointment} objects matching the doctor and status.
      */
     public static List<Appointment> getAppointmentsByDoctor(String doctorID, ApptStatus status) {
@@ -203,7 +219,8 @@ public class AppointmentManager {
 
     /**
      * Removes an appointment from the appointments list.
-     * If the appointment is scheduled, the doctor's time slot is returned to their schedule.
+     * If the appointment is scheduled, the doctor's time slot is returned to their
+     * schedule.
      * 
      * @param appt The {@link Appointment} object to be removed.
      */
@@ -224,12 +241,13 @@ public class AppointmentManager {
     }
 
     /**
-     * Requests an appointment by creating a new appointment object with a pending status.
+     * Requests an appointment by creating a new appointment object with a pending
+     * status.
      * 
-     * @param doctorID The hospital ID of the doctor for the appointment.
+     * @param doctorID  The hospital ID of the doctor for the appointment.
      * @param patientID The hospital ID of the patient requesting the appointment.
-     * @param date The date for the appointment.
-     * @param time The time for the appointment.
+     * @param date      The date for the appointment.
+     * @param time      The time for the appointment.
      */
     public static void requestAppointment(String doctorID, String patientID, LocalDate date, LocalTime time) {
         String appointmentID = IDGenerator.generateID("AP", appointments, Appointment::getAppointmentID, 3);
@@ -239,6 +257,44 @@ public class AppointmentManager {
         Appointment appt = new Appointment(doctor, patient, date, time, appointmentID, ApptStatus.PENDING);
         addAppointment(appt);
         duplicateAppointments();
+    }
+
+    /**
+     * Schedules an appointment by updating the appointment status to scheduled.
+     * 
+     * @param appointment The {@link Appointment} object to be scheduled.
+     */
+    public static void scheduleAppointment(String doctorID, String patientID, LocalDate date, LocalTime time) {
+        String appointmentID = IDGenerator.generateID("AP", appointments, Appointment::getAppointmentID, 3);
+        Doctor doctor = DoctorsAcc.findDoctorById(doctorID);
+        Patient patient = (Patient) PatientsAcc.findPatientById(patientID);
+
+        Appointment appt = new Appointment(doctor, patient, date, time, appointmentID, ApptStatus.SCHEDULED);
+        addAppointment(appt);
+
+        // remove the time slot from the doctor's available time slots
+        scheduleInterface.removeSchedule(date, time, doctor);
+
+        duplicateAppointments();
+    }
+
+    /**
+     * Reschedules an appointment by updating the appointment date and time.
+     * 
+     * @param appointment The {@link Appointment} object to be rescheduled.
+     * @param newDate     The new date for the appointment.
+     * @param newTime     The new time for the appointment.
+     */
+    public static void cancelAppointment(Appointment appointment) {
+        if (appointment.getStatus() == ApptStatus.SCHEDULED) {
+            // add the time slot back to the doctor's available time slots
+            Doctor doctor = DoctorsAcc.findDoctorById(appointment.getDoctor().getHospitalID());
+            scheduleInterface.addSchedule(appointment.getDate(), appointment.getTime(), doctor);
+        }
+        appointment.cancelAppointment();
+        // save to file
+        duplicateAppointments();
+        System.out.println("Appointment Cancelled Successfully.");
     }
 
     /**

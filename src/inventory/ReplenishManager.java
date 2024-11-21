@@ -7,7 +7,8 @@ import main.SystemInitialisation;
 import utility.*;
 
 /**
- * Manages replenish requests for inventory items, including loading requests, displaying
+ * Manages replenish requests for inventory items, including loading requests,
+ * displaying
  * the replenish list, and processing new, approved, or rejected requests.
  */
 public class ReplenishManager {
@@ -44,10 +45,12 @@ public class ReplenishManager {
     /**
      * Loads the replenish requests from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original path and clears the updated file.
+     * If it is the first run, it loads from the original path and clears the
+     * updated file.
      * If not, it loads from the updated path.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadReplenish(boolean isFirstRun) {
@@ -84,7 +87,7 @@ public class ReplenishManager {
      * }
      */
 
-     /**
+    /**
      * Returns the list of all replenish requests.
      * 
      * @return A list of replenish requests
@@ -117,7 +120,7 @@ public class ReplenishManager {
      * Generates and adds a new replenish request for an item.
      * The request is then written to the CSV file.
      * 
-     * @param itemName The name of the item to replenish
+     * @param itemName          The name of the item to replenish
      * @param replenishQuantity The quantity of the item to replenish
      */
     public static void generateReplenish(String itemName, int replenishQuantity) {
@@ -145,9 +148,9 @@ public class ReplenishManager {
      * @param requestID The ID of the request to find
      * @return The {@link ReplenishRequest} object, or {@code null} if not found
      */
-    public static ReplenishRequest findReplenishRequest(String requestID){
-        for (ReplenishRequest request : replenishList){
-            if (request.getRequestID().equals(requestID)){
+    public static ReplenishRequest findReplenishRequest(String requestID) {
+        for (ReplenishRequest request : replenishList) {
+            if (request.getRequestID().equals(requestID)) {
                 return request;
             }
         }
@@ -155,26 +158,28 @@ public class ReplenishManager {
     }
 
     /**
-     * Manages a replenish request by allowing an administrator to approve or reject it.
+     * Manages a replenish request by allowing an administrator to approve or reject
+     * it.
      * 
      * @param requestID The ID of the request to manage
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc        A {@link Scanner} object for user input.
      */
-    public static void manageReplenish(String requestID, Scanner sc){
-        ReplenishRequest request = findReplenishRequest(requestID); //returns request object
+    public static void manageReplenish(String requestID, Scanner sc) {
+        ReplenishRequest request = findReplenishRequest(requestID); // returns request object
 
-        if(request!=null){
+        if (request != null) {
             System.out.println("Do you want to approve or reject request " + requestID + "?");
             System.out.print("Choice Y/N: ");
             char choice = Character.toUpperCase(sc.next().charAt(0));
-            switch (choice){
+            switch (choice) {
                 case 'Y':
                     approveReplenish(request);
                     break;
                 case 'N':
                     rejectReplenish(request);
                     break;
-                default: System.out.println("Invalid choice!");
+                default:
+                    System.out.println("Invalid choice!");
             }
         } else {
             System.out.println("Replenish Request " + requestID + " not found.");
@@ -183,41 +188,46 @@ public class ReplenishManager {
 
     /**
      * Approves a replenish request and updates the inventory stock.
-     * The request's status is set to APPROVED and the approval date is set to the current date.
+     * The request's status is set to APPROVED and the approval date is set to the
+     * current date.
      * 
      * @param request The {@link ReplenishRequest} to approve
      */
     public static void approveReplenish(ReplenishRequest request) {
-        if(request.getRequestStatus() == RequestStatus.PENDING){
+        if (request.getRequestStatus() == RequestStatus.PENDING) {
             request.setRequestStatus(RequestStatus.APPROVED);
-            request.setApprovalDate(LocalDate.now()); //set approvalDate to now
-            
-            //update inventory stock level
+            request.setApprovalDate(LocalDate.now()); // set approvalDate to now
+
+            // update inventory stock level
             InventoryItem item = InventoryManager.findItemByName(request.getItemName());
             int updateQuantity = item.getQuantity() + request.getReplenishQuantity();
-            
-            //change this to use add/update method inventormyManager later
+
+            // change this to use add/update method inventormyManager later
             InventoryManager.updateItemStockHelper(request.getItemName(), updateQuantity);
-            duplicateReplenish(); 
+            duplicateReplenish();
             System.out.println("Replenish request for " + request.getItemName() + " approved.");
         } else {
-            System.out.println("You can't approve " + request.getRequestID() + ". It has already been " + request.getRequestStatus());
+            System.out.println("You can't approve " + request.getRequestID() + ". It has already been "
+                    + request.getRequestStatus());
         }
-        
+
     }
 
     /**
      * Rejects a replenish request.
-     * The request's status is set to REJECTED and the list is updated in the CSV file.
+     * The request's status is set to REJECTED and the list is updated in the CSV
+     * file.
+     * 
      * @param request The {@link ReplenishRequest} to reject
      */
     public static void rejectReplenish(ReplenishRequest request) {
-        if(request.getRequestStatus() == RequestStatus.PENDING){
+        if (request.getRequestStatus() == RequestStatus.PENDING) {
             request.setRequestStatus(RequestStatus.REJECTED);
-            duplicateReplenish(); //update CSV for rejection
+            duplicateReplenish(); // update CSV for rejection
             System.out.println("Replenish request for " + request.getItemName() + " rejected.");
         } else {
-            System.out.println("You can't reject " + request.getRequestID() + ". It has already been " + request.getRequestStatus());
+            System.out.println("You can't reject " + request.getRequestID() + ". It has already been "
+                    + request.getRequestStatus());
         }
     }
 }

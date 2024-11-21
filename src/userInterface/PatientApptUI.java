@@ -20,19 +20,23 @@ import user.Doctor;
 import user.Patient;
 
 /**
- * The class implements the {@link PatientApptInterface} to provide a UI for managing patient appointments. 
- * It allows a patient to view available doctors and time slots, schedule, reschedule, 
+ * The class implements the {@link PatientApptInterface} to provide a UI for
+ * managing patient appointments.
+ * It allows a patient to view available doctors and time slots, schedule,
+ * reschedule,
  * cancel appointments, and view scheduled or past appointment outcomes.
  */
-public class PatientApptUI implements PatientApptInterface{
+public class PatientApptUI implements PatientApptInterface {
 
     /**
      * Default constructor for PatientApptUI.
      */
-    public PatientApptUI(){}
+    public PatientApptUI() {
+    }
 
     /**
-     * Displays the available doctors and prompts the user to choose a doctor to view available appointment slots.
+     * Displays the available doctors and prompts the user to choose a doctor to
+     * view available appointment slots.
      * 
      * @param sc A {@link Scanner} object for user input.
      */
@@ -48,7 +52,7 @@ public class PatientApptUI implements PatientApptInterface{
      * 
      * @param sc A {@link Scanner} object for user input.
      */
-    public void viewAvailableDoctors(Scanner sc){
+    public void viewAvailableDoctors(Scanner sc) {
         List<User> doctors = DoctorsAcc.getDoctors();
         System.out.println("\n|-- Viewing Available Doctors --|");
         System.out.println("The Available Doctor IDs are: ");
@@ -75,10 +79,11 @@ public class PatientApptUI implements PatientApptInterface{
     }
 
     /**
-     * Allows the patient to schedule an appointment with a doctor by choosing a doctor, 
+     * Allows the patient to schedule an appointment with a doctor by choosing a
+     * doctor,
      * selecting a time slot, and confirming the appointment.
      * 
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc      A {@link Scanner} object for user input.
      * @param patient The patient scheduling the appointment.
      */
     public void scheduleAppointment(Scanner sc, Patient patient) {
@@ -88,8 +93,8 @@ public class PatientApptUI implements PatientApptInterface{
         String doctorID = sc.nextLine();
 
         Doctor doctor = DoctorsAcc.findDoctorById(doctorID);
-        //view when a doctor is found
-        if(doctor!=null){
+        // view when a doctor is found
+        if (doctor != null) {
             // display the available time slots for the doctor
             viewDoctorTimeSlots(doctorID);
             // select an available time slot
@@ -103,12 +108,13 @@ public class PatientApptUI implements PatientApptInterface{
     /**
      * Prompts the user to select an available time slot for their appointment.
      * It ensures the date and time are valid and checks the doctor's availability.
-     * Breaks if wrong format is entered for date and time. 
+     * Breaks if wrong format is entered for date and time.
      * 
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc       A {@link Scanner} object for user input.
      * @param doctorID The ID of the doctor being scheduled with.
-     * @param patient The patient who is scheduling the appointment.
-     * @return {@code True} if the appointment was successfully scheduled, otherwise {@code false}.
+     * @param patient  The patient who is scheduling the appointment.
+     * @return {@code True} if the appointment was successfully scheduled, otherwise
+     *         {@code false}.
      */
     public boolean selectTimeSlot(Scanner sc, String doctorID, Patient patient) {
         LocalDate date = null;
@@ -131,7 +137,7 @@ public class PatientApptUI implements PatientApptInterface{
                 continue; // Restart the loop to prompt the user again
             }
 
-            //check if the doctor is available at entered date and time
+            // check if the doctor is available at entered date and time
             if (!ScheduleManager.isDoctorAvailable(doctorID, date, time)) {
                 System.out.println("\nDoctor is not available at the specified time.");
                 System.out.println("Do you want to try again?");
@@ -142,7 +148,7 @@ public class PatientApptUI implements PatientApptInterface{
                 try {
                     choice = sc.nextInt();
                     sc.nextLine();
-                } catch (InputMismatchException e){
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid input type. Please enter an Integer.");
                     sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                     continue; // Restart the loop to prompt the user again
@@ -158,7 +164,7 @@ public class PatientApptUI implements PatientApptInterface{
         }
 
         // Schedule an appointment at the specified date and time
-        AppointmentManager.requestAppointment(doctorID, patient.getHospitalID(), date, time);
+        AppointmentManager.scheduleAppointment(doctorID, patient.getHospitalID(), date, time);
         System.out.println("Appointment Scheduled Successfully.");
 
         return true;
@@ -167,7 +173,7 @@ public class PatientApptUI implements PatientApptInterface{
     /**
      * Allows the patient to reschedule a previously scheduled appointment.
      * 
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc      A {@link Scanner} object for user input.
      * @param patient The patient who wants to reschedule an appointment.
      */
     public void rescheduleAppointment(Scanner sc, Patient patient) {
@@ -187,16 +193,16 @@ public class PatientApptUI implements PatientApptInterface{
                 System.out.println("Appointment not found. Do you want to try again?");
                 System.out.println("1. Yes");
                 System.out.println("2. No");
-                int choice =-1;
+                int choice = -1;
                 try {
                     choice = sc.nextInt();
                     sc.nextLine();
-                } catch (InputMismatchException e){
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid input type. Please enter an Integer.");
                     sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                     continue; // Restart the loop to prompt the user again
                 }
-                
+
                 if (choice != 1) {
                     return;
                 } else {
@@ -223,7 +229,7 @@ public class PatientApptUI implements PatientApptInterface{
     /**
      * Allows the patient to cancel a previously scheduled appointment.
      * 
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc      A {@link Scanner} object for user input.
      * @param patient The patient who wants to cancel an appointment.
      */
     public void cancelAppointment(Scanner sc, Patient patient) {
@@ -242,16 +248,16 @@ public class PatientApptUI implements PatientApptInterface{
                 System.out.println("Appointment not found. Do you want to try again?");
                 System.out.println("1. Yes");
                 System.out.println("2. No");
-                int choice=-1;
+                int choice = -1;
                 try {
                     choice = sc.nextInt();
                     sc.nextLine();
-                } catch (InputMismatchException e){
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid input type. Please enter an Integer.");
                     sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                     continue; // Restart the loop to prompt the user again
                 }
-                
+
                 if (choice != 1) {
                     return;
                 } else {
@@ -262,7 +268,7 @@ public class PatientApptUI implements PatientApptInterface{
         }
 
         // cancel the appointment
-        AppointmentManager.removeAppointment(appt);
+        AppointmentManager.cancelAppointment(appt);
     }
 
     /**

@@ -10,15 +10,18 @@ import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 
 /**
- * The class implements implements {@link MedicalRecInterface} to provide a UI for managing medical records. 
- * It allows a doctor to view, update, and manage patient medical records through various interactions.
+ * The class implements implements {@link MedicalRecInterface} to provide a UI
+ * for managing medical records.
+ * It allows a doctor to view, update, and manage patient medical records
+ * through various interactions.
  */
 public class MedicalRecordUI implements MedicalRecInterface {
-    
+
     /**
      * Default constructor for MedicalRecordUI.
      */
-    public MedicalRecordUI(){}
+    public MedicalRecordUI() {
+    }
 
     /**
      * Displays the patient's medical records.
@@ -41,21 +44,21 @@ public class MedicalRecordUI implements MedicalRecInterface {
     /**
      * Allows the doctor to choose a patient's medical record.
      * 
-     * @param sc A {@link Scanner} object for user input.
+     * @param sc     A {@link Scanner} object for user input.
      * @param doctor The doctor attempting to access the medical record.
-     * @return The medical record of the patient, or null if no record is found.
+     * @return A list of medical records for the selected patient.
      */
-    public MedicalRecord choosePatient(Scanner sc, Doctor doctor){
+    public List<MedicalRecord> choosePatient(Scanner sc, Doctor doctor) {
         System.out.println("Enter Patient ID of the Medical Records you would like manage");
         System.out.print("Enter Patient ID: ");
         String patientID = sc.nextLine();
-        MedicalRecord record = MedicalRecordManager.getMedicalRecord(doctor.getHospitalID(), patientID);
-        
-        if (record == null) {
+        List<MedicalRecord> records = MedicalRecordManager.getMedicalRecords(doctor.getHospitalID(), patientID);
+
+        if (records == null) {
             System.out.println("No medical record found for this patient.");
             return null;
         } else {
-            return record;
+            return records;
         }
     }
 
@@ -72,17 +75,46 @@ public class MedicalRecordUI implements MedicalRecInterface {
         System.out.println(record.getRecordDetails());
     }
 
-
     /**
-     * Allows the doctor to update a patient's medical record with diagnoses, prescriptions, or treatment plans.
+     * Allows the doctor to update a patient's medical record with diagnoses,
+     * prescriptions, or treatment plans.
      * 
-     * @param sc A {@link Scanner} object for user input.
-     * @param record The medical record of the patient to update.
+     * @param sc      A {@link Scanner} object for user input.
+     * @param records The list of medical records to update.
      */
-    public void updatePatientRecords(Scanner sc, MedicalRecord record) {
-        if (record == null) {
+    public void updatePatientRecords(Scanner sc, List<MedicalRecord> records) {
+        if (records == null) {
             System.out.println("No medical record found for this patient.");
             return;
+        }
+
+        MedicalRecord record = null;
+
+        while (true) {
+            // Enter the recordID to update
+            System.out.println("Enter the Medical Record ID you would like to update: ");
+            String recordID = sc.nextLine();
+            record = MedicalRecordManager.findMedicalRecordbyID(recordID);
+            if (record == null) {
+                System.out.println("No medical record found with the ID.");
+                System.out.println("Would you like to try again?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                System.out.print("Choice: ");
+                int choice;
+                try {
+                    choice = Integer.parseInt(sc.nextLine().trim()); // Use nextLine and parse input
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid choice. Please enter a number.");
+                    continue;
+                }
+
+                if (choice == 2) {
+                    return;
+                }
+                continue;
+            }
+            break;
         }
 
         boolean updated = false;
@@ -125,7 +157,7 @@ public class MedicalRecordUI implements MedicalRecInterface {
             switch (choice) {
                 case 1:
                     if (choice2 == 1) {
-                        System.out.println("Enter new diagnoses: ");
+                        System.out.println("Enter new diagnoses (separated by ';'): ");
                         String newDiagnose = sc.nextLine();
                         record.addDiagnose(newDiagnose);
                     } else if (choice2 == 2) {
@@ -138,7 +170,7 @@ public class MedicalRecordUI implements MedicalRecInterface {
                         System.out.println("Enter new prescription in the format (Medication: Quantity) ");
                         System.out.print("Enter prescription: ");
                         String newPrescription = sc.nextLine().trim();
-                        
+
                         try {
                             // Add the prescription, validation happens inside addPrescription
                             record.addPrescription(newPrescription);
@@ -153,7 +185,7 @@ public class MedicalRecordUI implements MedicalRecInterface {
                     break;
                 case 3:
                     if (choice2 == 1) {
-                        System.out.println("Enter new treatment plan: ");
+                        System.out.println("Enter new treatment plan (separated by ';'): ");
                         sc.nextLine();
                         String newTreatmentPlan = sc.nextLine();
                         record.addTreatmentPlan(newTreatmentPlan);

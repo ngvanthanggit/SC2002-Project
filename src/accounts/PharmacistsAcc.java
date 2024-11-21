@@ -16,8 +16,10 @@ import user.Role;
 /**
  * This class is responsible for managing pharmacist accounts.
  * <p>
- * This includes loading data from CSV files, displaying, updating, finding, and removing pharmacists, 
- * as well as managing password updates. The class interacts with utility classes like {@code CSVread}, 
+ * This includes loading data from CSV files, displaying, updating, finding, and
+ * removing pharmacists,
+ * as well as managing password updates. The class interacts with utility
+ * classes like {@code CSVread},
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class PharmacistsAcc {
@@ -51,10 +53,12 @@ public class PharmacistsAcc {
     /**
      * Loads pharmacist accounts from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original file path and clears the updated file.
+     * If it is the first run, it loads from the original file path and clears the
+     * updated file.
      * Otherwise, it loads from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadPharmacists(boolean isFirstRun) {
@@ -90,6 +94,7 @@ public class PharmacistsAcc {
 
     /**
      * Returns a copy of the list of all pharmacists.
+     * 
      * @return A list of {@link User} objects representing pharmacists.
      */
     public static List<User> getPharmacists() {
@@ -111,6 +116,7 @@ public class PharmacistsAcc {
 
     /**
      * Finds a pharmacist by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the pharmacist to find.
      * @return The {@link Pharmacist} object if found; {@code null} otherwise.
      */
@@ -123,11 +129,13 @@ public class PharmacistsAcc {
         return null;
     }
 
-    /** Adds a new pharmacist to the list and saves the updated list to the CSV file. */
+    /**
+     * Adds a new pharmacist to the list and saves the updated list to the CSV file.
+     */
     public static void addPharmacist(Scanner sc) {
         Pharmacist newCreatedUser = NewAccount.createNewAccount(sc, pharmacists, Role.Pharmacist);
 
-        if(newCreatedUser!=null){
+        if (newCreatedUser != null) {
             pharmacists.add(newCreatedUser);
             CSVwrite.writeCSV(updatedPath, newCreatedUser);
             System.out.println("Pharmacist " + newCreatedUser.getName() + " created!");
@@ -140,6 +148,7 @@ public class PharmacistsAcc {
      * Updates a pharmacist's details based on their hospital ID.
      * <p>
      * Prompts the user to enter updated details for the pharmacist.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void updatePharmacist(Scanner sc) {
@@ -148,7 +157,7 @@ public class PharmacistsAcc {
         String hospitalID = sc.nextLine();
         Pharmacist pharmToUpdate = findPharmById(hospitalID);
 
-        if(pharmToUpdate != null){
+        if (pharmToUpdate != null) {
             System.out.print("Enter your Name: ");
             String name = sc.nextLine();
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -164,7 +173,7 @@ public class PharmacistsAcc {
             try {
                 age = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 return;
@@ -175,7 +184,7 @@ public class PharmacistsAcc {
             pharmToUpdate.setPassword(sc.nextLine());
             System.out.println("Pharmacist with Hospital ID " + hospitalID + " has been updated.");
             duplicatePharmacist(); // rewrite the CSV file with updated version
-        
+
         } else {
             System.out.println("Pharmacist with Hospital ID " + hospitalID + " not found.");
         }
@@ -184,6 +193,7 @@ public class PharmacistsAcc {
     /**
      * Removes a pharmacist from the list based on their hospital ID.
      * <p>
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void removePharmacist(Scanner sc) {
@@ -204,7 +214,8 @@ public class PharmacistsAcc {
     /**
      * Updates the password of a pharmacist based on their hospital ID.
      * 
-     * @param hospitalID The hospital ID of the pharmacist whose password is to be updated.
+     * @param hospitalID  The hospital ID of the pharmacist whose password is to be
+     *                    updated.
      * @param newPassword The new password to set for the pharmacist.
      */
     public static void updatePassword(String hospitalID, String newPassword) {

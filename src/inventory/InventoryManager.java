@@ -12,7 +12,8 @@ import utility.*;
 /**
  * This class manages the inventory of medicines.
  * <p>
- * This class provides methods for loading inventory data, displaying inventory items, 
+ * This class provides methods for loading inventory data, displaying inventory
+ * items,
  * updating stock levels, and managing low-stock alerts.
  */
 public class InventoryManager {
@@ -48,10 +49,12 @@ public class InventoryManager {
     /**
      * Loads inventory data from a CSV file.
      * <p>
-     * If it's the first run, the data is loaded from the original file and the updated file is cleared.
+     * If it's the first run, the data is loaded from the original file and the
+     * updated file is cleared.
      * Otherwise, data is loaded from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time;
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadInventory(boolean isFirstRun) {
@@ -122,7 +125,7 @@ public class InventoryManager {
         }
     }
 
-    /** Displays items with stock levels below the low-stock threshold. */ 
+    /** Displays items with stock levels below the low-stock threshold. */
     public static void displayLowItem() {
         boolean lowStockFound = false;
         System.out.println("\nChecking for low-stock items...");
@@ -150,31 +153,31 @@ public class InventoryManager {
      * @param sc           A {@link Scanner} object for user input.
      * @param medicineName The {@link Medicine} to add stock for.
      */
-    public static void addItemStock(Scanner sc, Medicine medicineName){
+    public static void addItemStock(Scanner sc, Medicine medicineName) {
         try {
-            //pass the name as a string
-            InventoryItem itemName = findItemByName(medicineName.name()); //returns itemName
-            if(itemName!=null){
+            // pass the name as a string
+            InventoryItem itemName = findItemByName(medicineName.name()); // returns itemName
+            if (itemName != null) {
                 int currentQuantity = itemName.getQuantity();
                 System.out.println("\nThe current quantity of " + itemName.getItemName() + " is: " + currentQuantity);
                 System.out.println("How much " + itemName.getItemName() + " are you adding?");
                 System.out.print("Amount (ex. 5): ");
                 int amount = sc.nextInt();
-                sc.nextLine();//consume
+                sc.nextLine();// consume
 
-                if (amount <=0){
+                if (amount <= 0) {
                     System.out.println("Invalid amount. Must be greater than 0.");
                     return;
                 }
 
-                itemName.setQuantity(amount + currentQuantity); //set new quantity
+                itemName.setQuantity(amount + currentQuantity); // set new quantity
                 System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
                 duplicateInventory(); // update CSV file
             } else {
                 System.out.println(medicineName + " does not exist in the inventory.");
             }
         } catch (Exception e) {
-                System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
+            System.out.println("An unexpected error occurred while adding stock: " + e.getMessage());
         }
     }
 
@@ -184,7 +187,7 @@ public class InventoryManager {
      * @param sc           A {@link Scanner} object for user input.
      * @param medicineName The {@link Medicine} to deduct stock from.
      */
-    public static void deductItemStock(InventoryItem itemName, int quanity){
+    public static void deductItemStock(InventoryItem itemName, int quanity) {
         itemName.setQuantity(quanity);
         System.out.println("The new quantity of " + itemName.getItemName() + " is: " + itemName.getQuantity());
         duplicateInventory(); // update CSV file
@@ -198,17 +201,17 @@ public class InventoryManager {
      */
     public static void updateItemStock(Scanner sc, Medicine medicineName) {
         try {
-            //pass the name as a string
+            // pass the name as a string
             String itemName = medicineName.name();
-            InventoryItem item = findItemByName(itemName); //returns itemName
-            
-            if(item!=null){
+            InventoryItem item = findItemByName(itemName); // returns itemName
+
+            if (item != null) {
                 int currentQuantity = item.getQuantity();
                 System.out.println("\nThe current quantity of " + item.getItemName() + " is: " + currentQuantity);
                 System.out.println("Enter the new quanity for " + item.getItemName());
                 System.out.print("Amount (ex. 5): ");
                 int amount = sc.nextInt();
-                sc.nextLine();//consume
+                sc.nextLine();// consume
 
                 updateItemStockHelper(itemName, amount);
             } else {
@@ -220,13 +223,14 @@ public class InventoryManager {
     }
 
     /**
-     * Helper method to update the stock level of an inventory item programmatically.
+     * Helper method to update the stock level of an inventory item
+     * programmatically.
      * 
      * @param itemName The name of the item as a {@code String}.
      * @param quantity The new quantity to set for the item.
      */
     public static void updateItemStockHelper(String itemName, int quantity) {
-        //Check for valid parameters
+        // Check for valid parameters
         if (itemName == null || itemName.isEmpty()) {
             System.out.println("Item name cannot be null or empty.");
             return;
@@ -236,13 +240,12 @@ public class InventoryManager {
             return;
         }
 
-        InventoryItem item = findItemByName(itemName); //returns itemName
-        if(item != null) {
+        InventoryItem item = findItemByName(itemName); // returns itemName
+        if (item != null) {
             item.setQuantity(quantity);
             System.out.println("The new quantity of " + item.getItemName() + " is: " + item.getQuantity());
             duplicateInventory(); // update CSV file
-        }
-        else {
+        } else {
             System.out.println("The item does not exist in the inventory.");
         }
     }
@@ -255,23 +258,25 @@ public class InventoryManager {
      */
     public static void updateItemLowLevelAlert(Scanner sc, Medicine medicineName) {
         try {
-            //pass the name as a string
-            InventoryItem itemName = findItemByName(medicineName.name()); //returns itemName
-            if(itemName!=null){
+            // pass the name as a string
+            InventoryItem itemName = findItemByName(medicineName.name()); // returns itemName
+            if (itemName != null) {
                 int currentLevel = itemName.getMinimumQuantity();
-                System.out.println("\nThe current low-level-alert of " + itemName.getItemName() + " is: " + currentLevel);
+                System.out
+                        .println("\nThe current low-level-alert of " + itemName.getItemName() + " is: " + currentLevel);
                 System.out.println("Enter the new low-level-alert for" + itemName.getItemName());
                 System.out.print("Amount (ex. 5): ");
                 int amount = sc.nextInt();
-                sc.nextLine();//consume
+                sc.nextLine();// consume
 
                 itemName.setMinimumQuantity(amount);
-                System.out.println("The new low-level-alert for " + itemName.getItemName() + " is: " + itemName.getMinimumQuantity());
+                System.out.println("The new low-level-alert for " + itemName.getItemName() + " is: "
+                        + itemName.getMinimumQuantity());
                 duplicateInventory();
             } else {
                 System.out.println("The item does not exist in the inventory.");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(medicineName + " does not exist in the inventory.");
         }
     }

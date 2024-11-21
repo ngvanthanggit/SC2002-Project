@@ -9,35 +9,39 @@ import appointment.AppointmentManager;
 import appointment.ApptStatus;
 import interfaces.DocApptInterface;
 import interfaces.ScheduleInterface;
+import inventory.Medicine;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 import medicalrecord.PrescriptionStatus;
 import user.Doctor;
 import utility.IDGenerator;
 
-
 /**
- * The class implements {@link DocApptInterface} to provide a UI for managing doctor's appointments and recording appointment outcomes.
- * This class provides methods for viewing, accepting/declining appointment requests,
+ * The class implements {@link DocApptInterface} to provide a UI for managing
+ * doctor's appointments and recording appointment outcomes.
+ * This class provides methods for viewing, accepting/declining appointment
+ * requests,
  * and recording the outcome of appointments.
  */
-public class DocApptUI implements DocApptInterface{
+public class DocApptUI implements DocApptInterface {
 
     private final ScheduleInterface scheduleInterface;
-    
+
     /**
      * Constructs a DocApptUI object with the given ScheduleInterface.
      * 
-     * @param scheduleInterface The {@link ScheduleInterface} object to handle the doctor's schedule.
+     * @param scheduleInterface The {@link ScheduleInterface} object to handle the
+     *                          doctor's schedule.
      */
-    public DocApptUI(ScheduleInterface scheduleInterface){
+    public DocApptUI(ScheduleInterface scheduleInterface) {
         this.scheduleInterface = scheduleInterface;
     }
 
     /**
      * Displays the upcoming appointments for a given doctor.
      * 
-     * @param doctor The {@link Doctor} object whose appointments are to be displayed.
+     * @param doctor The {@link Doctor} object whose appointments are to be
+     *               displayed.
      */
     public void viewAppointments(Doctor doctor) {
         System.out.println("\n|--- Doctor " + doctor.getName() + "s' Appointments ---|");
@@ -48,21 +52,22 @@ public class DocApptUI implements DocApptInterface{
             System.out.println("No appointments found.");
             return;
         }
-        System.out.println("The Upcoming Appointments are:");
+        System.out.println("-- The Upcoming Appointments are: --");
         for (Appointment appointment : appointments) {
             System.out.println(appointment.getApptInfo());
         }
     }
 
     /**
-     * Handles appointment requests for a doctor, allowing them to accept or decline pending appointments.
+     * Handles appointment requests for a doctor, allowing them to accept or decline
+     * pending appointments.
      * 
-     * @param sc A {@link Scanner} object to read user input.
+     * @param sc     A {@link Scanner} object to read user input.
      * @param doctor The {@link Doctor} object handling the appointment requests.
      */
     public void AppointmentRequestHandler(Scanner sc, Doctor doctor) {
-        //System.out.println("Appointment Request Handler");
-        System.out.println("List of Appointment Requests:");
+        // System.out.println("Appointment Request Handler");
+        System.out.println("\n-- List of Appointment Requests: --");
         List<Appointment> appointments = AppointmentManager.getAppointmentsByDoctor(doctor.getHospitalID(),
                 ApptStatus.PENDING);
         if (appointments.isEmpty()) {
@@ -81,7 +86,7 @@ public class DocApptUI implements DocApptInterface{
         try {
             continueChoice = sc.nextInt();
             sc.nextLine();
-        } catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input type. Please enter an Integer.");
             sc.nextLine(); // Consume the invalid input to prevent an infinite loop
         }
@@ -92,7 +97,7 @@ public class DocApptUI implements DocApptInterface{
 
         Appointment appointment = null;
 
-        //accepting appointment requests
+        // accepting appointment requests
         while (true) {
             System.out.print("\nEnter Appointment ID: ");
             // sc.nextLine();
@@ -118,11 +123,11 @@ public class DocApptUI implements DocApptInterface{
                 System.out.println("1. Yes");
                 System.out.println("2. No");
                 System.out.print("Choice: ");
-                int choice =-1;
+                int choice = -1;
                 try {
                     choice = sc.nextInt();
                     sc.nextLine();
-                } catch (InputMismatchException e){
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid input type. Please enter an Integer.");
                     sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                     continue; // Restart the loop to prompt the user again
@@ -147,7 +152,7 @@ public class DocApptUI implements DocApptInterface{
             try {
                 choice = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 continue; // Restart the loop to prompt the user again
@@ -174,11 +179,12 @@ public class DocApptUI implements DocApptInterface{
     }
 
     /**
-     * Accepts an appointment request and updates the appointment status to scheduled.
+     * Accepts an appointment request and updates the appointment status to
+     * scheduled.
      * Also updates the doctor's schedule.
      * 
      * @param appointment The {@link Appointment} object to be accepted.
-     * @param doctor The {@link Doctor} object accepting the appointment.
+     * @param doctor      The {@link Doctor} object accepting the appointment.
      */
     public void acceptAppointmentRequest(Appointment appointment, Doctor doctor) {
         System.out.println("Accept Appointment Request");
@@ -191,7 +197,8 @@ public class DocApptUI implements DocApptInterface{
     }
 
     /**
-     * Declines an appointment request and updates the appointment status to cancelled.
+     * Declines an appointment request and updates the appointment status to
+     * cancelled.
      * 
      * @param appointment The {@link Appointment} object to be declined.
      */
@@ -203,10 +210,11 @@ public class DocApptUI implements DocApptInterface{
     }
 
     /**
-     * Records the outcome of an appointment, including consultation notes, diagnosis,
+     * Records the outcome of an appointment, including consultation notes,
+     * diagnosis,
      * prescribed medications, service type, and treatment plans.
      * 
-     * @param sc A {@link Scanner} object to read user input.
+     * @param sc     A {@link Scanner} object to read user input.
      * @param doctor The {@link Doctor} object recording the appointment outcome.
      */
     public void recordAppointmentOutcome(Scanner sc, Doctor doctor) {
@@ -222,8 +230,8 @@ public class DocApptUI implements DocApptInterface{
                 System.out.print("\nEnter Appointment ID: ");
                 String appointmentID = sc.next();
                 appointment = AppointmentManager.getAppointment(appointmentID);
-                
-                //validate whether an appropiate appointment found
+
+                // validate whether an appropiate appointment found
                 if (appointment == null || appointment.getDoctor().getHospitalID() != doctor.getHospitalID() ||
                         appointment.getStatus() != ApptStatus.SCHEDULED) {
                     System.out.println("Invalid Appointment ID.");
@@ -235,30 +243,30 @@ public class DocApptUI implements DocApptInterface{
                     try {
                         choice = sc.nextInt();
                         sc.nextLine();
-                    } catch (InputMismatchException e){
+                    } catch (InputMismatchException e) {
                         System.out.println("Invalid input type. Please enter an Integer.");
                         sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                         continue; // Restart the loop to prompt the user again
                     }
-                    
+
                     if (choice == 2) {
                         return;
                     }
                     System.out.println("Try Again");
-                    continue; //continue loop until user chooses 2.no
+                    continue; // continue loop until user chooses 2.no
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter 1 or 2 for your choice.");
                 sc.nextLine();
             }
-            break; //valid appointment found, exit loop
+            break; // valid appointment found, exit loop
         }
 
-        //create empty record
+        // create empty record
         MedicalRecord record = new MedicalRecord();
-        //set medical record ID
+        // set medical record ID
 
-        //write down appointment outcomes
+        // write down appointment outcomes
         System.out.println("Enter Consultation Notes: ");
         sc.nextLine();
         String consultationNotes = sc.nextLine();
@@ -267,10 +275,14 @@ public class DocApptUI implements DocApptInterface{
         // Enter and set diagnoses
         System.out.println("Enter new diagnoses (separated by ';'): ");
         String newDiagnose = sc.nextLine();
-        //List<String> diagnosesList = Arrays.asList(newDiagnose.split(";")); // Convert to List
+        // List<String> diagnosesList = Arrays.asList(newDiagnose.split(";")); //
+        // Convert to List
 
-        //check for correct medications and format
+        // check for correct medications and format
         System.out.println("Enter prescription in the format (Medication: Quantity) ");
+        // show list of prescriptions
+        System.out.println(Arrays.toString(Medicine.values()));
+
         System.out.print("Enter prescription: ");
         String prescribedMedications = null;
         try {
@@ -280,7 +292,7 @@ public class DocApptUI implements DocApptInterface{
             System.out.println("Wrong Medication Format");
         }
 
-        //check for correct Service Type
+        // check for correct Service Type
         System.out.println("Enter Service Type: ");
         String serviceType = sc.nextLine();
         appointment.setServiceType(serviceType);
@@ -288,14 +300,15 @@ public class DocApptUI implements DocApptInterface{
         // Enter and set treatment plans
         System.out.println("Enter new treatment plan (separated by ';'): ");
         String newTreatmentPlan = sc.nextLine();
-        //List<String> treatmentPlansList = Arrays.asList(newTreatmentPlan.split(";")); // Convert to List
+        // List<String> treatmentPlansList = Arrays.asList(newTreatmentPlan.split(";"));
+        // // Convert to List
 
-        //appointment completed
+        // appointment completed
         AppointmentManager.completeAppointment(appointment);
-        
-        //create new Medical Record to signify Appointment Completed
-        String medicalRID = IDGenerator.generateID("MR", MedicalRecordManager.getMedicalRecords(), 
-                            MedicalRecord::getMedicalRID, 3);
+
+        // create new Medical Record to signify Appointment Completed
+        String medicalRID = IDGenerator.generateID("MR", MedicalRecordManager.getMedicalRecords(),
+                MedicalRecord::getMedicalRID, 3);
         record.setMedicalRID(medicalRID);
         record.setDoctorID(appointment.getDoctor().getHospitalID());
         record.setPatientID(appointment.getPatient().getHospitalID());
