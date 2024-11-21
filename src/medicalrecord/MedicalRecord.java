@@ -231,7 +231,7 @@ public class MedicalRecord {
         }
         // need to include the patient's personal information
         Patient patient = PatientsAcc.findPatientById(patientID);
-        String patientInfo = patient.userInfo();
+        String patientInfo = patient.getInfoForMedicalRecord();
 
         String medicalRecordDetails = "\n--- Medical Record Details ---\n" +
                 "Medical Record ID: " + medicalRID + "\n" +

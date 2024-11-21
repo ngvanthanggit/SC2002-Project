@@ -1,5 +1,7 @@
 package userInterface;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,6 +16,8 @@ import inventory.Medicine;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 import medicalrecord.PrescriptionStatus;
+import schedule.Schedule;
+import schedule.ScheduleManager;
 import user.Doctor;
 import utility.IDGenerator;
 
@@ -71,12 +75,30 @@ public class DocApptUI implements DocApptInterface {
         System.out.println("\n-- List of Appointment Requests: --");
         List<Appointment> appointments = AppointmentManager.getAppointmentsByDoctor(doctor.getHospitalID(),
                 ApptStatus.PENDING);
+
+        List<Schedule> schedules = ScheduleManager.getScheduleOfDoctor(doctor.getHospitalID());
+
         if (appointments.isEmpty()) {
             System.out.println("\nNo appointment requests found.");
             return;
         }
         for (Appointment appointment : appointments) {
-            System.out.println(appointment.getApptInfo());
+            // check if the doctor is available at the time of the appointment
+            boolean isAvailable = false;
+            for (Schedule schedule : schedules) {
+                if (schedule.getDate().equals(appointment.getDate())) {
+                    List<LocalTime> timeSlots = schedule.getTimeSlots();
+                    for (LocalTime time : timeSlots) {
+                        if (time.equals(appointment.getTime())) {
+                            isAvailable = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (isAvailable) {
+                System.out.println(appointment.getApptInfo());
+            }
         }
 
         System.out.println("\nContinue to Accept/Decline Appointment Request?");

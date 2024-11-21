@@ -98,7 +98,7 @@ public class PatientApptUI implements PatientApptInterface {
             // display the available time slots for the doctor
             viewDoctorTimeSlots(doctorID);
             // select an available time slot
-            selectTimeSlot(sc, doctorID, patient);
+            selectTimeSlot(sc, doctorID, patient, true);
         } else {
             System.out.println("The Doctor with this ID does not exist.");
             return;
@@ -110,13 +110,15 @@ public class PatientApptUI implements PatientApptInterface {
      * It ensures the date and time are valid and checks the doctor's availability.
      * Breaks if wrong format is entered for date and time.
      * 
-     * @param sc       A {@link Scanner} object for user input.
-     * @param doctorID The ID of the doctor being scheduled with.
-     * @param patient  The patient who is scheduling the appointment.
+     * @param sc        A {@link Scanner} object for user input.
+     * @param doctorID  The ID of the doctor being scheduled with.
+     * @param patient   The patient who is scheduling the appointment.
+     * @param isRequest A {@code boolean} indicating if the appointment is a
+     *                  request.
      * @return {@code True} if the appointment was successfully scheduled, otherwise
      *         {@code false}.
      */
-    public boolean selectTimeSlot(Scanner sc, String doctorID, Patient patient) {
+    public boolean selectTimeSlot(Scanner sc, String doctorID, Patient patient, boolean isRequest) {
         LocalDate date = null;
         LocalTime time = null;
 
@@ -163,8 +165,14 @@ public class PatientApptUI implements PatientApptInterface {
             break;
         }
 
-        // Schedule an appointment at the specified date and time
-        AppointmentManager.scheduleAppointment(doctorID, patient.getHospitalID(), date, time);
+        if (!isRequest) {
+            // Schedule an appointment at the specified date and time
+            AppointmentManager.scheduleAppointment(doctorID, patient.getHospitalID(), date, time);
+        } else {
+            // Request an appointment at the specified date and time
+            AppointmentManager.requestAppointment(doctorID, patient.getHospitalID(), date, time);
+        }
+
         System.out.println("Appointment Scheduled Successfully.");
 
         return true;
@@ -218,7 +226,7 @@ public class PatientApptUI implements PatientApptInterface {
 
         // select an available time slot. If the time slot is selected, cancel the
         // previous appointment
-        if (selectTimeSlot(sc, doctor.getHospitalID(), patient)) {
+        if (selectTimeSlot(sc, doctor.getHospitalID(), patient, false)) {
             // cancel the previous appointment
             AppointmentManager.removeAppointment(appt);
             // save to file

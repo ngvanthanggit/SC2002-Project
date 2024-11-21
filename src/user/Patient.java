@@ -24,15 +24,16 @@ public class Patient extends User {
 
     /**
      * constructs a Patient object
+     * 
      * @param hospitalID The hospital ID of the patient
-     * @param name The name of the patient
-     * @param role The role of the patient (must be {@link Role#Patient}).
-     * @param gender The gender of the patient
-     * @param age The age of the patient
-     * @param password The password of the patient
-     * @param dateOB The date of birth of the patient
-     * @param bloodType The blood type of the patient
-     * @param email The contact information of the patient
+     * @param name       The name of the patient
+     * @param role       The role of the patient (must be {@link Role#Patient}).
+     * @param gender     The gender of the patient
+     * @param age        The age of the patient
+     * @param password   The password of the patient
+     * @param dateOB     The date of birth of the patient
+     * @param bloodType  The blood type of the patient
+     * @param email      The contact information of the patient
      */
     public Patient(String hospitalID, String name, Role role,
             String gender, int age, String password, String dateOB,
@@ -113,6 +114,21 @@ public class Patient extends User {
                 "[PatientID = %s, Name = %s, Role = %s, Gender = %s, Age = %d, Password = %s, DateOB = %s, BloodType = %s, ContactInfo = %s]",
                 getHospitalID(), getName(), getRole(), getGender(), getAge(), getPassword(), dateOB, bloodType,
                 email);
+    }
+
+    /**
+     * Returns a formatted string with Patient information for Medical Record
+     * 
+     * @return A formatted string with Patient details
+     */
+    public String getInfoForMedicalRecord() {
+        String patientInfo = "Patient ID: " + this.getHospitalID() + "\n" +
+                "Name: " + this.getName() + "\n" +
+                "Date of Birth: " + this.getDateOB() + "\n" +
+                "Gender: " + this.getGender() + "\n" +
+                "Contact: " + this.email + "\n" +
+                "Blood Type: " + this.getBloodType();
+        return patientInfo;
     }
 
     /**
