@@ -25,8 +25,6 @@ import appointment.Appointment;
  */
 public class CSVwrite {
 
-    private static boolean headersWritten = false;
-
     /**
      * Writes a single object to a CSV file. The method checks the type of the object
      * and writes its data into the CSV file in the appropriate format.
@@ -77,7 +75,6 @@ public class CSVwrite {
                 // System.out.println("Data written successfully!");
             }
         } catch (IOException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (output != null) {

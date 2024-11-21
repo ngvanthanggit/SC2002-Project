@@ -10,6 +10,7 @@ import userInterface.ScheduleUI;
 import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
 import interfaces.ScheduleInterface;
+import main.SystemInitialisation;
 
 /**
  * This class is responsible for managing appointments.
@@ -24,9 +25,29 @@ public class AppointmentManager {
     /** The interface used for interacting with the schedule. */
     private static ScheduleInterface scheduleInterface = new ScheduleUI();
     /** The path to the original appointments CSV file. */
-    private static String originalPath = "Data//Original/Appt_List.csv";
+    private static String originalPath;
     /** The path to the updated appointments CSV file. */
-    private static String updatedPath = "Data//Updated/Appt_List(Updated).csv";
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving appointment data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("AppointmentOriginal");
+        updatedPath = SystemInitialisation.getFilePath("AppointmentUpdated");
+    }
 
     /**
      * Loads appointments from a CSV file.
@@ -38,13 +59,8 @@ public class AppointmentManager {
      *                   {@code false} otherwise.
      */
     public static void loadAppointments(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
 
         appointments.clear();
 

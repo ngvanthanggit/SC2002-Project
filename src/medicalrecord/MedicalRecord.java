@@ -10,7 +10,6 @@ import inventory.Medicine;
 
 import accounts.PatientsAcc;
 import user.Patient;
-import user.Doctor;
 
 /**
  * This class represents a patient's medical record, including diagnoses,

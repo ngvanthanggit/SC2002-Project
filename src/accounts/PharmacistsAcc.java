@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import main.SystemInitialisation;
 import user.User;
 import utility.*;
-import user.Doctor;
 import user.Pharmacist;
 import user.Role;
 
@@ -23,8 +23,30 @@ import user.Role;
 public class PharmacistsAcc {
     // store all Pharmacist objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static String originalPath = "Data//Original/Pharm_List.csv";
-    private static String updatedPath = "Data//Updated/Pharm_List(Updated).csv";
+    /** The file path to the original pharmacist CSV file. */
+    private static String originalPath;
+    /** The file path to the updated pharmacist CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving pharmacist data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("PharmacistOriginal");
+        updatedPath = SystemInitialisation.getFilePath("PharmacistUpdated");
+    }
 
     /**
      * Loads pharmacist accounts from a CSV file.
@@ -36,13 +58,8 @@ public class PharmacistsAcc {
      *                   {@code false} otherwise.
      */
     public static void loadPharmacists(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
 
         // clear the list to avoid having duplicate data
         pharmacists.clear();

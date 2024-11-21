@@ -3,6 +3,7 @@ package inventory;
 import java.time.LocalDate;
 import java.util.*;
 
+import main.SystemInitialisation;
 import utility.*;
 
 /**
@@ -10,12 +11,35 @@ import utility.*;
  * the replenish list, and processing new, approved, or rejected requests.
  */
 public class ReplenishManager {
+
+    /** A list to store all {@link ReplenishRequest} objects. */
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
 
-    // private InventoryItem item;
-    // private static int idCounter = 0;
-    private static String originalPath = "Data//Original/Replenish_List.csv";
-    private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
+    /** The file path to the original replenish request CSV file. */
+    private static String originalPath;
+    
+    /** The file path to the updated replenish request CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving replenish requests data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("ReplenishOriginal");
+        updatedPath = SystemInitialisation.getFilePath("ReplenishUpdated");
+    }
 
     /**
      * Loads the replenish requests from a CSV file.
@@ -27,13 +51,9 @@ public class ReplenishManager {
      *                   {@code false} otherwise.
      */
     public static void loadReplenish(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
+        
         replenishList.clear();
 
         // Define column mapping for CSV reading

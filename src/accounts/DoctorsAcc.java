@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
+
+import main.SystemInitialisation;
+
 import java.util.HashMap;
 import java.util.InputMismatchException;
 
 import user.*;
-import utility.CSVclear;
 import utility.CSVread;
 import utility.CSVwrite;
 
@@ -20,10 +22,33 @@ import utility.CSVwrite;
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class DoctorsAcc {
-    // List of all doctors
+    
+    /** A list to store all {@link Doctor} objects. */
     private static List<Doctor> doctors = new ArrayList<>();
-    private static String originalPath = "Data//Original/Doctor_List.csv";
-    private static String updatedPath = "Data//Updated/Doctor_List(Updated).csv";
+    /** The file path to the original administrator CSV file. */
+    private static String originalPath;
+    /** The file path to the updated administrator CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving doctor data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing doctor data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving doctor data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("DoctorsOriginal");
+        updatedPath = SystemInitialisation.getFilePath("DoctorsUpdated");
+    }
 
     /**
      * Loads doctor accounts from a CSV file.
@@ -35,13 +60,8 @@ public class DoctorsAcc {
      *                   {@code false} otherwise.
      */
     public static void loadDoctors(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+       // Load data from the file
+       String filePath = isFirstRun ? originalPath : updatedPath;
 
         doctors.clear();
 

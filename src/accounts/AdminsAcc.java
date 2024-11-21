@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import main.MainUI;
+import main.SystemInitialisation;
 import user.User;
 import utility.*;
 import user.Administrator;
@@ -26,10 +27,30 @@ public class AdminsAcc {
     private static List<Administrator> admins = new ArrayList<>();
 
     /** The file path to the original administrator CSV file. */
-    private static String originalPath = "Data//Original/Admin_List.csv";
+    private static String originalPath;
 
     /** The file path to the updated administrator CSV file. */
-    private static String updatedPath = "Data//Updated/Admin_List(Updated).csv";
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving admin data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("AdminsOriginal");
+        updatedPath = SystemInitialisation.getFilePath("AdminsUpdated");
+    }
 
     /**
      * Loads administrator accounts from a CSV file.
@@ -41,13 +62,8 @@ public class AdminsAcc {
      *                   {@code false} otherwise.
      */
     public static void loadAdmins(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
 
         // clear the list to avoid having duplicate data
         admins.clear();

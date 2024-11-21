@@ -114,6 +114,24 @@ public class MainUI {
         HMSApp.resetSessionColor(); // Reset terminal color
     }
 
+    /**
+     * Submits a password reset request for a user.
+     * <p>
+     * This method collects the user's ID and name via input, creates a new {@link PasswordResetRequest}, 
+     * and submits it to the {@link PasswordResetManager} for processing.
+     * If the request is successfully submitted, a confirmation message is displayed.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * 
+     * <p>
+     * Process:
+     * <ul>
+     *   <li>Prompts the user to enter their User ID and Name.</li>
+     *   <li>Creates a {@link PasswordResetRequest} object with the provided details.</li>
+     *   <li>Submits the request to the {@link PasswordResetManager}.</li>
+     *   <li>Displays a confirmation message if the request is successfully added.</li>
+     * </ul>
+     */
     public static void resetPassword(Scanner sc){
         System.out.println("\n|--- Password Reset Request ---|");
         System.out.print("Enter your User ID: ");

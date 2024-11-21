@@ -13,7 +13,6 @@ import interfaces.StaffManageInterface;
 import main.HMSApp;
 import user.Administrator;
 import user.Role;
-import user.User;
 import utility.PasswordResetManager;
 import utility.PasswordResetRequest;
 
@@ -336,6 +335,30 @@ public class AdminUI implements AdminMenu{
         } while(choice!=3);
     }
 
+    /**
+     * Manages leave requests through an interactive menu.
+     * <p>
+     * This method displays a menu for managing leave requests, including viewing the list 
+     * of leave requests and approving or rejecting specific requests. 
+     * It handles user input and ensures valid choices are entered.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * 
+     * <p>
+     * Menu Options:
+     * <ul>
+     *   <li><b>1:</b> View the list of all leave requests.</li>
+     *   <li><b>2:</b> Approve or reject specific leave requests.</li>
+     *   <li><b>3:</b> Exit the menu and return to the previous interface.</li>
+     * </ul>
+     * 
+     * <p>
+     * Error Handling:
+     * <ul>
+     *   <li>Catches invalid input types (non-integer) and prompts the user to try again.</li>
+     *   <li>Displays a message for invalid menu choices.</li>
+     * </ul>
+     */
     public void manageLeaveRequests(Scanner sc){
         int choice = -1;
         do {
@@ -370,6 +393,38 @@ public class AdminUI implements AdminMenu{
         } while(choice!=3);
     }
 
+    /**
+     * Manages password reset requests through an interactive menu.
+     * <p>
+     * This method allows the administrator to view pending password reset requests, approve a specific request, 
+     * and reset the associated user's password to a default value.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * 
+     * <p>
+     * Menu Options:
+     * <ul>
+     *   <li>Displays all pending password reset requests.</li>
+     *   <li>Allows the administrator to approve a request by entering its index.</li>
+     *   <li>Provides an option to exit the menu by entering {@code 0}.</li>
+     * </ul>
+     * 
+     * <p>
+     * Process:
+     * <ol>
+     *   <li>Displays the list of password reset requests.</li>
+     *   <li>Prompts the administrator to enter the index of a request to approve.</li>
+     *   <li>If a valid index is entered, the request is approved, and the user's password is reset to the default value.</li>
+     *   <li>If {@code 0} is entered, the menu exits.</li>
+     * </ol>
+     * 
+     * <p>
+     * Error Handling:
+     * <ul>
+     *   <li>Catches invalid input types (non-integer) and prompts the user to try again.</li>
+     *   <li>Handles invalid indices gracefully.</li>
+     * </ul>
+     */
     public void managePasswordRequests(Scanner sc) {
         int choice = -1;
     

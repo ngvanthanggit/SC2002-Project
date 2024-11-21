@@ -12,7 +12,6 @@ import user.*;
  * The appointment status is managed using the ApptStatus enum, and the class provides methods to update and retrieve appointment details.
  */
 public class Appointment {
-    // will use enum ApptStatus class ltr
     private ApptStatus status;
     private Doctor doctor;
     private Patient patient;
@@ -23,9 +22,7 @@ public class Appointment {
     // for appointment outcome
     private String consultationNotes;
     private String prescribedMedications;
-    private String serviceType; // x-ray etc.
-
-    private static int idCounter = 1000;
+    private String serviceType; 
 
     /**
      * Default constructor that initializes the appointment with a status of {@code NOT_SCHEDULED} and {@code null} values for the doctor, patient,
@@ -282,11 +279,23 @@ public class Appointment {
      * 
      * @return A string in CSV format representing the appointment details.
      */
-    public String toCSVFormat() {
-        return appointmentID + "," + patient.getHospitalID() + "," + doctor.getHospitalID() + "," + appointmentDate
-                + "," + appointmentTime + "," + status + "," +
-                consultationNotes + "," + prescribedMedications + "," + serviceType;
-    }
+    /**
+ * Returns the appointment details in CSV format.
+ *
+ * @return A string in CSV format representing the appointment details.
+ */
+public String toCSVFormat() {
+    String patientId = (patient != null) ? patient.getHospitalID() : "NULL";
+    String doctorId = (doctor != null) ? doctor.getHospitalID() : "NULL";
+    String notes = (consultationNotes != null) ? consultationNotes : "";
+    String medications = (prescribedMedications != null) ? prescribedMedications : "";
+    String service = (serviceType != null) ? serviceType : "";
+
+    return appointmentID + "," + patientId + "," + doctorId + "," + appointmentDate
+            + "," + appointmentTime + "," + status + "," +
+            notes + "," + medications + "," + service;
+}
+
 
     /**
      * Confirms the appointment by setting its status to {@code CONFIRMED}.

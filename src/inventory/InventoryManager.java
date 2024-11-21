@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import main.SystemInitialisation;
 import utility.*;
 
 /**
@@ -15,10 +16,34 @@ import utility.*;
  * updating stock levels, and managing low-stock alerts.
  */
 public class InventoryManager {
-    // List of inventory items
+    /** A list to store all {@link Inventory} objects. */
     private static List<InventoryItem> inventory = new ArrayList<>();
-    private static String originalPath = "Data//Original/Medicine_List.csv";
-    private static String updatedPath = "Data//Updated/Medicine_List(Updated).csv";
+
+    /** The file path to the original inventory CSV file. */
+    private static String originalPath;
+    
+    /** The file path to the updated inventory CSV file. */
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving inventory data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("InventoryOriginal");
+        updatedPath = SystemInitialisation.getFilePath("InventoryUpdated");
+    }
 
     /**
      * Loads inventory data from a CSV file.
@@ -30,13 +55,9 @@ public class InventoryManager {
      *                   {@code false} otherwise.
      */
     public static void loadInventory(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
+        
         inventory.clear();
 
         Map<String, Integer> inventoryColumnMapping = new HashMap<>();

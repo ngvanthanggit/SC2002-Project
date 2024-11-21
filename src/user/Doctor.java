@@ -6,7 +6,6 @@ import interfaces.MedicalRecInterface;
 import interfaces.ScheduleInterface;
 import userInterface.DocApptUI;
 import userInterface.DoctorUI;
-import userInterface.InvenManageUI;
 import userInterface.LeaveUI;
 import userInterface.MedicalRecordUI;
 import userInterface.ScheduleUI;

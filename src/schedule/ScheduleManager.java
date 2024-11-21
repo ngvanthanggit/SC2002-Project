@@ -1,6 +1,9 @@
 package schedule;
 
 import java.util.*;
+
+import main.SystemInitialisation;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,10 +21,30 @@ public class ScheduleManager {
     private static List<Schedule> schedules = new ArrayList<>();
 
     /** The file path for the original schedule list */
-    private static String originalPath = "Data//Original/Schedule_List.csv";
+    private static String originalPath;
 
     /** The file path for the updated schedule list */
-    private static String updatedPath = "Data//Updated/Schedule_List(Updated).csv";
+    private static String updatedPath;
+
+    /**
+     * Updates the file paths for loading and saving schedule data by retrieving them from 
+     * the {@link SystemInitialisation} class. 
+     * <p>
+     * This method centralizes the file path management, ensuring that the file paths 
+     * are dynamically retrieved rather than hardcoded, improving maintainability and flexibility.
+     * <p>
+     * File paths updated:
+     * <ul>
+     *   <li><b>originalPath</b>: Path to the original CSV file containing admin data.</li>
+     *   <li><b>updatedPath</b>: Path to the updated CSV file for saving admin data.</li>
+     * </ul>
+     * 
+     * @see SystemInitialisation#getFilePath(String)
+     */
+    public static void setFilePaths() {
+        originalPath = SystemInitialisation.getFilePath("ScheduleOriginal");
+        updatedPath = SystemInitialisation.getFilePath("ScheduleUpdated");
+    }
 
     /** Removes any schedules that are in the past. */
     public static void removeInvalidSchedules() {
@@ -38,13 +61,9 @@ public class ScheduleManager {
      *                   {@code false} otherwise.
      */
     public static void loadSchedules(boolean isFirstRun) {
-        String filePath;
-        if (isFirstRun) {
-            filePath = originalPath;
-            CSVclear.clearFile(updatedPath);
-        } else {
-            filePath = updatedPath;
-        }
+        // Load data from the file
+        String filePath = isFirstRun ? originalPath : updatedPath;
+
         schedules.clear();
 
         Map<String, Integer> schedulesColumnMapping = new HashMap<>();

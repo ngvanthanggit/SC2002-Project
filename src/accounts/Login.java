@@ -27,7 +27,8 @@ public class Login {
     /**
      * Authenticates a user by their hospital ID and password.
      * <p>
-     * Prompts the user to enter their hospital ID and password.
+     * Prompts the staff to enter their hospital ID and password.
+     * Gives the patient an option to use their email instead of hospitaID
      * If the details match, the corresponding user object is returned, 
      * otherwise null is returned indicating a failed login.
      * 

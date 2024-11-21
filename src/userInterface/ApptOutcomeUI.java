@@ -2,7 +2,6 @@ package userInterface;
 
 import java.util.Scanner;
 
-import interfaces.AdminMenu;
 import interfaces.ApptOutcomeInterface;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;

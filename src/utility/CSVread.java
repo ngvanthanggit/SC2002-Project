@@ -72,7 +72,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -170,7 +170,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -217,7 +217,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -291,7 +291,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
     
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
     
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -378,7 +378,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             while ((line = reader.readLine()) != null) {
                 String[] row = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -420,12 +420,16 @@ public class CSVread {
     }
 
     /**
-     * Reads a CSV file containing appointment information and parses it into a list of {@link Appointment} objects.
-     * The method uses a column mapping to identify which columns to read for each field. 
-     * It then reconstructs the {@link Doctor} and {@link Patient} objects using their respective IDs.
+     * Reads a CSV file containing appointment information and parses it into a list
+     * of {@link Appointment} objects.
+     * The method uses a column mapping to identify which columns to read for each
+     * field.
+     * It then reconstructs the {@link Doctor} and {@link Patient} objects using
+     * their respective IDs.
      * 
-     * @param fileString The path to the CSV file to read.
-     * @param columnMapping A map that associates column names to their respective indices in the CSV file.
+     * @param fileString    The path to the CSV file to read.
+     * @param columnMapping A map that associates column names to their respective
+     *                      indices in the CSV file.
      * @return A list of {@link Appointment} objects containing the parsed data.
      */
     public static List<Appointment> readApptCSV(String fileString, Map<String, Integer> columnMapping) {
@@ -437,7 +441,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {
@@ -489,6 +493,16 @@ public class CSVread {
         return appointments; // Return the list of Appointment objects
     }
 
+    /**
+     * Reads leave data from a CSV file and converts it into a list of {@link Leave} objects.
+     * <p>
+     * Parses each row of the CSV based on the provided column mapping, recreating {@link Leave} 
+     * objects with associated staff details.
+     *
+     * @param fileString    The path to the CSV file to read.
+     * @param columnMapping A map specifying the column names and their corresponding indices.
+     * @return A {@link List} of {@link Leave} objects parsed from the CSV file.
+     */
     public static List<Leave> readLeaveCSV(String fileString, Map<String, Integer> columnMapping) {
         BufferedReader reader = null;
         String line = "";
@@ -499,7 +513,7 @@ public class CSVread {
             reader = new BufferedReader(new FileReader(fileString));
 
             // Read the first line to skip the header
-            String headerLine = reader.readLine();
+            reader.readLine();
 
             // Continuously read the next line
             while ((line = reader.readLine()) != null) {

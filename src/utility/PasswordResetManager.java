@@ -5,10 +5,28 @@ import accounts.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages password reset requests and operations.
+ * <p>
+ * This class provides functionality to add, display, approve, and process password reset requests.
+ * It also handles resetting user passwords to a default value based on their role.
+ */
 public class PasswordResetManager {
+    
+    /** A list to store all {@link PasswordRequest} objects */
     private static List<PasswordResetRequest> requests = new ArrayList<>();
+    
+    /** The default password for every account */
     private static final String DEFAULT_PASSWORD = "password1234";
 
+    /**
+     * Adds a password reset request to the system.
+     * <p>
+     * Validates the user ID and name before adding the request.
+     * 
+     * @param request The {@link PasswordResetRequest} to be added.
+     * @return {@code true} if the request was successfully added; {@code false} otherwise.
+     */
     public static boolean addRequest(PasswordResetRequest request) {
         String userId = request.getUserId();
         String userName = request.getUserName();
@@ -24,6 +42,11 @@ public class PasswordResetManager {
         return true; // Indicate success
     }
 
+    /**
+     * Displays all pending password reset requests.
+     * <p>
+     * If no requests are pending, a message is displayed.
+     */
     public static void displayRequests() {
         if (requests.isEmpty()) {
             System.out.println("No pending password reset requests.");
@@ -35,6 +58,12 @@ public class PasswordResetManager {
         }
     }
 
+    /**
+     * Approves a password reset request and removes it from the list.
+     * 
+     * @param index The index of the request to approve (0-based).
+     * @return The approved {@link PasswordResetRequest}, or {@code null} if the index is invalid.
+     */
     public static PasswordResetRequest approveRequest(int index) {
         if (index < 0 || index >= requests.size()) {
             System.out.println("Invalid request index.");
@@ -43,6 +72,14 @@ public class PasswordResetManager {
         return requests.remove(index);
     }
 
+    /**
+     * Resets the password of a user to the default value.
+     * <p>
+     * The user type is determined based on their hospital ID prefix, and the password
+     * is updated in the corresponding account database.
+     * 
+     * @param hospitalID The hospital ID of the user whose password is to be reset.
+     */
     public static void resetPasswordToDefault(String hospitalID) {
         String prefix = extractPrefix(hospitalID);
 
@@ -70,6 +107,12 @@ public class PasswordResetManager {
         System.out.println("Password reset to default ('" + DEFAULT_PASSWORD + "') for User: " + hospitalID);
     }
 
+    /**
+     * Extracts the prefix from a hospital ID to determine the user type.
+     * 
+     * @param hospitalID The hospital ID to extract the prefix from.
+     * @return The prefix as a {@code String}, or {@code null} if the format is invalid.
+     */
     private static String extractPrefix(String hospitalID) {
         // Extract the prefix based on your naming convention
         if (hospitalID == null || hospitalID.isEmpty()) {
@@ -87,6 +130,15 @@ public class PasswordResetManager {
         return null;
     }
 
+    /**
+     * Validates the user ID and name against the corresponding user database.
+     * <p>
+     * Checks if the user exists and if the provided name matches the name in the database.
+     * 
+     * @param userId   The user ID to validate.
+     * @param userName The name of the user to validate.
+     * @return {@code true} if the user ID and name are valid; {@code false} otherwise.
+     */
     private static boolean validateUserIdAndName(String userId, String userName) {
         String prefix = extractPrefix(userId);
 
