@@ -246,4 +246,57 @@ public class DoctorUI implements DoctorMenu {
         } while (choice != 4);
     }
 
+    /**
+     * Displays and manages the Leave Management menu.
+     * <p>
+     * This method provides options to apply for leave, update or remove leave requests, 
+     * view pending requests, and check the outcome of leave requests.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     */
+    public void manageLeave(Scanner sc){
+        int choice = -1;
+        do {
+            System.out.println("\n|---- Leave Management ----|");
+            System.out.printf("%s\n", "-".repeat(36));
+            System.out.println("1. Apply Leave");
+            System.out.println("2. Update Leave Requests");
+            System.out.println("3. Remove Leave Request");
+            System.out.println("4. View Pending Leave Requests");
+            System.out.println("5. View Leave Request Outcome");
+            System.out.println("6. Go Back");
+            System.out.print("Choice: ");
+            try {
+                choice = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input type. Please enter an Integer.");
+                sc.nextLine(); // Consume the invalid input to prevent an infinite loop
+                continue; // Restart the loop to prompt the user again
+            }
+
+            switch (choice) {
+                case 1:
+                    leaveInterface.applyLeave(sc, doctor);
+                    break;
+                case 2:
+                    leaveInterface.updateLeave(sc,doctor);
+                    break;
+                case 3:
+                    leaveInterface.removeLeave(sc, doctor);
+                    break;
+                case 4:
+                    leaveInterface.displayPendingLeave(sc,doctor);
+                    break;
+                case 5:
+                    leaveInterface.displayLeaveOutcome(sc,doctor);
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        } while (choice!=6);
+    }
+
 }

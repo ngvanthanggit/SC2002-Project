@@ -191,7 +191,7 @@ public class PatientsAcc {
             // catch any invalid types, date format and age
             try {
                 System.out.print("Enter your Contact Info: ");
-                patientToUpdate.setContactInfo(sc.nextLine());
+                patientToUpdate.setEmail(sc.nextLine());
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
                 duplicatePatient(); // rewrite the CSV file with updated version
             } catch (InputMismatchException e) {
