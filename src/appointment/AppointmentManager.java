@@ -258,6 +258,13 @@ public class AppointmentManager {
         duplicateAppointments();
     }
 
+    /**
+     * Reschedules an appointment by updating the appointment date and time.
+     * 
+     * @param appointment The {@link Appointment} object to be rescheduled.
+     * @param newDate     The new date for the appointment.
+     * @param newTime     The new time for the appointment.
+     */
     public static void cancelAppointment(Appointment appointment) {
         if (appointment.getStatus() == ApptStatus.SCHEDULED) {
             // add the time slot back to the doctor's available time slots
