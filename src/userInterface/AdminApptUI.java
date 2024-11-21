@@ -10,14 +10,27 @@ import accounts.PatientsAcc;
 import appointment.Appointment;
 import appointment.AppointmentManager;
 import interfaces.AdminApptInterface;
+import interfaces.ApptOutcomeInterface;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 import user.Doctor;
 import user.Patient;
 
+/**
+ * The class implements {@link AdminApptInterface} to provide a UI for administering appointment-related tasks for admins.
+ * This class provides functionality to filter and view appointments and outcomes
+ * by doctor, patient, or all appointments. It also allows admin to view appointment
+ * outcomes such as medical records for patients.
+ */
 public class AdminApptUI implements AdminApptInterface{
 
-    //main menu for appointments
+    /**
+     * Displays the main menu to filter appointments and handles user input.
+     * Allows the admin to view appointments by various criteria such as all, by doctor ID,
+     * or by patient ID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     */
     public void filterAppointments(Scanner sc){
         int choice = -1;
         do {
@@ -55,12 +68,20 @@ public class AdminApptUI implements AdminApptInterface{
         } while (choice!=4);
     }
 
-    //display all appointments
+    /**
+     * Displays all existing appointments.
+     * Calls the {@link AppointmentManager} to display all the appointments.
+     */
     public void viewAllAppointments(){
         AppointmentManager.displayAppointments();
     }
 
-    //helper function for selecting doctor
+    /**
+     * Helper method to select a doctor based on their DoctorID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @return {@link Doctor} object if found, otherwise {@code null}.
+     */
     public Doctor selectDoctorHelper(Scanner sc){
         System.out.print("Enter DoctorID: ");
         Doctor doctor = DoctorsAcc.findDoctorById(sc.nextLine().trim());
@@ -73,7 +94,11 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //filter by doctor
+    /**
+     * Filters appointments by a specific doctor based on DoctorID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     */
     public void selectDocAppt(Scanner sc){
         Doctor doctor = selectDoctorHelper(sc);
         if(doctor!=null){
@@ -81,7 +106,12 @@ public class AdminApptUI implements AdminApptInterface{
         } 
     }
 
-    //get specific doctor appt
+    /**
+     * Retrieves and displays appointments for a specific doctor.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @param doctor {@link Doctor} whose appointments are to be fetched.
+     */
     public void getDocAppt(Scanner sc, Doctor doctor){
         if(doctor!=null){
             List<Appointment> docAppt = new ArrayList<>();
@@ -90,7 +120,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //display only specific doctor appt
+    /**
+     * Displays appointments for a specific doctor.
+     * 
+     * @param docAppt List of appointments for the doctor.
+     * @param doctor Doctor whose appointments are being displayed.
+     */
     public void displayDocAppt(List<Appointment> docAppt, Doctor doctor){
         if (docAppt.isEmpty()) {
             System.out.println("\nDoctor " + doctor.getName() + "currently has no appointmnets.");
@@ -102,7 +137,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //helper function for selecting patient
+     /**
+     * Helper method to select a patient based on their PatientID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @return {@link Patient} object if found, otherwise {@code null}.
+     */
     public Patient selectPatientHelper(Scanner sc){
         System.out.print("Enter PatientID: ");
         Patient patient = PatientsAcc.findPatientById(sc.nextLine().trim());
@@ -115,7 +155,11 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //filter by patientID
+    /**
+     * Filters appointments by a specific patient based on PatientID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     */
     public void selectPatientAppt(Scanner sc){
         Patient patient = selectPatientHelper(sc);
         if(patient!=null){
@@ -123,7 +167,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //get specific patient appt
+    /**
+     * Retrieves and displays appointments for a specific patient.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @param patient {@link Patient} whose appointments are to be fetched.
+     */
     public void getPatientAppt(Scanner sc, Patient patient){
         if(patient!=null){
             List<Appointment> patientAppt = new ArrayList<>();
@@ -132,7 +181,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //display only specific patient appt
+    /**
+     * Displays appointments for a specific patient.
+     * 
+     * @param patientAppt List of appointments for the patient.
+     * @param patient Patient whose appointments are being displayed.
+     */
     public void displayPatientAppt(List<Appointment> patientAppt, Patient patient){
         if (patientAppt.isEmpty()) {
             System.out.println("\nPatient " + patient.getName() + " currently has no appointments.");
@@ -144,7 +198,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //main menu for appointment outcomes
+    /**
+     * Displays the main menu to filter appointment outcomes and handles user input.
+     * Allows the admin to view outcomes by various criteria such as all outcomes or by patient ID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     */
     public void filterOutcomes(Scanner sc){
         int choice = -1;
         do {
@@ -178,12 +237,19 @@ public class AdminApptUI implements AdminApptInterface{
         } while (choice!=4);
     }
 
-    //display all outcomes
+    /**
+     * Displays all appointment outcomes (medical records).
+     * Calls the {@link MedicalRecordManager} to display all the medical records (appointment outcomes).
+     */
     public void viewAllApptOutcomes(){
         MedicalRecordManager.displayMedicalRecords();
     }
 
-    //filter by patientID
+    /**
+     * Filters appointment outcomes by a specific patient based on PatientID.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     */
     public void selectPatientOutcomes(Scanner sc){
         Patient patient = selectPatientHelper(sc);
         if(patient!=null){
@@ -191,7 +257,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //get only specific patient outcomes
+    /**
+     * Retrieves and displays appointment outcomes (medical records) for a specific patient.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @param patient Patient whose appointment outcomes are to be fetched.
+     */
     public void getPatientOutcomes(Scanner sc, Patient patient){
         if(patient!=null){
             List<MedicalRecord> patientOutcomes = new ArrayList<>();
@@ -200,7 +271,12 @@ public class AdminApptUI implements AdminApptInterface{
         }
     }
 
-    //display only specific patient outcomes
+    /**
+     * Displays appointment outcomes (medical records) for a specific patient.
+     * 
+     * @param patientOutcomes List of medical records (appointment outcomes) for the patient.
+     * @param patient Patient whose appointment outcomes are being displayed.
+     */
     public void displayPatientOutcomes(List<MedicalRecord> patientOutcomes, Patient patient){
         if (patientOutcomes.isEmpty()) {
             System.out.println("\nPatient " + patient.getName() + " currently has no appointments outcomes.");

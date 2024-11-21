@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import accounts.PatientsAcc;
+import interfaces.AdminMenu;
 import interfaces.CommonMenu;
 import interfaces.DocApptInterface;
 import interfaces.DoctorMenu;
@@ -14,6 +15,7 @@ import medicalrecord.MedicalRecord;
 import user.Doctor;
 
 /**
+<<<<<<< HEAD
  * This class is responsible for displaying the Doctor's menu.
  * <p>
  * This includes the Medical Record, Schedule, and Appointment menus.
@@ -21,6 +23,11 @@ import user.Doctor;
  * {@code ScheduleInterface},
  * and {@code DocApptInterface} interfaces to handle the respective
  * functionalities.
+=======
+ * The class implements the {@link DoctorMenu} interface to provide a UI for doctors. 
+ * This class allows the doctor to manage their medical records, schedule, and appointments. 
+ * It implements the methods defined in {@link DoctorMenu}.
+>>>>>>> origin/main
  */
 public class DoctorUI implements DoctorMenu {
     private final Doctor doctor;
@@ -29,6 +36,7 @@ public class DoctorUI implements DoctorMenu {
     private final DocApptInterface docApptInterface;
 
     /**
+<<<<<<< HEAD
      * Creates a new DoctorUI object with the specified Doctor, Medical Record,
      * Schedule, and Appointment interfaces.
      * 
@@ -36,6 +44,14 @@ public class DoctorUI implements DoctorMenu {
      * @param medicalRecInterface the Medical Record interface
      * @param scheduleInterface   the Schedule interface
      * @param docApptInterface    the Appointment interface
+=======
+     * Constructs a DoctorUI instance for a specific doctor.
+     * 
+     * @param doctor The doctor associated with this UI
+     * @param medicalRecInterface Interface for medical record management
+     * @param scheduleInterface Interface for managing doctor schedules
+     * @param docApptInterface Interface for handling doctor appointments
+>>>>>>> origin/main
      */
     public DoctorUI(Doctor doctor, MedicalRecInterface medicalRecInterface,
             ScheduleInterface scheduleInterface, DocApptInterface docApptInterface) {
@@ -100,6 +116,12 @@ public class DoctorUI implements DoctorMenu {
         } while (choice != 4);
     }
 
+    /**
+     * Displays the Medical Record menu, allowing the doctor to view or update a patient's records.
+     * 
+     * @param sc The scanner object used to capture user input
+     * @param doctor The doctor whose medical records are being accessed
+     */
     public void medicalRecordMenu(Scanner sc, Doctor doctor) {
         int choice = -1;
         MedicalRecord record = medicalRecInterface.choosePatient(sc, doctor);
@@ -141,6 +163,11 @@ public class DoctorUI implements DoctorMenu {
         } while (choice != 3);
     }
 
+    /**
+     * Displays the Schedule menu, allowing the doctor to view or set their availability schedule.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     */
     public void scheduleMenu(Scanner sc) {
         int choice = -1;
 
@@ -178,6 +205,12 @@ public class DoctorUI implements DoctorMenu {
         } while (choice != 3);
     }
 
+    /**
+     * Displays the Appointment menu, allowing the doctor to view appointments, handle appointment requests,
+     * or record appointment outcomes.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     */
     public void appointmentMenu(Scanner sc) {
         int choice = -1;
 

@@ -5,12 +5,16 @@ import userInterface.MedicalRecordUI;
 import userInterface.PatientApptUI;
 import userInterface.PatientUI;
 
+/**
+ * represents a Patient in HMS
+ * extends {@link User} class
+ */
 public class Patient extends User {
     private String dateOB; // date of birth
     private String bloodType;
     private String contactInfo; // changeable
 
-    // constructors
+    /** default constructor for creating a Patient with no attributes */
     public Patient() {
         super();
         this.dateOB = null;
@@ -18,6 +22,18 @@ public class Patient extends User {
         this.contactInfo = null;
     }
 
+    /**
+     * constructs a Patient object
+     * @param hospitalID The hospital ID of the patient
+     * @param name The name of the patient
+     * @param role The role of the patient (must be {@link Role#Patient}).
+     * @param gender The gender of the patient
+     * @param age The age of the patient
+     * @param password The password of the patient
+     * @param dateOB The date of birth of the patient
+     * @param bloodType The blood type of the patient
+     * @param contactInfo The contact information of the patient
+     */
     public Patient(String hospitalID, String name, Role role,
             String gender, int age, String password, String dateOB,
             String bloodType, String contactInfo) {
@@ -27,28 +43,54 @@ public class Patient extends User {
         this.contactInfo = contactInfo;
     }
 
-    // get Methods()
+    // getter Methods()
+
+    /**
+     * Returns the date of birth of the patient
+     * @return the date of birth
+     */
     public String getDateOB() {
         return dateOB;
     }
 
+    /**
+     * Returns the blood type of the patient
+     * @return the blood type
+     */
     public String getBloodType() {
         return bloodType;
     }
 
+    /**
+     * Returns the contact information of the patient
+     * @return the contact information
+     */
     public String getContactInfo() {
         return contactInfo;
     }
 
-    // set Methods()
+    // setter Methods()
+
+    /**
+     * Updates date of birth of the patient
+     * @param dateOB
+     */
     public void setDateOB(String dateOB) {
         this.dateOB = dateOB;
     }
 
+    /**
+     * Updates blood type of the patient
+     * @param bloodType
+     */
     public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
     }
 
+    /**
+     * Updates contact information of the patient
+     * @param contactInfo
+     */
     public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
     }

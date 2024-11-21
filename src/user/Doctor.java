@@ -9,11 +9,26 @@ import userInterface.InvenManageUI;
 import userInterface.MedicalRecordUI;
 import userInterface.ScheduleUI;
 
+/**
+ * represents a Doctor in HMS
+ * extends {@link User} class
+ */
 public class Doctor extends User {
+
+    /** default constructor for creating a Doctor with no attributes */
     public Doctor() {
         this(null, null, null, null, 0, null);
     }
 
+    /**
+     * constructs a Doctor object
+     * @param hospitalID The hospital ID of the doctor
+     * @param name The name of the doctor
+     * @param role The role of the doctor (must be {@link Role#Doctor}).
+     * @param gender The gender of the doctor
+     * @param age The age of the doctor
+     * @param password The password of the doctor
+     */
     public Doctor(String hospitalID, String name, Role role,
             String gender, int age, String password) {
         super(hospitalID, name, role, gender, age, password);

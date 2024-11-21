@@ -9,16 +9,32 @@ import java.util.Scanner;
 
 import user.User;
 import utility.*;
+import user.Doctor;
 import user.Pharmacist;
 import user.Role;
 
+/**
+ * This class is responsible for managing pharmacist accounts.
+ * <p>
+ * This includes loading data from CSV files, displaying, updating, finding, and removing pharmacists, 
+ * as well as managing password updates. The class interacts with utility classes like {@code CSVread}, 
+ * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
+ */
 public class PharmacistsAcc {
-    // store all Administrator objects
+    // store all Pharmacist objects
     private static List<Pharmacist> pharmacists = new ArrayList<>();
     private static String originalPath = "../../Data//Original/Pharm_List.csv";
     private static String updatedPath = "../../Data//Updated/Pharm_List(Updated).csv";
 
-    // read in csv file of staffs
+    /**
+     * Loads pharmacist accounts from a CSV file.
+     * <p>
+     * If it is the first run, it loads from the original file path and clears the updated file.
+     * Otherwise, it loads from the updated file.
+     * 
+     * @param isFirstRun {@code true} if the application is running for the first time; 
+     *                   {@code false} otherwise.
+     */
     public static void loadPharmacists(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
@@ -55,11 +71,15 @@ public class PharmacistsAcc {
         }
     }
 
-    // getter & display methods
+    /**
+     * Returns a copy of the list of all pharmacists.
+     * @return A list of {@link User} objects representing pharmacists.
+     */
     public static List<User> getPharmacists() {
         return new ArrayList<>(pharmacists);
     }
 
+    /** Displays all pharmacists currently in the list. */
     public static void displayPharmacists() {
         System.out.println("\nThe Pharmacists in the CSV file are: ");
         for (User pharmacist : pharmacists) {
@@ -67,11 +87,16 @@ public class PharmacistsAcc {
         }
     }
 
+    /** Duplicates the current pharmacist list to the updated CSV file. */
     public static void duplicatePharmacist() {
         CSVwrite.writeCSVList(updatedPath, pharmacists);
     }
 
-    // find Pharmacist by hospitalID
+    /**
+     * Finds a pharmacist by their hospital ID.
+     * @param hospitalID The hospital ID of the pharmacist to find.
+     * @return The {@link Pharmacist} object if found; {@code null} otherwise.
+     */
     private static Pharmacist findPharmById(String hospitalID) {
         for (Pharmacist pharmacist : pharmacists) {
             if (pharmacist.getHospitalID().equals(hospitalID)) {
@@ -81,7 +106,7 @@ public class PharmacistsAcc {
         return null;
     }
 
-    // updating methods
+    /** Adds a new pharmacist to the list and saves the updated list to the CSV file. */
     public static void addPharmacist(Scanner sc) {
         Pharmacist newCreatedUser = NewAccount.createNewAccount(sc, pharmacists, Role.Pharmacist);
 
@@ -94,6 +119,12 @@ public class PharmacistsAcc {
         }
     }
 
+    /**
+     * Updates a pharmacist's details based on their hospital ID.
+     * <p>
+     * Prompts the user to enter updated details for the pharmacist.
+     * @param sc A {@link Scanner} object for user input.
+     */
     public static void updatePharmacist(Scanner sc) {
         displayPharmacists();
         System.out.print("\nEnter the Pharmacist ID to update: ");
@@ -133,6 +164,11 @@ public class PharmacistsAcc {
         }
     }
 
+    /**
+     * Removes a pharmacist from the list based on their hospital ID.
+     * <p>
+     * @param sc A {@link Scanner} object for user input.
+     */
     public static void removePharmacist(Scanner sc) {
         displayPharmacists();
         System.out.print("\nEnter the Pharmacist ID to remove: ");
@@ -148,6 +184,12 @@ public class PharmacistsAcc {
         }
     }
 
+    /**
+     * Updates the password of a pharmacist based on their hospital ID.
+     * 
+     * @param hospitalID The hospital ID of the pharmacist whose password is to be updated.
+     * @param newPassword The new password to set for the pharmacist.
+     */
     public static void updatePassword(String hospitalID, String newPassword) {
         // find the staff ID to update
         Pharmacist pharmacistPWToUpdate = findPharmById(hospitalID);

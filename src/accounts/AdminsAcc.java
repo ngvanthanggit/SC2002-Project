@@ -120,6 +120,8 @@ public class AdminsAcc {
     /**
      * Adds a new administrator to the list and saves the updated list to the CSV
      * file.
+     * 
+     * @param sc A {@link Scanner} object for user input.
      */
     public static void addAdmin(Scanner sc) {
         Administrator newCreatedUser = NewAccount.createNewAccount(sc, admins, Role.Administrator);

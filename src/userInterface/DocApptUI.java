@@ -18,14 +18,30 @@ import user.User;
 import utility.CSVwrite;
 import utility.IDGenerator;
 
+
+/**
+ * The class implements {@link DocApptInterface} to provide a UI for managing doctor's appointments and recording appointment outcomes.
+ * This class provides methods for viewing, accepting/declining appointment requests,
+ * and recording the outcome of appointments.
+ */
 public class DocApptUI implements DocApptInterface{
 
     private final ScheduleInterface scheduleInterface;
-    //constructor
+    
+    /**
+     * Constructs a DocApptUI object with the given ScheduleInterface.
+     * 
+     * @param scheduleInterface The {@link ScheduleInterface} object to handle the doctor's schedule.
+     */
     public DocApptUI(ScheduleInterface scheduleInterface){
         this.scheduleInterface = scheduleInterface;
     }
 
+    /**
+     * Displays the upcoming appointments for a given doctor.
+     * 
+     * @param doctor The {@link Doctor} object whose appointments are to be displayed.
+     */
     public void viewAppointments(Doctor doctor) {
         System.out.println("\n|--- Doctor " + doctor.getName() + "s' Appointments ---|");
         System.out.printf("%s\n", "-".repeat(40));
@@ -41,6 +57,12 @@ public class DocApptUI implements DocApptInterface{
         }
     }
 
+    /**
+     * Handles appointment requests for a doctor, allowing them to accept or decline pending appointments.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @param doctor The {@link Doctor} object handling the appointment requests.
+     */
     public void AppointmentRequestHandler(Scanner sc, Doctor doctor) {
         //System.out.println("Appointment Request Handler");
         System.out.println("List of Appointment Requests:");
@@ -154,6 +176,13 @@ public class DocApptUI implements DocApptInterface{
         }
     }
 
+    /**
+     * Accepts an appointment request and updates the appointment status to scheduled.
+     * Also updates the doctor's schedule.
+     * 
+     * @param appointment The {@link Appointment} object to be accepted.
+     * @param doctor The {@link Doctor} object accepting the appointment.
+     */
     public void acceptAppointmentRequest(Appointment appointment, Doctor doctor) {
         System.out.println("Accept Appointment Request");
         // set the appointment status to scheduled
@@ -164,6 +193,11 @@ public class DocApptUI implements DocApptInterface{
         scheduleInterface.removeSchedule(appointment.getDate(), appointment.getTime(), doctor);
     }
 
+    /**
+     * Declines an appointment request and updates the appointment status to cancelled.
+     * 
+     * @param appointment The {@link Appointment} object to be declined.
+     */
     public void declineAppointmentRequest(Appointment appointment) {
         System.out.println("Decline Appointment Request");
         appointment.cancelAppointment();
@@ -171,6 +205,13 @@ public class DocApptUI implements DocApptInterface{
         AppointmentManager.duplicateAppointments();
     }
 
+    /**
+     * Records the outcome of an appointment, including consultation notes, diagnosis,
+     * prescribed medications, service type, and treatment plans.
+     * 
+     * @param sc A {@link Scanner} object to read user input.
+     * @param doctor The {@link Doctor} object recording the appointment outcome.
+     */
     public void recordAppointmentOutcome(Scanner sc, Doctor doctor) {
         System.out.println("\nRecord Appointments Outcome");
         System.out.printf("%s\n", "-".repeat(30));

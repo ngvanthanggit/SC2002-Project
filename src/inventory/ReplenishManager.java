@@ -5,6 +5,11 @@ import java.util.*;
 
 import utility.*;
 
+/**
+ * Manages replenish requests for inventory items, including loading requests,
+ * displaying
+ * the replenish list, and processing new, approved, or rejected requests.
+ */
 public class ReplenishManager {
     private static List<ReplenishRequest> replenishList = new ArrayList<>();
 
@@ -13,6 +18,17 @@ public class ReplenishManager {
     private static String originalPath = "Data//Original/Replenish_List.csv";
     private static String updatedPath = "Data//Updated/Replenish_List(Updated).csv";
 
+    /**
+     * Loads the replenish requests from a CSV file.
+     * <p>
+     * If it is the first run, it loads from the original path and clears the
+     * updated file.
+     * If not, it loads from the updated path.
+     * 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
+     *                   {@code false} otherwise.
+     */
     public static void loadReplenish(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
@@ -51,10 +67,19 @@ public class ReplenishManager {
      * }
      */
 
+    /**
+     * Returns the list of all replenish requests.
+     * 
+     * @return A list of replenish requests
+     */
     public static List<ReplenishRequest> getReplenishList() {
         return replenishList;
     }
 
+    /**
+     * Displays all replenish requests currently loaded in the system.
+     * If the list is empty, it notifies the user.
+     */
     public static void displayReplenishList() {
         if (replenishList.isEmpty()) {
             System.out.println("There are no replenish request at the moment.");
@@ -66,10 +91,18 @@ public class ReplenishManager {
         }
     }
 
+    /** Duplicates the replenish list by writing it to the updated CSV file. */
     public static void duplicateReplenish() {
         CSVwrite.writeCSVList(updatedPath, replenishList);
     }
 
+    /**
+     * Generates and adds a new replenish request for an item.
+     * The request is then written to the CSV file.
+     * 
+     * @param itemName          The name of the item to replenish
+     * @param replenishQuantity The quantity of the item to replenish
+     */
     public static void generateReplenish(String itemName, int replenishQuantity) {
         // Generate a unique ID for the request
         // String requestID = "REQ" + String.format("%03d", ++idCounter);
@@ -89,6 +122,12 @@ public class ReplenishManager {
         System.out.println("Replenish request submitted for " + itemName + " (" + replenishQuantity + " units).");
     }
 
+    /**
+     * Finds and returns a replenish request by its request ID.
+     * 
+     * @param requestID The ID of the request to find
+     * @return The {@link ReplenishRequest} object, or {@code null} if not found
+     */
     public static ReplenishRequest findReplenishRequest(String requestID) {
         for (ReplenishRequest request : replenishList) {
             if (request.getRequestID().equals(requestID)) {
@@ -98,6 +137,13 @@ public class ReplenishManager {
         return null;
     }
 
+    /**
+     * Manages a replenish request by allowing an administrator to approve or reject
+     * it.
+     * 
+     * @param requestID The ID of the request to manage
+     * @param sc        A {@link Scanner} object for user input.
+     */
     public static void manageReplenish(String requestID, Scanner sc) {
         ReplenishRequest request = findReplenishRequest(requestID); // returns request object
 
@@ -120,7 +166,13 @@ public class ReplenishManager {
         }
     }
 
-    // error able to approve/reject request even after approved/rejected
+    /**
+     * Approves a replenish request and updates the inventory stock.
+     * The request's status is set to APPROVED and the approval date is set to the
+     * current date.
+     * 
+     * @param request The {@link ReplenishRequest} to approve
+     */
     public static void approveReplenish(ReplenishRequest request) {
         if (request.getRequestStatus() == RequestStatus.PENDING) {
             request.setRequestStatus(RequestStatus.APPROVED);
@@ -141,6 +193,13 @@ public class ReplenishManager {
 
     }
 
+    /**
+     * Rejects a replenish request.
+     * The request's status is set to REJECTED and the list is updated in the CSV
+     * file.
+     * 
+     * @param request The {@link ReplenishRequest} to reject
+     */
     public static void rejectReplenish(ReplenishRequest request) {
         if (request.getRequestStatus() == RequestStatus.PENDING) {
             request.setRequestStatus(RequestStatus.REJECTED);
