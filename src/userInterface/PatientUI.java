@@ -10,7 +10,14 @@ import interfaces.PatientMenu;
 import main.HMSApp;
 import user.Patient;
 
+/**
+ * The class implements the {@link PatientMenu} interface to provide a UI for patients. 
+ * This class allows patients to perform various tasks, 
+ * including updating personal information, viewing available appointments slots, viewing past appointment outcomes, and
+ * viewing, scheduling, rescheduling, and cancelling appointments, 
+ */
 public class PatientUI implements PatientMenu{
+    /** The patient object associated with this UI. */
     private final Patient patient;
     private final PatientApptInterface patientApptInterface;
     private final MedicalRecordUI medicalRecordUI;
@@ -96,6 +103,12 @@ public class PatientUI implements PatientMenu{
         } while (choice > 0 && choice < 10);
     }
 
+    /**
+     * Updates personal information of patient
+     * 
+     * @param sc A {@link Scanner} object for user input
+     * @param patient whose personal information to update
+     */
     public void updatePersonalInfo(Scanner sc, Patient patient) {
         PatientsAcc.updatePatient(sc, patient);
     }

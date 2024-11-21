@@ -14,11 +14,29 @@ import schedule.Schedule;
 import schedule.ScheduleManager;
 import user.Doctor;
 
+/**
+ * The class implements {@link ScheduleInterface} to provide a user interface for managing doctor schedules.
+ * This class allows doctors to view, set, add, and remove time slots from their schedules.
+ * <p>
+ * It interacts with the {@link ScheduleManager} to handle the schedule data and ensures that the input 
+ * is validated for consistency and correctness. Doctors can set their available time slots for future dates,
+ * and the class ensures that there are no conflicts with existing schedules.
+ */
 public class ScheduleUI implements ScheduleInterface{
 
-    //constructor
+    /**
+     * Default constructor for ScheduleUI.
+     */
     public ScheduleUI(){}
     
+     /**
+     * Displays the schedule for a given doctor.
+     * <p>
+     * This method retrieves and displays the doctor's schedule, showing the available
+     * time slots for the doctor, if any.
+     * 
+     * @param doctor The {@link Doctor} whose schedule is to be viewed.
+     */
     public void viewSchedule(Doctor doctor) {
         System.out.println("\n|------- Doctor " +  doctor.getName() + "'s Schedule -------|");
         List<Schedule> schedules = ScheduleManager.getScheduleOfDoctor(doctor.getHospitalID());
@@ -36,6 +54,16 @@ public class ScheduleUI implements ScheduleInterface{
 
     }
 
+    /**
+     * Sets a schedule for the doctor.
+     * <p>
+     * This method allows the doctor to set their available time slots for a future date.
+     * The user must input the date and available time slots, which will be validated before
+     * being added to the schedule.
+     * 
+     * @param sc      The {@link Scanner} object used to capture user input.
+     * @param doctor  The {@link Doctor} who is setting their schedule.
+     */
     public void setSchedule(Scanner sc, Doctor doctor) {
         System.out.println("Set Schedule");
         String dateStr;
@@ -116,6 +144,12 @@ public class ScheduleUI implements ScheduleInterface{
         }
     }
 
+    /**
+     * Validates that all time slots are 1 hour apart.
+     * 
+     * @param timeSlots The list of time slots to be checked.
+     * @return True if all time slots are 1 hour apart, otherwise false.
+     */
     public boolean areTimeSlotsOneHourApart(List<LocalTime> timeSlots) {
         // Sort the time slots to ensure order
         Collections.sort(timeSlots);
@@ -131,6 +165,15 @@ public class ScheduleUI implements ScheduleInterface{
         return true; // All time slots are 1 hour apart
     }
 
+    /**
+     * Adds a single time slot to the doctor's schedule.
+     * <p>
+     * This method checks if the time slot is valid and adds it to the schedule for the given date.
+     * 
+     * @param date    The date of the schedule.
+     * @param time    The time slot to be added.
+     * @param doctor  The {@link Doctor} whose schedule is being updated.
+     */
     public void addSchedule(LocalDate date, LocalTime time, Doctor doctor) {
         if (ScheduleManager.checkValidTime(date, time)) {
             List<Schedule> schedules = ScheduleManager.getScheduleOfDoctor(doctor.getHospitalID());
@@ -153,6 +196,16 @@ public class ScheduleUI implements ScheduleInterface{
         }
     }
 
+    /**
+     * Adds multiple time slots to the doctor's schedule.
+     * <p>
+     * This method ensures that all the time slots are valid and adds them to the schedule for the given date.
+     * If the date already has a schedule, the new time slots are added to the existing schedule.
+     * 
+     * @param date       The date of the schedule.
+     * @param timeSlots  The list of time slots to be added.
+     * @param doctor     The {@link Doctor} whose schedule is being updated.
+     */
     public void addSchedule(LocalDate date, List<LocalTime> timeSlots, Doctor doctor) {
         // storing the valid time slots
         List<LocalTime> validTimeSlots = new ArrayList<>();
@@ -196,6 +249,13 @@ public class ScheduleUI implements ScheduleInterface{
         ScheduleManager.duplicateSchedule();
     }
 
+    /**
+     * Removes a time slot from the doctor's schedule.
+     * 
+     * @param date    The date of the schedule.
+     * @param time    The time slot to be removed.
+     * @param doctor  The {@link Doctor} whose schedule is being updated.
+     */
     public void removeSchedule(LocalDate date, LocalTime time, Doctor doctor) {
         List<Schedule> schedules = ScheduleManager.getScheduleOfDoctor(doctor.getHospitalID());
         for (Schedule schedule : schedules) {

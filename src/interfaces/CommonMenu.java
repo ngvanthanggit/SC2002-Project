@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * The interface defines common functionalities for menus used in the HMS
+ * The interface defines common functionalities for menus used in the HMS.
  * This includes displaying menus and handling logout functionality
  */
 public interface CommonMenu {

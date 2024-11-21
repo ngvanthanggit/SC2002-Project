@@ -2,6 +2,11 @@ package utility;
 
 import java.util.List;
 
+/**
+ * Functional interface for generating an ID for an object
+ * <p>
+ * This interface is used in conjunction with the {@link IDExtractor} class.
+ */
 public class IDGenerator {
     /**
      * Generates a new unique ID based on the prefix and the list of existing objects.

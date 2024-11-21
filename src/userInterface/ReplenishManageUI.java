@@ -10,14 +10,16 @@ import inventory.ReplenishManager;
 import user.Pharmacist;
 
 /**
- * This class provides a user interface for managing inventory replenish requests. 
+ * This class implements {@link ReplenishManageInterface} to provide a user interface for managing inventory replenish requests. 
  * <p>
  * This class includes methods for viewing, submitting, and managing replenish requests
  * for inventory items. It is designed for use by administrators and pharmacists.
  */
 public class ReplenishManageUI implements ReplenishManageInterface{
 
-    //constructor
+    /**
+     * Default constructor for ReplenishManageUI.
+     */
     public ReplenishManageUI(){}
 
     /** Displays the list of all replenish requests. */
@@ -81,6 +83,15 @@ public class ReplenishManageUI implements ReplenishManageInterface{
         ReplenishManager.manageReplenish(sc.nextLine() ,sc); //pass reqID
     }
 
+    /**
+     * Submits a replenish request by first displaying the current replenish requests 
+     * and then allowing the pharmacist to choose a medication.
+     * 
+     * @param sc The {@link Scanner} object to capture user input.
+     * @param pharmacist The pharmacist submitting the replenish request.
+     * @param replenishManageInterface The interface for managing replenish requests.
+     * @param invenManageInterface The interface for managing inventory.
+     */
     public void submitReplenish(Scanner sc, Pharmacist pharmacist, 
     ReplenishManageInterface replenishManageInterface, InvenManageInterface invenManageInterface){
         replenishManageInterface.viewReplenishRequest();
