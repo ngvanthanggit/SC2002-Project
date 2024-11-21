@@ -3,14 +3,19 @@ import java.util.Scanner;
 import user.Role;
 
 /**
- * The interface extends {@link CommonMenus} to provide additional administrative functionalities 
+ * The interface extends {@link CommonMenus} to provide additional administrative functionalities.
  * It defines methods specific for Administators like managing various aspects of the system,
  * such as hospital staff, appointments, inventory, and replenish requests.
+ * <p>
+ * The methods in this interface are intended to be implemented by classes that provide the actual
+ * functionality for an administrator to manage the different system components.
+ * </p>
  */
 public interface AdminMenu extends CommonMenu{
 
     /** 
      * Manages hospital staff based on their role
+     * 
      * @param sc   A {@link Scanner} object for user input.
      * @param role The {@link Role} of the staff to manage (Doctor, Pharmacist, Administator).
      */
@@ -18,6 +23,7 @@ public interface AdminMenu extends CommonMenu{
 
     /**
      * Manages appointments, allowing the administrator to view and modify appointment details.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public void manageAppointments(Scanner sc);

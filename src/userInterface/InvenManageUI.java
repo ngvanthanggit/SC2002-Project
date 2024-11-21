@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import interfaces.InvenManageInterface;
 import interfaces.ReplenishManageInterface;
+import interfaces.ScheduleInterface;
 import inventory.InventoryItem;
 import inventory.InventoryManager;
 import inventory.Medicine;
@@ -19,7 +20,12 @@ import user.Role;
 public class InvenManageUI implements InvenManageInterface{
 
     private final ReplenishManageInterface replenishManageInterface;
-    //constructor
+    
+    /**
+     * Constructs a IvenManageUI object with the given replenishManageInterface.
+     * 
+     * @param replenishManageInterface The {@link replenishManageInterface} object to manage the inventory.
+     */
     public InvenManageUI(ReplenishManageInterface replenishManageInterface){
         this.replenishManageInterface = replenishManageInterface;
     }

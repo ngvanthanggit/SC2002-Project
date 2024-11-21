@@ -21,7 +21,9 @@ import user.Role;
  */
 public class StaffManageUI implements StaffManageInterface{
 
-    //constructor
+    /**
+     * Default constructor for StaffManageUI.
+     */
     public StaffManageUI(){}
 
     /**

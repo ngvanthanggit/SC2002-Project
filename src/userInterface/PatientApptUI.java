@@ -19,11 +19,23 @@ import user.User;
 import user.Doctor;
 import user.Patient;
 
+/**
+ * The class implements the {@link PatientApptInterface} to provide a UI for managing patient appointments. 
+ * It allows a patient to view available doctors and time slots, schedule, reschedule, 
+ * cancel appointments, and view scheduled or past appointment outcomes.
+ */
 public class PatientApptUI implements PatientApptInterface{
 
-    //constructor
+    /**
+     * Default constructor for PatientApptUI.
+     */
     public PatientApptUI(){}
 
+    /**
+     * Displays the available doctors and prompts the user to choose a doctor to view available appointment slots.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     */
     public void viewAvailableApptSlots(Scanner sc) {
         viewAvailableDoctors(sc);
         System.out.print("\nEnter Doctor ID: ");
@@ -31,6 +43,11 @@ public class PatientApptUI implements PatientApptInterface{
         viewDoctorTimeSlots(doctorID);
     }
 
+    /**
+     * Displays the list of available doctors.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     */
     public void viewAvailableDoctors(Scanner sc){
         List<User> doctors = DoctorsAcc.getDoctors();
         System.out.println("\n|-- Viewing Available Doctors --|");
@@ -40,6 +57,11 @@ public class PatientApptUI implements PatientApptInterface{
         }
     }
 
+    /**
+     * Displays the available time slots for a specific doctor.
+     * 
+     * @param doctorID The ID of the doctor whose time slots are to be viewed.
+     */
     public void viewDoctorTimeSlots(String doctorID) {
         List<Schedule> doctorSchedules = ScheduleManager.getScheduleOfDoctor(doctorID);
         if (doctorSchedules.isEmpty()) {
@@ -52,6 +74,13 @@ public class PatientApptUI implements PatientApptInterface{
         }
     }
 
+    /**
+     * Allows the patient to schedule an appointment with a doctor by choosing a doctor, 
+     * selecting a time slot, and confirming the appointment.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param patient The patient scheduling the appointment.
+     */
     public void scheduleAppointment(Scanner sc, Patient patient) {
         viewAvailableDoctors(sc);
         System.out.println("\nEnter the Doctor ID you would like to view: ");
@@ -71,7 +100,16 @@ public class PatientApptUI implements PatientApptInterface{
         }
     }
 
-    //breaks if wrong format is enterd for time and date
+    /**
+     * Prompts the user to select an available time slot for their appointment.
+     * It ensures the date and time are valid and checks the doctor's availability.
+     * Breaks if wrong format is entered for date and time. 
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param doctorID The ID of the doctor being scheduled with.
+     * @param patient The patient who is scheduling the appointment.
+     * @return {@code True} if the appointment was successfully scheduled, otherwise {@code false}.
+     */
     public boolean selectTimeSlot(Scanner sc, String doctorID, Patient patient) {
         LocalDate date = null;
         LocalTime time = null;
@@ -126,6 +164,12 @@ public class PatientApptUI implements PatientApptInterface{
         return true;
     }
 
+    /**
+     * Allows the patient to reschedule a previously scheduled appointment.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param patient The patient who wants to reschedule an appointment.
+     */
     public void rescheduleAppointment(Scanner sc, Patient patient) {
         System.out.println("Rescheduling Appointment");
 
@@ -176,6 +220,12 @@ public class PatientApptUI implements PatientApptInterface{
         }
     }
 
+    /**
+     * Allows the patient to cancel a previously scheduled appointment.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param patient The patient who wants to cancel an appointment.
+     */
     public void cancelAppointment(Scanner sc, Patient patient) {
 
         // display the scheduled appointments
@@ -215,6 +265,11 @@ public class PatientApptUI implements PatientApptInterface{
         AppointmentManager.removeAppointment(appt);
     }
 
+    /**
+     * Displays the list of scheduled appointments for the patient.
+     * 
+     * @param patient The patient whose scheduled appointments are to be viewed.
+     */
     public void viewScheduledAppointments(Patient patient) {
         System.out.println("\nViewing Scheduled Appointments");
         // get all appointments for the patient
@@ -236,6 +291,11 @@ public class PatientApptUI implements PatientApptInterface{
         }
     }
 
+    /**
+     * Displays the list of past appointment outcomes for the patient.
+     * 
+     * @param patient The patient whose past appointments outcomes are to be viewed.
+     */
     public void viewPastApptOutcomes(Patient patient) {
         List<Appointment> patientAppts = AppointmentManager.getAppointmentsByPatient(patient.getHospitalID());
 

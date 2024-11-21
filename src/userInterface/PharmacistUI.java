@@ -12,12 +12,25 @@ import inventory.ReplenishManager;
 import main.HMSApp;
 import user.Pharmacist;
 
+/**
+ * The class implements the {@link PharmacistMenu} interface to provide a UI for pharmacists. 
+ * This class allows pharmacists to perform various tasks, 
+ * including updating prescription status, viewing inventory, and replenish requests, and submitting replenish requests.
+ */
 public class PharmacistUI implements PharmacistMenu {
     private final Pharmacist pharmacist;
     private final InvenManageInterface invenManageInterface;
     private final ReplenishManageInterface replenishManageInterface;
     private final ApptOutcomeInterface apptOutcomeInterface;
 
+    /**
+     * Constructs a new {@code PharmacistUI} instance.
+     *
+     * @param pharmacist The {@link Pharmacist} object representing the logged-in pharmacist.
+     * @param invenManageInterface The {@link InvenManageInterface} for inventory management.
+     * @param replenishManageInterface The {@link ReplenishManageInterface} for managing replenish requests.
+     * @param apptOutcomeInterface The {@link ApptOutcomeInterface} for managing appointment outcomes.
+     */
     public PharmacistUI(Pharmacist pharmacist, InvenManageInterface invenManageInterface, 
                         ReplenishManageInterface replenishManageInterface, ApptOutcomeInterface apptOutcomeInterface){
         this.pharmacist = pharmacist;
@@ -93,7 +106,11 @@ public class PharmacistUI implements PharmacistMenu {
 
     }
 
-    //show all items & low level warning
+    /**
+     * Displays the inventory management options for the pharmacist.
+     *
+     * @param sc A {@link Scanner} object for user input.
+     */
     public void viewInventory(Scanner sc) {
         int choice=-1;
         do{

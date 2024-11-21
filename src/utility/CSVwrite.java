@@ -16,11 +16,25 @@ import medicalrecord.MedicalRecord;
 import schedule.Schedule;
 import appointment.Appointment;
 
+/**
+ * A utility class that provides methods for writing objects and lists of objects to a CSV file. 
+ * <p>
+ * The class supports writing both single objects and lists of objects. For each object, 
+ * it checks the type and writes the appropriate CSV format. If the file does not exist or 
+ * the header is missing, it generates a default header based on the object type.
+ */
 public class CSVwrite {
 
     private static boolean headersWritten = false;
 
-    // a method to write a single row of data into a CSV file
+    /**
+     * Writes a single object to a CSV file. The method checks the type of the object
+     * and writes its data into the CSV file in the appropriate format.
+     * 
+     * @param <T> The type of object being written to the CSV file.
+     * @param filePath The path to the CSV file.
+     * @param object The object whose data will be written to the CSV file.
+     */
     public static <T> void writeCSV(String filePath, T object) {
 
         if (object == null) {
@@ -170,7 +184,15 @@ public class CSVwrite {
         }
     }
 
-    // method to get all fields from the class hierarchy (including superclasses)
+    /**
+     * Retrieves all fields from the class hierarchy of the given class, including fields from 
+     * its superclasses. This method uses reflection to get both declared fields of the class 
+     * and its superclasses.
+     * 
+     * @param clazz The class whose fields are to be retrieved.
+     * @return A list of {@link Field} objects representing all fields of the class and its 
+     *         superclasses.
+     */
     private static List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         List<Class<?>> classHierarchy = new ArrayList<>(); // List of Classes

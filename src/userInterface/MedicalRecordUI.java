@@ -9,10 +9,22 @@ import user.Patient;
 import medicalrecord.MedicalRecord;
 import medicalrecord.MedicalRecordManager;
 
+/**
+ * The class implements implements {@link MedicalRecInterface} to provide a UI for managing medical records. 
+ * It allows a doctor to view, update, and manage patient medical records through various interactions.
+ */
 public class MedicalRecordUI implements MedicalRecInterface {
-    //constructor
+    
+    /**
+     * Default constructor for MedicalRecordUI.
+     */
     public MedicalRecordUI(){}
 
+    /**
+     * Displays the patient's medical records.
+     * 
+     * @param patient The {@link Patient} whose records are to be viewed.
+     */
     public void viewPatientMedicalRecords(Patient patient) {
         System.out.println("\n|-- Viewing Medical Records--|");
         System.out.printf("%s\n", "-".repeat(30));
@@ -26,6 +38,13 @@ public class MedicalRecordUI implements MedicalRecInterface {
         }
     }
 
+    /**
+     * Allows the doctor to choose a patient's medical record.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param doctor The doctor attempting to access the medical record.
+     * @return The medical record of the patient, or null if no record is found.
+     */
     public MedicalRecord choosePatient(Scanner sc, Doctor doctor){
         System.out.println("Enter Patient ID of the Medical Records you would like manage");
         System.out.print("Enter Patient ID: ");
@@ -39,6 +58,12 @@ public class MedicalRecordUI implements MedicalRecInterface {
             return record;
         }
     }
+
+    /**
+     * Displays the details of a patient's medical record.
+     * 
+     * @param record The medical record of the patient to view.
+     */
     public void viewPatientRecords(MedicalRecord record) {
         if (record == null) {
             System.out.println("No medical record found for this patient.");
@@ -47,6 +72,13 @@ public class MedicalRecordUI implements MedicalRecInterface {
         System.out.println(record.getRecordDetails());
     }
 
+
+    /**
+     * Allows the doctor to update a patient's medical record with diagnoses, prescriptions, or treatment plans.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @param record The medical record of the patient to update.
+     */
     public void updatePatientRecords(Scanner sc, MedicalRecord record) {
         if (record == null) {
             System.out.println("No medical record found for this patient.");
