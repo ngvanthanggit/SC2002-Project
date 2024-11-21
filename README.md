@@ -1,4 +1,4 @@
-# SC2002 Project
+# SC2002 Project: Hospital Management Application
 ## How to run?
 1. Direct the terminal to /src folder
    ![cdsrc](https://github.com/user-attachments/assets/61ac3278-3d0e-4674-9321-d2f9288163cf)
