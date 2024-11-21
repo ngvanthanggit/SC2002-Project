@@ -3,8 +3,31 @@ package main;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import utility.ColoredPrintStream;
+
+/**
+ * This class is the main entry point of the Hospital Management System (HMS) application.
+ * It handles user interactions such as logging in, creating a new patient account, or exiting the system.
+ * The application displays a menu and processes the user's choice to either log in, create an account, or exit.
+ * The system data is initialized from CSV files during startup.
+ */
 public class HMSApp {
+
+    /** ColoredPrintStream object for printing colored output to the console. */
+    private static ColoredPrintStream coloredOut;
+
+    /**
+     * The main method is the entry point for the HMSApp.
+     * It initializes the system by loading data from CSV files and prompts the user for input.
+     * The user can choose to log in, create a new patient account, or exit the system.
+     * 
+     * @param args Command-line arguments (not used in this case)
+     */
     public static void main(String[] args) {
+        
+        // Redirect System.out to ColoredPrintStream
+        coloredOut = new ColoredPrintStream(System.out);
+        System.setOut(coloredOut);
 
         //initialise the system by importing all data from any CSV files
         SystemInitialisation.start(); 
@@ -45,5 +68,23 @@ public class HMSApp {
                     continue;
             }
         } while (choice != 3);
+    }
+
+    /**
+     * Sets the color for the current session based on the user's role.
+     * This method changes the color of the output text for the session.
+     *
+     * @param roleColor The color to be set for the session.
+     */
+    public static void setSessionColor(String roleColor) {
+        coloredOut.setColor(roleColor);
+    }
+
+    /**
+     * Resets the output color to the default color after a session.
+     * This method should be called at the end of the session to restore the default color.
+     */
+    public static void resetSessionColor() {
+        coloredOut.resetColor();
     }
 }

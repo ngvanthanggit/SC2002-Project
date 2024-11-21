@@ -8,6 +8,10 @@ import java.util.Map;
 
 import inventory.Medicine;
 
+import accounts.PatientsAcc;
+import user.Patient;
+import user.Doctor;
+
 public class MedicalRecord {
     private String medicalRID;
     private String doctorID; // Unique identifier for the doctor
@@ -117,6 +121,16 @@ public class MedicalRecord {
         }
         return String.format("MedicalR ID: %s, Doctor ID: %s, Patient ID: %s, Diagnoses: %s, Prescriptions: %s, Treatment Plans: %s, Prescription Status: %s",
                 medicalRID, doctorID, patientID, String.join(";", diagnoses), prescriptionDetails, String.join(";", treatmentPlans), status);
+    }
+
+    public String getRecordDetailsWithPersonalInfo() {
+        Patient patient = PatientsAcc.findPatientById(patientID);
+        return "Medical Record for " + patient.getName() + " (" + patient.getHospitalID() + "):\n" +
+                "- Contact: " + patient.getContactInfo() + "\n" +
+                "- Blood Type: " + patient.getBloodType() + "\n" +
+                "- Diagnoses: " + diagnoses + "\n" +
+                "- Prescriptions: " + prescriptions + "\n" +
+                "- Treatment Plans: " + treatmentPlans + "\n";
     }
 
     public String toCSVRow() {

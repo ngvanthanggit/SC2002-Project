@@ -7,11 +7,23 @@ import java.time.LocalTime;
 import utility.*;
 import user.Doctor;
 
+/**
+ * The ScheduleManager class manages all the operations related to doctor schedules.
+ * It handles loading schedules from a CSV file, checking for conflicts, adding, removing, 
+ * and displaying schedules, as well as validating the schedules and their time slots.
+ */
 public class ScheduleManager {
+
+    /** The list of schedules for all doctors */
     private static List<Schedule> schedules = new ArrayList<>();
+
+    /** The file path for the original schedule list */
     private static String originalPath = "Data//Original/Schedule_List.csv";
+
+    /** The file path for the updated schedule list */
     private static String updatedPath = "Data//Updated/Schedule_List(Updated).csv";
 
+    /** Removes any schedules that are in the past. */
     public static void removeInvalidSchedules() {
         // remove schedules that are in the past
         schedules.removeIf(schedule -> schedule.getDate().isBefore(java.time.LocalDate.now()));
@@ -19,6 +31,12 @@ public class ScheduleManager {
                 && schedule.getTimeSlots().stream().allMatch(time -> time.isBefore(java.time.LocalTime.now())));
     }
 
+    /**
+     * Loads the schedules from the CSV file (original or updated based on the first run).
+     * 
+     * @param isFirstRun {@code true} if the application is running for the first time; 
+     *                   {@code false} otherwise.
+     */
     public static void loadSchedules(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
@@ -50,11 +68,16 @@ public class ScheduleManager {
         removeInvalidSchedules();
     }
 
+    /** Duplicates the current list of schedules to the updated CSV file. */
     public static void duplicateSchedule() {
         removeInvalidSchedules();
         CSVwrite.writeCSVList(updatedPath, schedules);
     }
 
+    /**
+     * Displays the current list of schedules.
+     * Removes any invalid schedules before displaying.
+     */
     public static void displaySchedules() {
         removeInvalidSchedules();
         if (schedules.isEmpty()) {
@@ -67,6 +90,12 @@ public class ScheduleManager {
         }
     }
 
+    /**
+     * Retrieves the list of schedules for a specific doctor based on their ID.
+     * 
+     * @param doctorID The ID of the doctor whose schedules are to be retrieved
+     * @return A list of schedules for the specified doctor
+     */
     public static List<Schedule> getScheduleOfDoctor(String doctorID) {
         removeInvalidSchedules();
         List<Schedule> doctorSchedules = new ArrayList<>();
@@ -78,6 +107,14 @@ public class ScheduleManager {
         return doctorSchedules;
     }
 
+    /**
+     * Checks if a specific doctor is available at a given date and time.
+     * 
+     * @param doctorID The ID of the doctor
+     * @param date The date for the check
+     * @param time The time for the check
+     * @return {@code true} if the doctor is available, {@code false} otherwise
+     */
     public static boolean isDoctorAvailable(String doctorID, LocalDate date, LocalTime time) {
         removeInvalidSchedules();
         for (Schedule schedule : schedules) {
@@ -89,39 +126,64 @@ public class ScheduleManager {
         return false;
     }
 
+    /**
+     * Retrieves all the schedules in the system.
+     * 
+     * @return A list of all the schedules
+     */
     public static List<Schedule> getSchedules() {
         removeInvalidSchedules();
         return schedules;
     }
 
+    /**
+     * Adds a new schedule to the system and duplicates the schedule list in the updated CSV file.
+     * 
+     * @param schedule The new schedule to add
+     */
     public static void addSchedule(Schedule schedule) {
         removeInvalidSchedules();
         schedules.add(schedule);
         duplicateSchedule();
     }
 
-    //checks duplicate time schedule for doctor
-    public static boolean checkDuplicateSchedule(LocalDate date, LocalTime time, Doctor doctor){
-        //loop through the entire schedules list
-        for(Schedule schedule: schedules){
-            //if a schedule for the Doctor with date passed is found
+    /**
+     * Checks if there is a duplicate schedule (same doctor, same date, and same time).
+     * 
+     * @param date The date of the proposed schedule
+     * @param time The time of the proposed schedule
+     * @param doctor The doctor for whom the schedule is being checked
+     * @return {@code true} if a conflict exists, {@code false} otherwise
+     */
+    public static boolean checkDuplicateSchedule(LocalDate date, LocalTime time, Doctor doctor) {
+        // loop through the entire schedules list
+        for (Schedule schedule : schedules) {
+            // if a schedule for the Doctor with date passed is found
             if (schedule.getDoctorID().equals(doctor.getHospitalID()) && schedule.getDate().equals(date)) {
-                //check the timeSlots
-                if(schedule.getTimeSlots().contains(time)){
+                // check the timeSlots
+                if (schedule.getTimeSlots().contains(time)) {
                     return true; // Conflict found
                 }
             }
         }
-        return false; //no conflicts
+        return false; // no conflicts
     }
 
-    //check for 1hr-interval
-    public static boolean checkInterval(LocalDate date, LocalTime time, Doctor doctor){
+    /**
+     * Checks if there is a conflict with the time slots (ensures there is a 1-hour interval between slots).
+     * 
+     * @param date The date of the proposed schedule
+     * @param time The time of the proposed schedule
+     * @param doctor The doctor for whom the schedule is being checked
+     * @return {@code true} if the proposed schedule conflicts with an existing one, {@code false} otherwise
+     */
+    public static boolean checkInterval(LocalDate date, LocalTime time, Doctor doctor) {
         for (Schedule schedule : schedules) {
             if (schedule.getDoctorID().equals(doctor.getHospitalID()) &&
-                schedule.getDate().equals(date)) {
-                //check whether incoming timeSlot has a 1hr difference between before and after time
-                //example before < incoming < after, 1hr interval
+                    schedule.getDate().equals(date)) {
+                // check whether incoming timeSlot has a 1hr difference between before and after
+                // time
+                // example before < incoming < after, 1hr interval
                 for (LocalTime existingTime : schedule.getTimeSlots()) {
                     if (Math.abs(Duration.between(existingTime, time).toMinutes()) < 60) {
                         return true; // Conflict found
@@ -132,17 +194,31 @@ public class ScheduleManager {
         return false; // No conflict
     }
 
+    /**
+     * Validates a proposed schedule by checking for any duplicate schedules and interval conflicts.
+     * 
+     * @param date The date of the proposed schedule
+     * @param time The time of the proposed schedule
+     * @param doctor The doctor for whom the schedule is being checked
+     * @return {@code true} if the schedule is valid (no conflicts), {@code false} otherwise
+     */
     public static boolean checkValidSchedule(LocalDate date, LocalTime time, Doctor doctor) {
         boolean isDuplicate = checkDuplicateSchedule(date, time, doctor);
         boolean isIntervalConflict = checkInterval(date, time, doctor);
-    
+
         if (isDuplicate || isIntervalConflict) {
             return false; // Conflict found
         }
         return true; // No conflicts
     }
 
-    // check if the time is in the future
+    /**
+     * Validates if the proposed time is in the future (i.e., the time is not in the past).
+     * 
+     * @param date The date of the proposed schedule
+     * @param time The time of the proposed schedule
+     * @return {@code true} if the time is in the future, {@code false} otherwise
+     */
     public static boolean checkValidTime(LocalDate date, LocalTime time) {
         if ((date.isEqual(LocalDate.now()) && time.isAfter(LocalTime.now())) ||
                 date.isAfter(LocalDate.now())) {

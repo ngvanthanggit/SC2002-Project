@@ -11,12 +11,32 @@ import accounts.DoctorsAcc;
 import accounts.PatientsAcc;
 import interfaces.ScheduleInterface;
 
+/**
+ * This class is responsible for managing appointments.
+ * <p>
+ * This includes loading data from CSV files, displaying, adding, updating, and removing appointments, 
+ * as well as managing appointment statuses and linking appointments with doctors and patients.. The class interacts with utility classes like {@code CSVread}, 
+ * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
+ */
 public class AppointmentManager {
+    /** The list of appointments managed by the AppointmentManager. */
     private static List<Appointment> appointments = new ArrayList<>();
+    /** The interface used for interacting with the schedule. */
     private static ScheduleInterface scheduleInterface = new ScheduleUI();
+    /** The path to the original appointments CSV file. */
     private static String originalPath = "Data//Original/Appt_List.csv";
+    /** The path to the updated appointments CSV file. */
     private static String updatedPath = "Data//Updated/Appt_List(Updated).csv";
 
+    /**
+     * Loads appointments from a CSV file.
+     * <p>
+     * If it is the first run, it loads from the original file path and clears the updated file.
+     * Otherwise, it loads from the updated file.
+     * 
+     * @param isFirstRun {@code true} if the application is running for the first time; 
+     *                   {@code false} otherwise.
+     */
     public static void loadAppointments(boolean isFirstRun) {
         String filePath;
         if (isFirstRun) {
@@ -54,6 +74,11 @@ public class AppointmentManager {
         }
     }
 
+    /**
+     * Retrieves an appointment by its ID.
+     * @param appointmentID The ID of the appointment to retrieve.
+     * @return The {@link Appointment} object, or {@code null} if not found.
+     */
     public static Appointment getAppointment(String appointmentID) {
         for (Appointment appt : appointments) {
             if (appt.getAppointmentID().equals(appointmentID)) {
@@ -63,6 +88,7 @@ public class AppointmentManager {
         return null;
     }
 
+    /** Displays all appointments currently in the list. */
     public static void displayAppointments() {
         if (appointments.isEmpty()) {
             System.out.println("The appointment list is currently empty.");
@@ -74,11 +100,17 @@ public class AppointmentManager {
         }
     }
 
+    /** Duplicates the current appointments list to the updated appointments CSV file. */
     public static void duplicateAppointments() {
         CSVwrite.writeCSVList(updatedPath, appointments);
     }
-    
-    // getting appointments by patient
+
+    /**
+     * Retrieves a list of appointments for a given patient.
+     * 
+     * @param patientID The hospital ID of the patient whose appointments are to be retrieved.
+     * @return A list of {@link Appointment} objects associated with the given patient.
+     */
     public static List<Appointment> getAppointmentsByPatient(String patientID) {
         List<Appointment> patientAppts = new ArrayList<>();
         for (Appointment appt : appointments) {
@@ -88,6 +120,14 @@ public class AppointmentManager {
         }
         return patientAppts;
     }
+
+    /**
+     * Retrieves a list of appointments for a given patient with a specified status.
+     * 
+     * @param patientID The hospital ID of the patient whose appointments are to be retrieved.
+     * @param status The status of the appointments to retrieve.
+     * @return A list of {@link Appointment} objects matching the patient and status.
+     */
 
     public static List<Appointment> getAppointmentsByPatient(String patientID, ApptStatus status) {
         List<Appointment> patientAppts = new ArrayList<>();
@@ -99,7 +139,12 @@ public class AppointmentManager {
         return patientAppts;
     }
 
-    // getting appointments by doctor
+    /**
+     * Retrieves a list of appointments for a given doctor.
+     * 
+     * @param doctorID The hospital ID of the doctor whose appointments are to be retrieved.
+     * @return A list of {@link Appointment} objects associated with the given doctor.
+     */
     public static List<Appointment> getAppointmentsByDoctor(String doctorID) {
         List<Appointment> doctorAppts = new ArrayList<>();
         for (Appointment appt : appointments) {
@@ -110,6 +155,13 @@ public class AppointmentManager {
         return doctorAppts;
     }
 
+    /**
+     * Retrieves a list of appointments for a given doctor with a specified status.
+     * 
+     * @param doctorID The hospital ID of the doctor whose appointments are to be retrieved.
+     * @param status The status of the appointments to retrieve.
+     * @return A list of {@link Appointment} objects matching the doctor and status.
+     */
     public static List<Appointment> getAppointmentsByDoctor(String doctorID, ApptStatus status) {
         List<Appointment> doctorAppts = new ArrayList<>();
         for (Appointment appt : appointments) {
@@ -120,10 +172,21 @@ public class AppointmentManager {
         return doctorAppts;
     }
 
+    /**
+     * Adds a new appointment to the appointments list.
+     * 
+     * @param appt The {@link Appointment} object to be added.
+     */
     public static void addAppointment(Appointment appt) {
         appointments.add(appt);
     }
 
+    /**
+     * Removes an appointment from the appointments list.
+     * If the appointment is scheduled, the doctor's time slot is returned to their schedule.
+     * 
+     * @param appt The {@link Appointment} object to be removed.
+     */
     public static void removeAppointment(Appointment appt) {
         // check if the appointment was scheduled
         if (appt.getStatus() == ApptStatus.SCHEDULED) {
@@ -140,6 +203,14 @@ public class AppointmentManager {
         }
     }
 
+    /**
+     * Requests an appointment by creating a new appointment object with a pending status.
+     * 
+     * @param doctorID The hospital ID of the doctor for the appointment.
+     * @param patientID The hospital ID of the patient requesting the appointment.
+     * @param date The date for the appointment.
+     * @param time The time for the appointment.
+     */
     public static void requestAppointment(String doctorID, String patientID, LocalDate date, LocalTime time) {
         String appointmentID = IDGenerator.generateID("AP", appointments, Appointment::getAppointmentID, 3);
         Doctor doctor = DoctorsAcc.findDoctorById(doctorID);
@@ -150,8 +221,12 @@ public class AppointmentManager {
         duplicateAppointments();
     }
 
-    //called by doctor when writing medicalRecord  
-    public static void completeAppointment(Appointment appointment){
+    /**
+     * Marks an appointment as completed and records the appointment outcome.
+     * 
+     * @param appointment The {@link Appointment} object to be completed.
+     */
+    public static void completeAppointment(Appointment appointment) {
         appointment.completeAppointment();
         // save to file
         duplicateAppointments();

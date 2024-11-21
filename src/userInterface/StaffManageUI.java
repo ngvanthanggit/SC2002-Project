@@ -104,7 +104,7 @@ public class StaffManageUI implements StaffManageInterface{
                     continue;
             }
             //after sorting, display staffs
-            System.out.println("\nDisplaying" + role + "list:");
+            System.out.println("\nDisplaying " + role + " list:");
                 for (User user : copiedList) {
                     System.out.println(user.userInfo());
                 }

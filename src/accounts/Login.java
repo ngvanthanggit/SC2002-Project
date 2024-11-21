@@ -4,15 +4,36 @@ import java.util.List;
 import java.util.Scanner;
 import user.*;
 
+/**
+ * This class is responsible for authenticating users based on their hospital ID and password.
+ * <p>
+ * It checks the hospitalID and password against a list of users and provides access based on user roles (Patient, Pharmacist, Doctor, Administrator).
+ * If a user logs in with the default password, they are prompted to change it.
+ */
 public class Login {
 
     private List<User> users; // Accepts a list of users
     private static String defaultPW = "password1234";
 
+    /**
+     * Constructor for the Login class.
+     * 
+     * @param users The list of users to authenticate against.
+     */
     public Login(List<User> users) {
         this.users = users;
     }
 
+    /**
+     * Authenticates a user by their hospital ID and password.
+     * <p>
+     * Prompts the user to enter their hospital ID and password.
+     * If the details match, the corresponding user object is returned, 
+     * otherwise null is returned indicating a failed login.
+     * 
+     * @param sc A {@link Scanner} object for user input.
+     * @return The authenticated {@link user}, or {@code null} if authentication fails.
+     */
     public User authenticate(Scanner sc) {
 
         System.out.print("Enter your hospital ID: ");
@@ -58,7 +79,14 @@ public class Login {
         return null; // Return null if login fails
     }
 
-    // check if user is using default pw "password1234"
+    /**
+     * Checks if a user is logging in with the default password "password1234".
+     * <p>
+     * If they are, they are prompted to change their password.
+     * 
+     * @param user The user who is attempting to log in.
+     * @param scanner A {@link scanner} object to capture the new password input.
+     */
     public static void checkDefPw(User user, Scanner scanner) {
         if (user.getPassword().equals(defaultPW)) {
             System.out.println("You are logging in with a default password, please change your password. ");

@@ -5,15 +5,36 @@ import java.util.Scanner;
 
 import accounts.*;
 import user.*;
+import utility.TerminalColors;
 
+/**
+ * This class handles the user interface for the Hospital Management System (HMS).
+ * It allows users to log in, create a new patient account, check their role, and manage session states.
+ * The class facilitates user authentication and displays appropriate user-specific UI based on the role.
+ */
 public class MainUI {
-    private static User loggedInUser; // store logged-in user. static becuz only 1 at a time
+
+    /** The currently logged-in user in the system. There can be only one logged-in user at a time. */
+    private static User loggedInUser; 
+
+    /** Format string for displaying the menu options with a fixed width. */
     private static final String format = "|%-25s|\n";
 
+    /**
+     * Creates a new patient account by calling the `addPatient` method from the `PatientsAcc` class.
+     *
+     * @param sc A {@link Scanner} object for user input.
+     */
     public static void createPatientAccount(Scanner sc){
         PatientsAcc.addPatient(sc);
     }
 
+    /**
+     * Prompts the user to log in based on their role (Patient, Doctor, Pharmacist, Administrator).
+     * The method authenticates the user and displays the appropriate user interface based on the role.
+     *
+     * @param sc A {@link Scanner} object for user input.
+     */
     public static void login(Scanner sc) {
         int userRole = checkRole(sc); // return class of user
         Login login = null;
@@ -46,23 +67,23 @@ public class MainUI {
         }
         
         if (loggedIn != null) {
-            loggedInUser = loggedIn; // Store the logged-in user
-            if (loggedIn instanceof Patient) {
-                Patient patient = (Patient) loggedIn;
-                patient.displayUI();
-            } else if (loggedIn instanceof Pharmacist) {
-                Pharmacist pharmacist = (Pharmacist) loggedIn;
-                pharmacist.displayUI();
-            } else if (loggedIn instanceof Doctor) {
-                Doctor doctor = (Doctor) loggedIn;
-                doctor.displayUI();
-            } else if (loggedIn instanceof Administrator) {
-                Administrator admin = (Administrator) loggedIn;
-                admin.displayUI();
-            } 
+            loggedInUser = loggedIn;
+
+            // Set the terminal color for the logged-in user
+            HMSApp.setSessionColor(TerminalColors.getColorByRole(loggedIn.getRole().name()));
+
+            System.out.println("Welcome, " + loggedIn.getName() + "! You are logged in as " + loggedIn.getRole() + ".");
+            loggedIn.displayUI(); // Display user-specific UI
         }
     }
 
+    /**
+     * Prompts the user to select their role (Patient, Doctor, Pharmacist, Administrator).
+     * Returns the corresponding integer value representing the selected role.
+     *
+     * @param sc A {@link Scanner} object for user input.
+     * @return The selected role as an integer (1 for Patient, 2 for Doctor, 3 for Pharmacist, 4 for Administrator).
+     */
     public static int checkRole(Scanner sc) {
         int choice = -1;
         System.out.println("\nAre you a Staff or a Patient?");
@@ -85,6 +106,17 @@ public class MainUI {
         return choice;
     }
 
+    /** Logs out the current user and resets the session color for the terminal. */
+    public static void logout() {
+        System.out.println("Logging out...");
+        HMSApp.resetSessionColor(); // Reset terminal color
+    }
+
+    /**
+     * Returns the currently logged-in user.
+     * 
+     * @return The {@link User} object representing the logged-in user.
+     */
     public static User getLoggedInUser() {
         return loggedInUser;
     }

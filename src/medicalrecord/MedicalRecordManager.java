@@ -56,7 +56,7 @@ public class MedicalRecordManager {
         return patientRecords;
     }
 
-    public static MedicalRecord findMedicalRecordbyID(String medicalRID){
+    public static MedicalRecord findMedicalRecordbyID(String medicalRID) {
         for (MedicalRecord record : medicalRecords) {
             if (record.getMedicalRID().equals(medicalRID)) {
                 return record;
@@ -89,39 +89,39 @@ public class MedicalRecordManager {
         }
     }
 
-    public static void displayPendingMR(){
+    public static void displayPendingMR() {
         boolean found = false;
         for (MedicalRecord record : medicalRecords) {
-            if(record.getStatus() == PrescriptionStatus.PENDING){
+            if (record.getStatus() == PrescriptionStatus.PENDING) {
                 System.out.println(record.getRecordDetails());
                 found = true;
             }
         }
-        if(!found){
+        if (!found) {
             System.out.println("No pending medical records found.");
         }
     }
 
-    public static void displayDispensedMR(){
+    public static void displayDispensedMR() {
         boolean found = false;
         for (MedicalRecord record : medicalRecords) {
-            if(record.getStatus() == PrescriptionStatus.DISPENSED){
+            if (record.getStatus() == PrescriptionStatus.DISPENSED) {
                 System.out.println(record.getRecordDetails());
                 found = true;
             }
         }
-        if(!found){
+        if (!found) {
             System.out.println("No dispensed medical records found.");
         }
     }
 
-    public static void updateMRStatus(MedicalRecord record){
-        if(record==null){
+    public static void updateMRStatus(MedicalRecord record) {
+        if (record == null) {
             return;
         }
 
-        if(record.getStatus().equals(PrescriptionStatus.PENDING)){
-            
+        if (record.getStatus().equals(PrescriptionStatus.PENDING)) {
+
             // Update the inventory
             Map<String, Integer> prescriptions = record.getPrescriptions();
             for (Map.Entry<String, Integer> entry : prescriptions.entrySet()) {
@@ -129,19 +129,20 @@ public class MedicalRecordManager {
                 int deduct = entry.getValue();
 
                 InventoryItem item = InventoryManager.findItemByName(medicineName);
-                if(item!=null){
+                if (item != null) {
                     // Deduct the quantity from the inventory
                     int newAmt = item.getQuantity() - deduct;
                     InventoryManager.deductItemStock(item, newAmt);
                     record.setStatus(PrescriptionStatus.DISPENSED);
-                    System.out.println("The medicine for Meidical Record " + record.getMedicalRID() + " has been dispensed.");
+                    System.out.println(
+                            "The medicine for Meidical Record " + record.getMedicalRID() + " has been dispensed.");
                     System.out.println("Deducted " + deduct + " of " + medicineName + " from inventory.");
                     duplicateMedicalRecord();
                 } else {
-                    System.out.println("Failed to deduct " + deduct + " of " + medicineName + " from inventory." + 
-                    medicineName + " does not exist in our inventory");
+                    System.out.println("Failed to deduct " + deduct + " of " + medicineName + " from inventory." +
+                            medicineName + " does not exist in our inventory");
                 }
-            }       
+            }
         }
     }
 
