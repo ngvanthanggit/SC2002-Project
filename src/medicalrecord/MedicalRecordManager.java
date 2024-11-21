@@ -8,22 +8,26 @@ import utility.*;
 
 /**
  * This class is responsible for managing the medical records of patients.
- * It handles loading, updating, retrieving, and displaying medical records. Additionally, 
+ * It handles loading, updating, retrieving, and displaying medical records.
+ * Additionally,
  * it manages the inventory updates when a prescription is dispensed.
  * <p>
- * This class interacts with CSV files to persist medical records and inventory updates.
+ * This class interacts with CSV files to persist medical records and inventory
+ * updates.
  * </p>
  */
 public class MedicalRecordManager {
     private static List<MedicalRecord> medicalRecords = new ArrayList<>();
-    private static String originalPath = "Data//Original/MedicalRecord_List.csv";
-    private static String updatedPath = "Data//Updated/MedicalRecord_List(Updated).csv";
+    private static String originalPath = "../Data//Original/MedicalRecord_List.csv";
+    private static String updatedPath = "../Data//Updated/MedicalRecord_List(Updated).csv";
 
     /**
-     * Loads the medical records from a CSV file. Depending on whether it is the first run or not,
+     * Loads the medical records from a CSV file. Depending on whether it is the
+     * first run or not,
      * it loads either from the original or updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadMedicalRecords(boolean isFirstRun) {
@@ -63,7 +67,8 @@ public class MedicalRecordManager {
     /**
      * Gets all medical records associated with a specific patient.
      * 
-     * @param patientID the ID of the patient whose medical records are to be retrieved.
+     * @param patientID the ID of the patient whose medical records are to be
+     *                  retrieved.
      * @return a list of medical records associated with the patient.
      */
     public static List<MedicalRecord> getMedicalRecordsByPatient(String patientID) {
@@ -94,9 +99,10 @@ public class MedicalRecordManager {
     /**
      * Gets the medical record associated with a specific doctor and patient.
      * 
-     * @param doctorID the ID of the doctor.
+     * @param doctorID  the ID of the doctor.
      * @param patientID the ID of the patient.
-     * @return the medical record for the specified doctor and patient, or null if not found.
+     * @return the medical record for the specified doctor and patient, or null if
+     *         not found.
      */
     public static MedicalRecord getMedicalRecord(String doctorID, String patientID) {
         for (MedicalRecord record : medicalRecords) {
@@ -105,6 +111,23 @@ public class MedicalRecordManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets all medical records associated with a specific doctor and patient.
+     * 
+     * @param doctorID  the ID of the doctor.
+     * @param patientID the ID of the patient.
+     * @return a list of medical records associated with the doctor and patient.
+     */
+    public static List<MedicalRecord> getMedicalRecords(String doctorID, String patientID) {
+        List<MedicalRecord> records = new ArrayList<>();
+        for (MedicalRecord record : medicalRecords) {
+            if (record.getDoctorID().equalsIgnoreCase(doctorID) && record.getPatientID().equalsIgnoreCase(patientID)) {
+                records.add(record);
+            }
+        }
+        return records;
     }
 
     /**
@@ -128,7 +151,10 @@ public class MedicalRecordManager {
         }
     }
 
-    /** Displays all pending medical records (those with a prescription status of {@code PENDING}). */
+    /**
+     * Displays all pending medical records (those with a prescription status of
+     * {@code PENDING}).
+     */
     public static void displayPendingMR() {
         boolean found = false;
         for (MedicalRecord record : medicalRecords) {
@@ -142,7 +168,10 @@ public class MedicalRecordManager {
         }
     }
 
-    /** Displays all dispensed medical records (those with a prescription status of {@code DISPENSED}). */
+    /**
+     * Displays all dispensed medical records (those with a prescription status of
+     * {@code DISPENSED}).
+     */
     public static void displayDispensedMR() {
         boolean found = false;
         for (MedicalRecord record : medicalRecords) {
@@ -157,8 +186,10 @@ public class MedicalRecordManager {
     }
 
     /**
-     * Updates the prescription status of a medical record to DISPENSED and adjusts the inventory.
-     * If the prescription status is already PENDING, the method will attempt to deduct the prescribed
+     * Updates the prescription status of a medical record to DISPENSED and adjusts
+     * the inventory.
+     * If the prescription status is already PENDING, the method will attempt to
+     * deduct the prescribed
      * medicines from the inventory and update the record's status.
      * 
      * @param record the medical record to update.
@@ -206,14 +237,15 @@ public class MedicalRecordManager {
      */
     public static void addMedicalRecord(MedicalRecord record) {
         medicalRecords.add(record);
-        CSVwrite.writeCSV(updatedPath, record);
+        duplicateMedicalRecord();
     }
 
     /**
      * Removes a medical record from the list based on the doctor ID and patient ID.
-     * If the record is found, it will be deleted and the updated list will be saved.
+     * If the record is found, it will be deleted and the updated list will be
+     * saved.
      * 
-     * @param doctorID the ID of the doctor.
+     * @param doctorID  the ID of the doctor.
      * @param patientID the ID of the patient.
      */
     public static void removeMedicalRecord(String doctorID, String patientID) {

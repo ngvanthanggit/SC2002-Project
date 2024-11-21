@@ -16,8 +16,10 @@ import user.Role;
 /**
  * This class is responsible for managing administrator accounts.
  * <p>
- * This includes loading data from CSV files, displaying, adding, updating, and removing administrators, 
- * as well as managing password updates. The class interacts with utility classes like {@code CSVread}, 
+ * This includes loading data from CSV files, displaying, adding, updating, and
+ * removing administrators,
+ * as well as managing password updates. The class interacts with utility
+ * classes like {@code CSVread},
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class AdminsAcc {
@@ -26,18 +28,20 @@ public class AdminsAcc {
     private static List<Administrator> admins = new ArrayList<>();
 
     /** The file path to the original administrator CSV file. */
-    private static String originalPath = "Data//Original/Admin_List.csv";
+    private static String originalPath = "../Data//Original/Admin_List.csv";
 
     /** The file path to the updated administrator CSV file. */
-    private static String updatedPath = "Data//Updated/Admin_List(Updated).csv";
+    private static String updatedPath = "../Data//Updated/Admin_List(Updated).csv";
 
     /**
      * Loads administrator accounts from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original file path and clears the updated file.
+     * If it is the first run, it loads from the original file path and clears the
+     * updated file.
      * Otherwise, it loads from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadAdmins(boolean isFirstRun) {
@@ -113,15 +117,16 @@ public class AdminsAcc {
         return null;
     }
 
-    /** 
-     * Adds a new administrator to the list and saves the updated list to the CSV file. 
+    /**
+     * Adds a new administrator to the list and saves the updated list to the CSV
+     * file.
      * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void addAdmin(Scanner sc) {
         Administrator newCreatedUser = NewAccount.createNewAccount(sc, admins, Role.Administrator);
 
-        if(newCreatedUser!=null){
+        if (newCreatedUser != null) {
             admins.add(newCreatedUser);
             CSVwrite.writeCSV(updatedPath, newCreatedUser);
             System.out.println("Admin " + newCreatedUser.getName() + " created!");
@@ -143,7 +148,7 @@ public class AdminsAcc {
         String hospitalID = sc.nextLine();
         Administrator adminToUpdate = findAdminById(hospitalID);
 
-        if(adminToUpdate != null){
+        if (adminToUpdate != null) {
             System.out.print("Enter your Name: ");
             String name = sc.nextLine();
             name = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -159,7 +164,7 @@ public class AdminsAcc {
             try {
                 age = sc.nextInt();
                 sc.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input type. Please enter an Integer.");
                 sc.nextLine(); // Consume the invalid input to prevent an infinite loop
                 return;
@@ -170,7 +175,7 @@ public class AdminsAcc {
             adminToUpdate.setPassword(sc.nextLine());
             System.out.println("Administrator with Hospital ID " + hospitalID + " has been updated.");
             duplicateAdmin(); // rewrite the CSV file with updated version
-        
+
         } else {
             System.out.println("Administrator with Hospital ID " + hospitalID + " not found.");
         }
@@ -188,9 +193,9 @@ public class AdminsAcc {
         System.out.print("\nEnter the Admin ID to remove: ");
         String hospitalID = sc.nextLine();
 
-        //admin shouldn't be able to remove themself while logged in
+        // admin shouldn't be able to remove themself while logged in
         Administrator currentAdmin = (Administrator) MainUI.getLoggedInUser();
-        if(currentAdmin.getHospitalID().equalsIgnoreCase(hospitalID)){
+        if (currentAdmin.getHospitalID().equalsIgnoreCase(hospitalID)) {
             System.out.println("Error! You can't remove yourself while logged in!");
             return;
         }
@@ -208,7 +213,8 @@ public class AdminsAcc {
     /**
      * Updates the password of an administrator based on their hospital ID.
      * 
-     * @param hospitalID The hospital ID of the administrator whose password is to be updated.
+     * @param hospitalID  The hospital ID of the administrator whose password is to
+     *                    be updated.
      * @param newPassword The new password to set for the administrator.
      */
     public static void updatePassword(String hospitalID, String newPassword) {

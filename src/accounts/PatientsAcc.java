@@ -15,24 +15,28 @@ import utility.*;
 /**
  * This class is responsible for managing patient accounts.
  * <p>
- * This includes loading data from CSV files, displaying, adding, updating, finding, and removing patients, 
- * as well as managing password updates. The class interacts with utility classes like {@code CSVread}, 
+ * This includes loading data from CSV files, displaying, adding, updating,
+ * finding, and removing patients,
+ * as well as managing password updates. The class interacts with utility
+ * classes like {@code CSVread},
  * {@code CSVwrite}, and {@code CSVclear} to handle file operations.
  */
 public class PatientsAcc {
 
     // store the list of patients
     private static List<Patient> patients = new ArrayList<>();
-    private static String originalPath = "Data//Original/Patient_List.csv";
-    private static String updatedPath = "Data//Updated/Patient_List(Updated).csv";
+    private static String originalPath = "../Data//Original/Patient_List.csv";
+    private static String updatedPath = "../Data//Updated/Patient_List(Updated).csv";
 
     /**
      * Loads patient accounts from a CSV file.
      * <p>
-     * If it is the first run, it loads from the original file path and clears the updated file.
+     * If it is the first run, it loads from the original file path and clears the
+     * updated file.
      * Otherwise, it loads from the updated file.
      * 
-     * @param isFirstRun {@code true} if the application is running for the first time; 
+     * @param isFirstRun {@code true} if the application is running for the first
+     *                   time;
      *                   {@code false} otherwise.
      */
     public static void loadPatients(boolean isFirstRun) {
@@ -77,6 +81,7 @@ public class PatientsAcc {
 
     /**
      * Returns a copy of the list of all patients.
+     * 
      * @return A list of {@link User} objects representing patients.
      */
     public static List<User> getPatients() {
@@ -98,6 +103,7 @@ public class PatientsAcc {
 
     /**
      * Finds a patient by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the patient to find.
      * @return The {@link Patient} object if found; {@code null} otherwise.
      */
@@ -110,10 +116,11 @@ public class PatientsAcc {
         return null;
     }
 
-    /**  
+    /**
      * Gets patient name by their hospital ID.
+     * 
      * @param hospitalID The hospital ID of the patient to get name of.
-    */
+     */
     public String getPatientName(String hospitalID) {
         for (User patient : patients) {
             if (patient.getHospitalID().equals(hospitalID)) {
@@ -123,13 +130,15 @@ public class PatientsAcc {
         return null;
     }
 
-    /** Adds a new patient to the list and saves the updated list to the CSV file. */
+    /**
+     * Adds a new patient to the list and saves the updated list to the CSV file.
+     */
     public static void addPatient(Scanner sc) {
         System.out.println("\n|---- Creating New Patient Account ----|");
         System.out.printf("%s\n", "-".repeat(40));
         Patient newCreatedUser = NewAccount.createNewAccount(sc, patients, Role.Patient);
 
-        if(newCreatedUser!=null){
+        if (newCreatedUser != null) {
             patients.add(newCreatedUser);
             CSVwrite.writeCSV(updatedPath, newCreatedUser);
             System.out.println("Patient " + newCreatedUser.getName() + " created!");
@@ -142,14 +151,15 @@ public class PatientsAcc {
      * Updates a patient's details based on their hospital ID.
      * <p>
      * Prompts the user to enter updated details for the patient.
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
-    public static void updatePatient(Scanner sc, Patient patient){
+    public static void updatePatient(Scanner sc, Patient patient) {
         String name, gender, password, bloodType;
         Patient patientToUpdate;
         String hospitalID;
-        //no patient object passed, from admin
-        if(patient==null){
+        // no patient object passed, from admin
+        if (patient == null) {
             displayPatients();
             System.out.print("Enter the Patient ID to update: ");
             hospitalID = sc.nextLine();
@@ -159,49 +169,13 @@ public class PatientsAcc {
             hospitalID = patient.getHospitalID();
             patientToUpdate = patient;
         }
-        
-        if(patientToUpdate!=null){
-            //catch any invalid types, date format and age
+
+        if (patientToUpdate != null) {
+            // catch any invalid types, date format and age
             try {
-                System.out.print("\nEnter your Name: ");
-                name = sc.nextLine().trim();
-                name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                patientToUpdate.setName(name);
-
-                System.out.print("Enter your Gender: ");
-                gender = sc.nextLine().trim();
-                gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
-                patientToUpdate.setGender(gender);
-
-                System.out.print("Enter your Age: ");
-                patientToUpdate.setAge(sc.nextInt());
-                sc.nextLine(); //consume
-                System.out.print("Enter your Password: ");
-                password = sc.nextLine();
-    
-                // Validate Date of Birth
-                String DOB = null;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateFormat.setLenient(false); // Strict validation
-                while (DOB == null) {
-                    System.out.print("Enter your Date of Birth (DD/MM/YYYY): ");
-                    String inputDOB = sc.nextLine().trim();
-                    try {
-                        dateFormat.parse(inputDOB);
-                        DOB = inputDOB; // Valid date
-                    } catch (ParseException e) {
-                        System.out.println("Invalid date format. Please use DD/MM/YYYY.\n");
-                    }
-                }
-                patientToUpdate.setDateOB(DOB);
-                System.out.print("Enter your Blood Type: ");
-                bloodType = sc.nextLine();
-                bloodType = bloodType.substring(0, 1).toUpperCase() + bloodType.substring(1);
-                patientToUpdate.setBloodType(bloodType);
-                System.out.print("Enter your Contact Info @gmail: ");
+                System.out.print("Enter your Contact Info: ");
                 patientToUpdate.setContactInfo(sc.nextLine());
                 System.out.println("Patient " + patientToUpdate.getName() + "'s details has been updated.");
-                updatePassword(patientToUpdate.getHospitalID(), password);
                 duplicatePatient(); // rewrite the CSV file with updated version
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input type detected. Please enter the correct type for each field.");
@@ -217,6 +191,7 @@ public class PatientsAcc {
     /**
      * Removes a patient from the list based on their hospital ID.
      * <p>
+     * 
      * @param sc A {@link Scanner} object for user input.
      */
     public static void removePatient(Scanner sc) {
@@ -236,7 +211,8 @@ public class PatientsAcc {
     /**
      * Updates the password of a patient based on their hospital ID.
      * 
-     * @param hospitalID The hospital ID of the patient whose password is to be updated.
+     * @param hospitalID  The hospital ID of the patient whose password is to be
+     *                    updated.
      * @param newPassword The new password to set for the patient.
      */
     public static void updatePassword(String hospitalID, String newPassword) {
