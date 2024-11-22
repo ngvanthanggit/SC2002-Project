@@ -8,26 +8,27 @@ The Hospital Management System (HMS) is a comprehensive Java-based application d
 4. Nguyen Van Thang
 
 ## Project Structure  
-- **`Data`**:  
+- **`Data`**:
   This folder contains the all the neccessary CSV files which we have used and updated in our HMS App  
 
-- **`Docs`**
+- **`Docs`**:
   This folder contains the complete Javadoc documentation for the project. It includes detailed descriptions of all classes, methods, and attributes used in the HMS application.
   
-- **`src`**:  
+- **`src`**:
   This folder contains the source code for the HMS project. All implementation files are organized here.  
 
 ## Set Up Intructions
 1. Clone the respository [link](https://github.com/ngvanthanggit/SC2002-Project)
-   ```sh
-   git clone https://github.com/ngvanthanggit/SC2002-Project
-2. Direct the terminal to /src folder
+   ```console
+   $ git clone https://github.com/ngvanthanggit/SC2002-Project
+   ```
+2. Direct the terminal to **`/src`** folder
    ![cdsrc](https://github.com/user-attachments/assets/61ac3278-3d0e-4674-9321-d2f9288163cf)
-3. Compile all the .java files in the /src
+3. Compile all the **.java** files in the **`/src`**
    ```console
    $ javac -d ./bin **/*.java
    ```
-4. Run the HMSApp to start
+4. Run the **HMSApp** to start the application
    ```console
    $ java -cp ./bin main.HMSApp
    ```
