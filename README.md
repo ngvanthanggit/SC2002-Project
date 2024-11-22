@@ -17,7 +17,7 @@ The Hospital Management System (HMS) is a comprehensive Java-based application d
 - **`src`**:
   This folder contains the source code for the HMS project. All implementation files are organized here.  
 
-## Set Up Intructions
+## Set Up Instructions
 1. Clone the respository [link](https://github.com/ngvanthanggit/SC2002-Project)
    ```console
    $ git clone https://github.com/ngvanthanggit/SC2002-Project
