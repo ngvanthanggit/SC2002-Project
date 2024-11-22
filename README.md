@@ -1,7 +1,7 @@
 # SC2002 Project: Hospital Management Application :hospital:
 
 ## Set Up Intructions
-1. Clone the respository
+1. Clone the respository [link]https://github.com/ngvanthanggit/SC2002-Project
    ```console
    git clone https://github.com/ngvanthanggit/SC2002-Project
 2. Direct the terminal to /src folder
