@@ -1,12 +1,15 @@
 # SC2002 Project: Hospital Management Application :hospital:
-## How to run?
-1. Direct the terminal to /src folder
+
+## Set Up Intructions
+1. Clone the respository
+   git clone https://github.com/ngvanthanggit/SC2002-Project
+3. Direct the terminal to /src folder
    ![cdsrc](https://github.com/user-attachments/assets/61ac3278-3d0e-4674-9321-d2f9288163cf)
-2. Compile all the .java files in the /src
+4. Compile all the .java files in the /src
    ```console
    $ javac -d ./bin **/*.java
    ```
-3. Run the HMSApp to start
+5. Run the HMSApp to start
    ```console
    $ java -cp ./bin main.HMSApp
    ```
