@@ -1,4 +1,5 @@
 # SC2002 Project: Hospital Management Application :hospital:
+The Hospital Management System (HMS) is a comprehensive Java-based application designed to streamline operations in a healthcare environment. It supports role-based functionality for Patients, Doctors, Pharmacists, and Administrators to handle various tasks such as appointment scheduling, inventory management, leave management, and medical record keeping.
 
 ## Team Members
 1. Ngo Zong Han
