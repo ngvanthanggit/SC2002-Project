@@ -1,5 +1,11 @@
 # SC2002 Project: Hospital Management Application :hospital:
 
+## Team Members
+1. Ngo Zong Han
+2. Yong Yik Sheng
+3. Stephanie Heather Zaw
+4. Nguyen Van Thang
+
 ## Set Up Intructions
 1. Clone the respository [link](https://github.com/ngvanthanggit/SC2002-Project)
    ```sh
