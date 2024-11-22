@@ -2,7 +2,7 @@
 
 ## Set Up Intructions
 1. Clone the respository [link](https://github.com/ngvanthanggit/SC2002-Project)
-   ```console
+   ```sh
    git clone https://github.com/ngvanthanggit/SC2002-Project
 2. Direct the terminal to /src folder
    ![cdsrc](https://github.com/user-attachments/assets/61ac3278-3d0e-4674-9321-d2f9288163cf)
