@@ -8,14 +8,12 @@ The Hospital Management System (HMS) is a comprehensive Java-based application d
 4. Nguyen Van Thang
 
 ## Project Structure  
+- **`Data`**:  
+  This folder contains the all the neccessary CSV files which we have used and updated in our HMS App  
 
-### 1. **`hms` Folder**  
-Contains all project-related files and subfolders for HMS.  
-
-### 2. **Subfolders**  
-- **`Javadocmain`**:  
-  This folder contains the complete Javadoc documentation for the project. It includes detailed descriptions of all classes, methods, and attributes used in the HMS application.  
-
+- **`Docs`**
+  This folder contains the complete Javadoc documentation for the project. It includes detailed descriptions of all classes, methods, and attributes used in the HMS application.
+  
 - **`src`**:  
   This folder contains the source code for the HMS project. All implementation files are organized here.  
 
